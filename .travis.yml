@@ -24,7 +24,12 @@ before_script:
         phpenv config-add .travis.ini;
     fi
   - phpenv config-rm xdebug.ini || echo "XDebug not enabled"
-  - pear channel-discover pear.horde.org
+  - if [ "$TRAVIS_PHP_VERSION" == "5.6" ] || [ "$TRAVIS_PHP_VERSION" == "7.0" ];
+    then
+      echo "include_path = .:$HOME/.phpenv/versions/$(phpenv version-name)/lib/php/pear" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini;
+      pear channel-discover pear.horde.org;
+    fi
+
   - pear install channel://pear.horde.org/Horde_Test
   - pear install package.xml
 script:
