@@ -31,6 +31,6 @@ before_script:
     fi
 
   - pear install channel://pear.horde.org/Horde_Test
-  - pear install package.xml
+  - pear install -a -B package.xml
 script:
   - php $(find test -name AllTests.php)
