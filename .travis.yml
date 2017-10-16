@@ -1,6 +1,4 @@
 sudo: false
-notifications:
-  irc: "chat.freenode.net#horde"
 language: php
 php:
   - 5.4
