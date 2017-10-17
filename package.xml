@@ -33,7 +33,7 @@
         <file name="tutorial.md" role="doc" />
         <file name="tutorial.rst" role="doc" />
        </dir> <!-- /doc/Horde/Imap/Client/examples -->
-       <file name="UPGRADING" role="doc" />
+       <file name="UPGRADING.rst" role="doc" />
       </dir> <!-- /doc/Horde/Imap/Client -->
      </dir> <!-- /doc/Horde/Imap -->
     </dir> <!-- /doc/Horde -->
@@ -575,7 +575,7 @@
   <filelist>
    <install as="examples/tutorial.md" name="doc/Horde/Imap/Client/examples/tutorial.md" />
    <install as="examples/tutorial.rst" name="doc/Horde/Imap/Client/examples/tutorial.rst" />
-   <install as="UPGRADING" name="doc/Horde/Imap/Client/UPGRADING" />
+   <install as="UPGRADING.rst" name="doc/Horde/Imap/Client/UPGRADING.rst" />
    <install as="Horde/Imap/Client.php" name="lib/Horde/Imap/Client.php" />
    <install as="Horde/Imap/Client/Auth/DigestMD5.php" name="lib/Horde/Imap/Client/Auth/DigestMD5.php" />
    <install as="Horde/Imap/Client/Auth/Scram.php" name="lib/Horde/Imap/Client/Auth/Scram.php" />
