@@ -10,7 +10,7 @@
   <email>slusarz@horde.org</email>
   <active>yes</active>
  </lead>
- <date>2017-10-17</date>
+ <date>2017-10-20</date>
  <version>
   <release>2.29.16</release>
   <api>2.29.0</api>
@@ -398,7 +398,6 @@
        <file name="IdsTest.php" role="test" />
        <file name="MailboxTest.php" role="test" />
        <file name="MapTest.php" role="test" />
-       <file name="phpunit.xml" role="test" />
        <file name="SearchTest.php" role="test" />
        <file name="SocketTest.php" role="test" />
        <file name="SortTest.php" role="test" />
@@ -756,7 +755,6 @@
    <install as="Horde/Imap/Client/MapTest.php" name="test/Horde/Imap/Client/MapTest.php" />
    <install as="Horde/Imap/Client/Namespace/DataTest.php" name="test/Horde/Imap/Client/Namespace/DataTest.php" />
    <install as="Horde/Imap/Client/Namespace/ListTest.php" name="test/Horde/Imap/Client/Namespace/ListTest.php" />
-   <install as="Horde/Imap/Client/phpunit.xml" name="test/Horde/Imap/Client/phpunit.xml" />
    <install as="Horde/Imap/Client/SearchTest.php" name="test/Horde/Imap/Client/SearchTest.php" />
    <install as="Horde/Imap/Client/Socket/ClientSortTest.php" name="test/Horde/Imap/Client/Socket/ClientSortTest.php" />
    <install as="Horde/Imap/Client/SocketTest.php" name="test/Horde/Imap/Client/SocketTest.php" />
@@ -3133,7 +3131,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-10-17</date>
+   <date>2017-10-20</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * 
