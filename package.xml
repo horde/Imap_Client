@@ -1487,6 +1487,7 @@
     <release>beta</release>
     <api>beta</api></stability>
    <date>2012-08-07</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
   </release>
   <release>
    <version>
