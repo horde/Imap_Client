@@ -7,3 +7,51 @@ description: >
   connections to POP3 (STD 53/RFC 1939).
 list: dev
 type: library
+homepage: https://www.horde.org/libraries/Horde_Imap_Client
+authors:
+  -
+    name: Michael Slusarz
+    user: slusarz
+    email: slusarz@horde.org
+    active: true
+    role: lead
+version:
+  release: 2.29.16
+  api: 2.29.0
+state:
+  release: stable
+  api: stable
+license:
+  identifier: LGPL-2.1
+  uri: http://www.horde.org/licenses/lgpl21
+dependencies:
+  required:
+    php: ^5.3 || ^7
+    pear:
+      pear.horde.org/Horde_Exception: ^2
+      pear.horde.org/Horde_Mail: ^2
+      pear.horde.org/Horde_Mime: ^2.5.2
+      pear.horde.org/Horde_Socket_Client: ^2
+      pear.horde.org/Horde_Stream: ^1.4
+      pear.horde.org/Horde_Secret: ^2
+      pear.horde.org/Horde_Stream_Filter: ^2
+      pear.horde.org/Horde_Translation: ^2.2
+      pear.horde.org/Horde_Util: ^2
+    ext:
+      hash: '*'
+      json: '*'
+  optional:
+    pear:
+      pear.horde.org/Horde_Cache: ^2
+      pear.horde.org/Horde_Compress_Fast: ^1
+      pear.horde.org/Horde_Crypt_Blowfish: ^1.1
+      pear.horde.org/Horde_Db: ^2.2
+      pear.horde.org/Horde_HashTable: ^1
+      pear.horde.org/Horde_Mongo: ^1
+      pear.horde.org/Horde_Pack: ^1
+      pear.horde.org/Horde_Stringprep: ^1
+      pear.horde.org/Horde_Support: ^2
+      pear.horde.org/Horde_Test: ^2.2.7
+    ext:
+      intl: '*'
+      mbstring: '*'
