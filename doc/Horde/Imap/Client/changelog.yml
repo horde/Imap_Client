@@ -1,0 +1,2035 @@
+---
+2.29.16:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2017-10-20
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes:
+2.29.15:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2017-08-28
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix expunging cache entries of a certain lifetime from the DB backend.
+2.29.14:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2017-08-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix check if QRESYNC is enabled in vanished() (i.badamshin <i.badamshin@i-infinite.net>).
+2.29.13:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2017-06-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Add Turkish translation (İTÜ BİDB <sistemdestek@itu.edu.tr>).
+2.29.12:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-12-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] Fix command syntax for CREATE-SPECIAL-USE support.
+2.29.11:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-12-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] Fix failed connections when using unix sockets (Thomas Jarosch <thomas.jarosch@intra2net.com>).
+2.29.10:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-11-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix parsing GETACL responses from RFC 4314 capable IMAP servers (Bug #14466).
+2.29.9:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-09-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Optimize deleting or moving a large number of messages.
+2.29.8:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-07-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Avoid notice with Horde_Mongo on PHP 7.
+    [mjr] Catch incorrectly localized Date headers.
+2.29.7:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-05-31
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] Add sanity check for malformed offset in Date header (Bug #14381).
+    [mjr] Fix fatal error in certain cases when performing a BODY[HEADER.FIELDS] query.
+2.29.6:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-03-21
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Add Greek translation (Limperis Antonis <limperis@cti.gr>).
+2.29.5:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2016-02-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Don't try LOGIN authentication over secure connections if explicitly disabled.
+    [jan] Mark PHP 7 as supported.
+    [jan] Improve Oracle compatibility.
+    [mjr] Fix fatal error during shutdown due to incorrect exception name.
+    [jan] Fix broken ID requests under certain circumstances.
+2.29.4:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-11-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix parsing IMAP responses with tilde characters.
+2.29.3:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-09-07
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] Avoid PHP warning when listing mailboxes without LIST-STATUS (Bug #14097).
+2.29.2:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-09-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Improved performance of Horde_Imap_Client_Data_Thread object when containing large number of messages (Request #14075).
+    [mms] Catch translation errors when creating Exceptions (PR #143; baso10dev@gmail.com).
+2.29.1:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-07-15
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Ensure FETCH stream data is rewound before returning (Bug #14013).
+    [mjr] Fix detecting empty ID queries (Bug #14044).
+2.29.0:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-06-18
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] Fix detecting changes when using tokens.
+    [mms] Add support for SCRAM-SHA-1 authentication (RFC 5802) for both IMAP and POP3 drivers.
+2.28.1:
+  api: 2.28.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-05-12
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Directly store literal data in a separate stream when parsing IMAP tokens, so we don't have to duplicate the stream later when processing it.
+    [mms] Don't load literal IMAP data into a string variable when tokenizing IMAP input.
+    [mms] Fix search queries where ID list given is explicitly empty, indicating that a match can never be successful (Bug #13971).
+    [mms] Fix expunging in certain cases when UIDPLUS is not available (Bug #13970; Robin McCorkell <rmccorkell@karoshi.org.uk>).
+2.28.0:
+  api: 2.28.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-04-27
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix parsing mailbox name from STATUS response on servers that have the UTF8 extension enabled.
+    [jan] Fix searching with non-ASCII strings in AND/OR-combined searches.
+    [jan] Fix issues with certain locales like Turkish.
+    [mms] Pipeline ID command with other commands, if possible.
+2.27.0:
+  api: 2.27.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-03-10
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Add parameter for stream context settings (Request #13730).
+2.26.1:
+  api: 2.26.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-01-27
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix serialization of Horde_Imap_Client_Data_Fetch objects.
+    [mms] Workaround broken in-memory stream filter handling.
+2.26.0:
+  api: 2.26.0
+  state:
+    release: stable
+    api: stable
+  date: 2015-01-07
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix handling mailbox cache data when the mailbox returns NOMODSEQ.
+    [mms] IMAP alerts can now be handled by registering an observer with the new Horde_Imap_Client_Base_Alerts object.
+2.25.6:
+  api: 2.25.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-12-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Better cache unserialization error handling for all backends.
+2.25.5:
+  api: 2.25.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-11-24
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] Fix broken IMAP cache behavior in the DB driver when unserialization of a cached object fails.
+2.25.4:
+  api: 2.25.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-11-23
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Better error handling when IMAP connection is prematurely disconnected.
+    [mms] Fix regression in listMailboxes() for POP3 servers when 'flat' option is true.
+2.25.3:
+  api: 2.25.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-11-10
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix determining whether a command requires a continuation request, when the literal occurs within a nested list.
+    [mms] Ensure we don't use the same authentication method multiple times when logging into IMAP server.
+2.25.2:
+  api: 2.25.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-10-14
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Add support for UTF8 extension for POP3 servers (RFC 6856).
+    [mms] Add support for LANG extension for POP3 servers (RFC 6856).
+2.25.1:
+  api: 2.25.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-09-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix IMAP search results for recent and total messages when it is the only query and the mailbox is not selected.
+    [mms] Fix client-side message sorting when there are multiple sort criteria and at least one tie in the first sorting criteria.
+    [mms] Better error handling when attempting to authenticate via IMAP LOGIN command with non-ASCII credentials (Bug #13554).
+    [mms] Fix sending IMAP APPEND data when the UTF-8 capability is enabled.
+    [mms] Fix parsing IMAP mailbox list requests when UTF-8 mode is enabled.
+    [mms] Ensure client sorting tests work reproducibly across systems with varying default locales.
+2.25.0:
+  api: 2.25.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-09-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Add support for Gmail-specific WEBALERT response code.
+    [mms] IMAP/POP3 URL generation split into a more modular library structure.
+    [mms] Ignore message-specific URL parameters if a search query appears in an IMAP URL.
+    [mms] Fix encoding/decoding URL elements in IMAP/POP3 URLs.
+    [mms] Fix setting default port for POP3 URLs.
+    [mms] Fix client-side reverse sorting.
+    [mms] Fix client-side sequence sorting, when that is the only sort criteria.
+    [mms] Use Collator class, if present, to sort string fields on the client side.
+    [mms] Fix client-side sorting of display addresses.
+    [mms] Even more improved pseudo-UIDNEXT value for POP3 servers.
+    [mms] Improved sanity checking so that non-ASCII data is not sent to server in commands where it is not supported.
+2.24.2:
+  api: 2.24.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-08-11
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix typo in Horde_Imap_Client_Data_Sync (Bug #13430; Jasper Olbrich <Jasper.Olbrich@students.uni-marburg.de>).
+2.24.1:
+  api: 2.24.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-08-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in reporting capabilities (Bug #13421).
+2.24.0:
+  api: 2.24.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-08-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Correctly expire internal cache in POP3 when messages are deleted.
+    [mms] Improved determination of a pseudo-UIDNEXT value for POP3 servers.
+    [mms] Fix sorting of POP3 IDs.
+    [mms] Added the 'url' property to Horde_Imap_Client_Base.
+    [mms] Fix thread sort order when using the client-side ordered subject algorithm and there are messages with identical dates.
+    [mms] Allow multiple live IMAP/POP3 tests to be run in a single PHPUnit instance.
+    [mms] Add support for the IMAP UTF-8 extension (RFC 6855).
+    [mms] Querying of valid search charsets is now handled by the Horde_Imap_Client_Data_SearchCharset object.
+    [mms] IMAP extension enabled information is now stored within the capability object.
+    [mms] Fix regression where authetication was attempted with a non-null, empty string password.
+    [mms] Improved debug logging during connection failures and authentication attempts.
+    [mms] Fix debug logging for certain IMAP authentication actions.
+    [mms] Internally handle capability querying via the new Horde_Imap_Client_Data_Capability object.
+2.23.2:
+  api: 2.23.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-07-09
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Determination of approximate part size should be done at IMAP level, not within Horde_Mime_Part.
+    [mms] Fix regression in handling invalid DateTime data due to a BC-incompatible change in PHP.
+2.23.1:
+  api: 2.23.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-06-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression where INBOX subscription status was based on server status, instead of always being treated as subscribed (Bug #13261).
+2.23.0:
+  api: 2.23.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-06-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Delimiter information is now always returned from Horde_Imap_Client_Base#listMailboxes().
+    [mms] Fix broken MBOX_UNSUBSCRIBED behavior on IMAP servers that support LIST-EXTENDED.
+    [mms] Added the MBOX_ALL_SUBSCRIBED mode to Horde_Imap_Client_Base#listMailboxes().
+2.22.0:
+  api: 2.22.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-06-07
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Workaround PHP DateTime regression in 5.4.29 & 5.5.13.
+    [mms] Fix translating error messages if they contain printf placeholders.
+2.21.0:
+  api: 2.21.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-06-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix working with mailboxes containing entirely integers (Bug #13157).
+    [mms] Horde_Imap_Client_Base#getNamespaces() can now return a Horde_Imap_Client_Namespace_List object instead of an array.
+    [mms] Use the new command length limitations defined in RFC 7162.
+    [mms] A noop() call before authentication will now correctly throw an exception on a connection issue (Bug #13205).
+2.20.0:
+  api: 2.20.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-05-21
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix instantiating base object with an empty password.
+    [mms] Better error checking when writing data to the server (Bug #13187; Thomas Jarosch <thomas.jarosch@intra2net.com>).
+    [mms] Support partial search limitation even if the PARTIAL search return option is not available on the server (Request #13153).
+    [mms] Added the 'max' and 'min' properties to Horde_Imap_Client_Ids.
+2.19.6:
+  api: 2.19.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-05-14
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Workaround broken MIME parts that cannot be binary decoded on the server.
+    [jan] Add Hungarian translation (Andras Galos <galosa@netinform.hu>).
+2.19.5:
+  api: 2.19.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-05-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Correctly handle partial search limiting for a single ID (Bug #13153).
+    [mms] Workaround bug in Dovecot where improperly encoded body part returns NIL data when using the BINARY extension.
+2.19.4:
+  api: 2.19.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-04-23
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Handle IN-USE, LOGIN-DELAY, and SYS/TEMP error codes when authenticating to POP3 servers.
+    [mms] Fix TLS negotiation with POP3 servers.
+    [mms] Fix throwing authentication exception when using Digest-MD5.
+2.19.3:
+  api: 2.19.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-04-16
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix parsing a reply/forward subject with no blob content.
+    [mms] Ensure integer value returns from Horde_Imap_Client_Base#status() are truly integers.
+2.19.2:
+  api: 2.19.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-04-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Prevent unnecessary cache writes when list of UIDs passed to deleteMsgs() is empty.
+    [mms] Fix stripping non-ASCII characters in Horde_Imap_Client_Data_Format_Atom#stripNonAtomCharacters().
+    [jan] Add Danish translation (Erling Preben Hansen <erling@eph.dk>).
+    [mms] Don't allow PREAUTH on unencrypted connection if a secure connection (e.g. STARTTLS) is requested.
+    [mms] Password is no longer a necessary parameter.
+2.19.1:
+  api: 2.19.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-03-16
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in parsing empty string values in IMAP tokenizer.
+2.19.0:
+  api: 2.19.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-03-10
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] The Hashtable cache driver now allows the lifetime of the message data to be specified.
+    [mms] Fix removing UID from cached list in Hashtable cache driver if the message data no longer exists.
+    [mms] Add 'force_map' option to Horde_Imap_Client_Base#copy() to guarantee that the mapping array is always returned.
+    [mms] More accurate way of determining appended UID on append when UIDPLUS is not available.
+    [mms] Fixes for stream handling in the Nstring object.
+    [mms] Split data format object test into individual files.
+2.18.6:
+  api: 2.18.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-03-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix updating cached flags list on a CONDSTORE-only server.
+2.18.5:
+  api: 2.18.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-03-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] Fix regression in obtaining bodypart size when BINARY extension is available.
+2.18.4:
+  api: 2.18.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-02-27
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Improved/more concise debug output.
+    [mms] Optimize sorting in Horde_Imap_Client_Ids object.
+    [mms] Workaround broken SASL capability responses from POP3 servers.
+    [mms] Prevent PHP error when a FETCH call is unsuccessful.
+    [mms] Relax type checking on cache driver object.
+2.18.3:
+  api: 2.18.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-02-24
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix obtaining bodypart size (Bug #12992; martin@matuska.org).
+2.18.2:
+  api: 2.18.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-02-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] More correct fix for Exception construction.
+2.18.1:
+  api: 2.18.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-02-14
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression where Horde_Imap_Client_Exception was inheriting from a different class than before.
+    [mms] Use more efficient FNV1-32 hashing algorithm for internal hashtable storage, if available.
+    [jan] Make SQL cache backend compatible with Oracle.
+    [mms] Optimizations to IMAP tokenizer.
+2.18.0:
+  api: 2.18.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-02-11
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Add raw error message text (in English) to Exceptions.
+    [mms] Add debug timing information for connection/commands.
+    [mms] Fix resetting capability list when internally cached authentication information becomes invalid.
+2.17.1:
+  api: 2.17.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-01-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix updating message list in the hashtable cache driver when deleting.
+2.17.0:
+  api: 2.17.0
+  state:
+    release: stable
+    api: stable
+  date: 2014-01-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] When determining a sequence -> UID mapping, do sanity checking to make ensure data is valid (Bug #12911).
+    [mms] Add a Horde_Hashtable specific cache driver.
+    [mms] Add remove() method to Horde_Imap_Client_Ids.
+2.16.2:
+  api: 2.16.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-11-27
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Don't login to IMAP server if namespace information is already cached.
+2.16.1:
+  api: 2.16.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-11-21
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix intermittent error when purging messages using a Horde_Cache caching backend (Bug #12827).
+    [mms] Workaround broken IMAP servers that don't support the required AUTH=PLAIN authentication method (Bug #12817).
+2.16.0:
+  api: 2.16.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-10-30
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Added direct TLS v1.x connection option when connecting to remote server.
+    [mms] Use SHA-1 instead of MD5 for internal hashing.
+    [mms] Correctly handle untagged BAD IMAP responses.
+    [mms] Added Horde_Imap_Client_Password_Xoauth2 class.
+    [mms] Fix harmless PHP undefined error when using with an IMAP server that supports XOAUTH2.
+2.15.5:
+  api: 2.15.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-10-11
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Explicitly reject XOAUTH2 as a authentication mechanism if it is not configured in the client (Bug #12756).
+2.15.4:
+  api: 2.15.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-10-09
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Sort UID list before sending in QRESYNC parameter.
+    [mms] Ensure that INBOX always appears in subscribed mailbox list when using a server that supports LIST-EXTENDED.
+2.15.3:
+  api: 2.15.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-09-16
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression where INBOX may not be recognized as subscribed, if the server doesn't list it in the subscribed list.
+2.15.2:
+  api: 2.15.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-09-14
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Handle case-insensitive INBOX return from the server.
+    [mms] Use strict RFC-compliant workaround for servers that don't support the UNSELECT IMAP extension.
+2.15.1:
+  api: 2.15.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-09-13
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Ensure Horde_Imap_Client_Base#search() always returns the 'count' value (Bug #12682).
+    [jan] Fix incorrect usage of Horde_Db API in cache backend.
+2.15.0:
+  api: 2.15.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-09-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Workaround servers that don't advertise UIDL until after authentication.
+    [mms] Fix parsing continuation requests sent in SASL AUTH command (RFC 5034).
+    [mms] By default, use TLS if available and necessary to login to server.
+    [mms] Fix adding status information to listMailboxes() return when LIST-STATUS is not available.
+2.14.0:
+  api: 2.14.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-08-25
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Added the 'statuscache' property to Horde_Imap_Client_Base (Request #12589).
+    [mms] The 'xoauth2_token' parameter now accepts a Horde_Imap_Client_Base_Password object.
+    [mms] Deprecated the 'encryptKey' parameter and instead support passing a Horde_Imap_Client_Base_Password object into the 'password' parameter.
+    [mms] Added the Horde_Imap_Client::STATUS_FORCE_REFRESH flag.
+2.13.1:
+  api: 2.13.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-08-20
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in setting CAPABILITY for IMAP servers that don't automatically send this information after login.
+2.13.0:
+  api: 2.13.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-08-19
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in POP3 SASL PLAIN authentication command.
+    [mms] Fix regression in mapping message sequence numbers to UIDs when doing an 'all' activity in POP3.
+    [mms] Added support for the Google XOAUTH2 authentication mechanism for the IMAP Socket driver.
+    [mms] Fix regression in retrieving CAPABILITY information after we login.
+2.12.3:
+  api: 2.12.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-08-16
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in caching for POP3 servers.
+    [mms] Cache any data returned from POP3 capability sniffing.
+2.12.2:
+  api: 2.12.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-08-15
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Add remote POP3 server test.
+    [mms] Fix sniffing capabilities for POP3 servers that don't support the CAPA command.
+2.12.1:
+  api: 2.12.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-08-13
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix returning list of expunged UIDs when expunging all messages in a mailbox that doesn't support CONDSTORE (Bug #12559).
+    [mms] Translate mailbox names from UTF7-IMAP -> UTF-8 in return from Horde_Imap_Client_Base#getMetadata() (Bug #12541).
+2.12.0:
+  api: 2.12.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-07-24
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Added the Horde_Imap_Client::STATUS_RECENT_TOTAL return option to Horde_Imap_Client_Base#status().
+    [mms] More graceful handling of servers that return broken FETCH information (Request #12441).
+2.11.6:
+  api: 2.11.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-06-18
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in handling response codes in POP3 driver.
+    [mms] Fix clearing data from the MongoDB cache.
+2.11.5:
+  api: 2.11.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-06-11
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] So many IMAP servers have issues with BINARY, that we should not send literal8 data unless we absolutely have to.
+    [mms] Remove read/write buffering from stream connection to remote server.
+    [mms] Ensure we only use literal8's in APPEND commands.
+    [mms] Abstract connection code into separate library, to better handle output buffering and error handling.
+    [mms] Fix regression in throwing exceptions when parsing POP3 server responses.
+2.11.4:
+  api: 2.11.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-06-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Be more lenient about mailboxes containing null characters in Horde_Imap_Client 2.x for BC reasons.
+    [mms] Fix flushing debug buffer when unexpected data is returned from the remote server.
+2.11.3:
+  api: 2.11.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-06-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Improved detection of client-side command errors before sending to the remote IMAP server.
+    [mms] Better sanity checking that we don't send binary data for mailbox entries.
+2.11.2:
+  api: 2.11.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-05-28
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in Socket driver when moving messages without UIDPLUS.
+2.11.1:
+  api: 2.11.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-05-28
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix caching MIME structure data in POP3 driver.
+    [mms] Enhanced parsing of POP3 data from the remote server.
+2.11.0:
+  api: 2.11.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-05-27
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Workaround broken IMAP servers and prevent infinite loops (Bug #12265).
+    [mms] Add support for the DOWNGRADED IMAP response code (RFC 6858).
+2.10.1:
+  api: 2.10.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-05-21
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix returning the list of deleted messages in the POP3 driver.
+    [mms] Handle all additional namespace queries in a single call.
+2.10.0:
+  api: 2.10.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-05-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Pipeline multiple IMAP LIST/LSUB calls.
+    [mms] Fix login methods that require server continutation responses.
+    [mms] Correctly handle enabled cached status when not using imapproxy.
+    [mms] Fix caching of CAPABILITY information when not using imapproxy.
+    [mms] Support pipelining of STORE + EXPUNGE if UIDPLUS is available.
+    [mms] Pipeline multiple STATUS commands if LIST-STATUS is not available.
+    [mms] Fold statusMultiple() functionality into base status() command.
+    [mms] Pipeline multiple IMAP FETCH calls.
+    [mms] Delay sending LANGUAGE command until we send another command to save a round-trip.
+    [mms] Delay sending ENABLE command until we send another command to save a round-trip.
+    [mms] Add internal support for IMAP command pipelining.
+2.9.1:
+  api: 2.9.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-05-14
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix dependency.
+2.9.0:
+  api: 2.9.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-05-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Support UID EXPUNGE command for large UID lists (Bug #12228).
+    [mms] Don't attempt to expunge messages if the list of UIDs to expunge is empty (Bug #12226).
+    [mms] Correctly use limit parameter to Horde_Imap_Client_Ids#split() (Bug #12216).
+    [mms] Add a MongoDB based backend for storing cached IMAP/POP data.
+    [mms] Add Horde_Imap_Client_Cache#clear().
+    [mms] Add a Horde_Db based backend for storing cached IMAP/POP data.
+    [mms] Abstract the backend storage into a separate driver for the Horde_Imap_Client_Cache class.
+2.8.2:
+  api: 2.8.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-04-18
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Correctly parse message/rfc822 BODYSTRUCTURE responses if the server does not provide any envelope information (Bug #12190).
+2.8.1:
+  api: 2.8.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-03-28
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in storing cached flags if not using debug mode.
+2.8.0:
+  api: 2.8.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-03-26
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Add properties to Sync object to allow retrieval of previous sync state status.
+    [mms] Only do UNCHANGEDSINCE check when storing flags if the user explicitly passes the 'unchangedsince' parameter.
+    [mms] Add the 'nocache' option to Horde_Imap_Client_Base#fetch().
+2.7.2:
+  api: 2.7.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-03-08
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Always return UID information for FETCH queries if cache is active, so we ensure that mappings are updated and any cacheable data can be cached.
+    [mms] Don't cache FETCH data if it does not contain UID information (Bug #12097).
+2.7.1:
+  api: 2.7.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-03-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix SETQUOTA, GETQUOTA, and GETQUOTAROOT commands on mailboxes that contain non-7bit characters (Bug #12059).
+    [mms] Fix returning UID data from the Horde_Imap_Client_Data_Sync object (Bug #12071).
+2.7.0:
+  api: 2.7.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-02-24
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] More efficient implementation of Horde_Imap_Client_Ids#range_string.
+    [mms] Fix APPENDs on IMAP servers that do not support CATENATE.
+    [mms] Fix from/to searches on servers that support SORT=DISPLAY when using the *_FALLBACK sort criteria.
+    [mms] Ensure that a FETCH and/or SELECT/EXAMINE (w/QRESYNC) will not exceed maximum allowed command length on the IMAP server (Bug #12001).
+    [mms] Add Horde_Imap_Client_ids#split().
+    [mms] Fix regression in the replace argument, and multiple arguments to add/delete, for the store() command.
+    [mms] Make sure the modseq given to the vanished() command is always at least 1 (Bug #12031).
+2.6.0:
+  api: 2.6.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-02-08
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in parsing LISTRIGHTS results (Bug #11994).
+    [mms] Workaround QRESYNC errata that allows FETCH FLAGS results to be returned without UID information.
+    [mms] More robust handling of split FETCH responses.
+2.5.0:
+  api: 2.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-01-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Some IMAP servers require a mailbox to be unselected before it can be renamed.
+    [jan] Add French translation (Paul De Vlieger <paul.de_vlieger@moniut.univ-bpclermont.fr>).
+    [mms] Ignore fetch data returned from an UID FETCH command if it doesn't include UID information (Bug #11946).
+    [mms] Add exists option to Horde_Imap_Client_Base#fetch().
+2.4.2:
+  api: 2.4.0
+  state:
+    release: stable
+    api: stable
+  date: 2013-01-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix multipart APPENDs when IMAP server does not support CATENATE.
+    [mms] Fix harmless PHP warning issued when IMAP server supports SORT but not SORT=DISPLAY.
+2.4.1:
+  api: 2.4.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-12-20
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix bodystructure parsing for IMAP servers that do not return full extension data (Bug #11907).
+2.4.0:
+  api: 2.4.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-12-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Re-add optimizations to IMAP token parser.
+    [jan] Add Basque translation (Ibon Igartua <ibon.igartua@ehu.es>).
+    [mms] Additional workarounds for IMAP servers with broken BINARY implementations (Bug #11855).
+    [mms] Add SORT_DISPLAYFROM_FALLBACK and SORT_DISPLAYTO_FALLBACK sorting criteria to Horde_Imap_Client_Base#search().
+2.3.2:
+  api: 2.3.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-12-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Revert valid PHP changes that caused errors in broken old versions of PHP.
+2.3.1:
+  api: 2.3.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-12-05
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix client-side address sorting (Bug #11820).
+    [mms] Optimizations to IMAP token parser.
+    [mms] Fix setting language value when language is returned in an IMAP list.
+2.3.0:
+  api: 2.3.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-12-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix sending literal mailbox data to an IMAP server (Bug #11800).
+    [mms] Add Horde_Imap_Client_Data_Format_String#getStream().
+    [jan] Fix Dutch translation (Arjen de Korte <build+horde@de-korte.org>).
+    [mms] Fix regression in POP3 driver for servers that don't support the RESP-CODES extension.
+2.2.3:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-28
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Another workaround for broken Cyrus APPEND behavior (Bug #11769).
+2.2.2:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-27
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Complete workaround for broken BINARY extension on Cyrus servers.
+2.2.1:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Workaround broken BINARY extension on Cyrus servers.
+2.2.0:
+  api: 2.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-10
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix returning UIDNEXT when using UIDNEXT_FORCE and the server does not automatically return this information.
+    [mms] Significant optimization to append() command.
+    [mms] Add abstracted syncing methods to Horde_Imap_Client_Base.
+2.1.6:
+  api: 2.1.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-10
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix parsing PARSE response code associated with an OK response.
+    [mms] Workaround broken BINARY implementation on UW-IMAP servers.
+    [mms] If we have binary data, and server doesn't support BINARY extension, send data anyway since we don't have any other option.
+    [mms] Correctly increment UIDNEXT when an EXISTS response is issued after the mailbox is opened (Bug #11679).
+    [mms] Fix regression that may have caused message flags to have been improperly cached if debugging was disabled (Bug #11665).
+2.1.5:
+  api: 2.1.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Correctly workaround servers that incorrectly implement the LIST-EXTENDED command.
+2.1.4:
+  api: 2.1.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-19
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Add Dutch translation (Arjen de Korte <build+horde@de-korte.org>).
+    [mms] Fix returning UIDNEXT when using UIDNEXT_FORCE and the server does not automatically return this information.
+    [mms] Significant optimization to append() command.
+    [mms] Add abstracted syncing methods to Horde_Imap_Client_Base.
+2.1.3:
+  api: 2.1.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-05
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Allow Horde_Imap_Client_Base#vanished() to work with non-QRESYNC servers if the 'ids' option is given.
+    [mms] Always map UIDs to sequence numbers if resolving an all UIDs search.
+    [mms] Ignore empty ID search queries.
+2.1.2:
+  api: 2.1.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-05
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix parsing empty ACL responses.
+2.1.1:
+  api: 2.1.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Massive performance increase for cached FETCH queries.
+2.1.0:
+  api: 2.1.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-11-02
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Split debugging code from Base driver into separate object.
+    [mms] Fix double encoding of non-ASCII elements in listMailboxes() (Bug #11608).
+    [mms] Fix regression for non-cached Socket objects (Bug #11605).
+    [mms] Improved handling of server write errors in the Socket driver.
+    [mms] Add support for IMAP MOVE command.
+    [mms] Correctly handle FETCH results intermingled with EXPUNGE/VANISHED requests within a single request.
+    [mms] Correctly handle EXISTS/EXPUNGE/VANISHED untagged responses which may appear at any time.
+    [mms] Fix handling message sequence number actions returned from server when using CONDSTORE/QRESYNC.
+2.0.0:
+  api: 2.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-10-30
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First stable release for Horde 5.
+    [mms] Fix regression in Horde_Imap_Client_Base#listMailboxes() return when both the 'flat' and 'sort' options are active.
+    [mms] Add STATUS_SYNCMODSEQ, STATUS_SYNCFLAGUIDS, and STATUS_SYNCVANISHED return options to Horde_Imap_Client_Base#status().
+2.0.0RC2:
+  api: 2.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-10-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix invalid class name usage (Bug #11586).
+    [mms] Remove STATUS_LASTMODSEQ and STATUS_LASTMODSEQUIDS return options from status().
+2.0.0RC1:
+  api: 2.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-10-26
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix CONDSTORE synchronization of deleted messages since last mailbox access.
+    [mms] Need to immediately synchronize mailbox on mailbox load with CONDSTORE or else we may lose flag change information.
+    [mms] Fixes/improvements to CONDSTORE capability sniffing and enabling.
+    [mms] Remove statuscache configuration option.
+    [mms] Optimize generation of POP3 sequence string.
+    [mms] Abstract forced determination of UIDNEXT value from cache method to a status() flag.
+    [mms] Remove Horde_Imap_Client_Base#fetchFromSectionString().
+    [mms] Horde_Imap_Client_Base#listMailboxes() now supports 'status' return even if server does not server LIST-STATUS.
+    [mms] Remove Horde_Imap_Client_Base#fetchCacheIgnore().
+    [mms] Move IMAP/POP URL parsing to new Horde_Imap_Client_Url object.
+    [mms] Move base subject parsing to new Horde_Imap_Client_Data_BaseSubject class.
+    [mms] Move IMAP sequence string generation/parsing to the Horde_Imap_Client_Ids object.
+    [mms] Remove Horde_Imap_Client_Utils#escape().
+    [mms] Remove Horde_Imap_Client_Utils#removeBareNewlines().
+    [mms] Move IMAP mailboxes sorting into new Horde_Imap_Client_Mailbox_List class.
+    [mms] Correctly handle determination of highestmodseq in currently selected mailbox if CONDSTORE, but not QRESYNC, is active.
+    [mms] Optimize APPEND so that we don't send large amounts of data to server if the server is not going to accept the data.
+    [mms] Don't expunge mailbox when it is labeled as read-only.
+    [mms] Fix regression in FETCH/COPY with sequence numbers (Bug #11521).
+    [mms] Fix quoting empty astrings (Bug #11505).
+    [jan] Fix Horde_Stream dependency.
+2.0.0beta4:
+  api: 2.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-10-12
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Add deleteACL().
+    [jan] Make setACL() work more similar to the SETACL IMAP command.
+    [mms] Fix determination of HIGHESTMODSEQ value from FETCH data.
+    [mms] Store command that caused NO/BAD error in Exception, if it can be determined.
+    [mms] Limit FETCH ENVELOPE data sizes.
+    [mms] Improved parsing of incoming IMAP server stream.
+    [mms] Improved parsing of IMAP threading data.
+    [mms] Improved IMAP tokenizer of server response data using PHP temporary streams.
+    [mms] Add standalone IMAP command tokenizer.
+    [mms] Rewritten handling for processing outgoing IMAP commands.
+    [mms] Improved debugging efficiency.
+    [mms] Added data objects for the various IMAP data types.
+    [mms] Added the Horde_Imap_Client_Data_Format objects.
+2.0.0beta3:
+  api: 2.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-08-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Correctly handle any resource key supported by the QUOTA extension.
+2.0.0beta2:
+  api: 2.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-08-07
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes:
+2.0.0beta1:
+  api: 2.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-07-19
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First beta release for Horde 5.
+    [mms] Allow auto-escaping of mailbox names in listMailboxes().
+    [mms] Add list_escape property to Horde_Imap_Client_Mailbox.
+    [mms] Remove public cache variable from IMAP driver.
+2.0.0alpha1:
+  api: 2.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2012-07-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First alpha release for Horde 5.
+    [mms] Internally workaround IMAP servers that don't support text searches other than US-ASCII.
+    [mms] Horde_Imap_Client_DateTime is now a wrapper around the native PHP DateTime object (Request #11074).
+    [mms] Implement new 2.0 API. See UPGRADING for full details of changes.
+1.5.11:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: false
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix CRAM-MD5 authentication for POP3 driver (Bug #11449).
+    [mms] Allow SSL version to be explicitly chosen via 'secure' configuration option for POP3 driver (Request #11435).
+1.5.10:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-10-15
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix reinitializing a prior authenticated client object when the IMAP server subsequently becomes unavailable (Bug #11413).
+1.5.9:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-09-26
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix POP3 regression that broken envelope data parsing (Bug #11477).
+    [mms] Fix outputting the host part when using Horde_Imap_Client_Utils#createUrl().
+    [mms] Fix obtaining UIDs for APPENDed messages when the server doesn't support APPENDUID.
+1.5.8:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-09-19
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix CRAM-MD5 authentication (Bug #11449; patrickdk@patrickdk.com).
+    [mms] Allow SSL version to be explicitly chosen via 'secure' configuration option (Request #11435).
+1.5.7:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-07-30
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix determining sequence numbers when caching is active (Bug #11294).
+1.5.6:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-07-28
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix sorting of numeric mailboxes with leading zeros.
+    [mms] Optimize statusMultiple() when polling mailboxes containing wildcard characters.
+    [mms] Correctly handle any resource key supported by the QUOTA extension.
+1.5.5:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-06-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Improved handling of multi-accessed mailboxes and the FETCH/STORE/SEARCH commands (RFC 2180 [2-4]).
+1.5.4:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-04-12
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in caching code (Bug #11143).
+1.5.3:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-04-11
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fixed PHP 5.2 incompatibility (Bug #11137).
+1.5.2:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-04-09
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix CHANGEDSINCE search if no FETCH attributes were specified (Bug #11132).
+    [mms] Fix search charset detection for servers that do not send the BADCHARSET response code (Bug #11117).
+    [mms] Workaround IMAP servers with broken CATENATE implementations (Bug #11111).
+    [jan] Fix sending ID requests.
+    [jan] Add Finnish translation (Leena Heino <liinu@uta.fi>).
+    [mms] Rewrite of caching system. Fixes a few bugs, and should be more efficient.
+    [mms] Clear imapproxy status when logging out.
+1.5.1:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-02-28
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Workaround PHP bug when using serialized Envelope data created by Horde_Imap_Client < 1.5.0 (Bug #11026).
+    [mms] Fix accessing STATUS information for mailboxes with non 7-bit characters.
+    [mms] Fix 'vanished' return from fetch().
+1.5.0:
+  api: 1.5.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-02-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Add Horde_Imap_Client_Base#setParam() (Bug #10680).
+    [mms] Return correct authentication error if authentication fails after the original login (Bug #11007).
+    [mms] Do case-insensitive check for NIL in IMAP data.
+    [mms] Correctly support RFC 822 groups in envelope data.
+    [mms] Envelope address data now returned as Horde_Mail_Rfc822_Address objects.
+    [mms] Other places where bodystructure may return literals.
+1.4.4:
+  api: 1.4.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-02-12
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Re-release of 1.4.3 due to broken PEAR .tgz package.
+1.4.3:
+  api: 1.4.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-02-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Workaround non-ASCII data in bodystructure return from IMAP server.
+    [mms] Fix several faulty translation strings (Bug #10958).
+1.4.2:
+  api: 1.4.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-02-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix objects where the password is not being encrypted (Bug #10950).
+1.4.1:
+  api: 1.4.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-01-31
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix translations when installed through PEAR.
+1.4.0:
+  api: 1.4.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-01-31
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Add German translation.
+    [jan] Add Spanish translation (Manuel P. Ayala <mayala@unex.es>).
+    [mms] Implement more efficient serialization for Thread data objects.
+    [mms] Move server debug information from exception error message to 'details' property of exception object.
+    [mms] Fix METADATA_TOOMANY and METADATA_NOPRIVATE exception codes.
+    [mms] All user-directed exception messages are now translated.
+    [mms] Added Horde_Imap_Client_Exception_NoSupportExtension.
+    [mms] Incorrect method calls now throw SPL errors instead of Horde_Imap_Client_Exceptions.
+1.3.2:
+  api: 1.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-01-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Allow multiple date searches to be specified in a single AND search query.
+    [mms] Fix deleting cached mailbox when mailbox name is given as an object.
+    [mms] Fix 'changedsince' and 'vanished' parameters' in the fetch() command (Bug #10915).
+1.3.1:
+  api: 1.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-12-21
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] LIST-STATUS does not depend on LIST-EXTENDED.
+    [mms] Add dependency checking for capabilities.
+1.3.0:
+  api: 1.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-12-13
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Work around broken headers in IMAP envelope data.
+    [mms] Remove Cclient drivers.
+1.2.1:
+  api: 1.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-11-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Workaround missing search charset support in the Socket driver (Bug #10726).
+    [mms] Only add CHARSET data to SEARCH queries if necessary (Bug #10726).
+    [mms] Fix deletion of cached message entries.
+1.2.0:
+  api: 1.2.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-11-04
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fixed setting data for several POP3 fetch results.
+    [mms] Parsing/generating sequence strings for POP3 servers has been fixed.
+    [mms] Removed unmaintained Mock driver.
+    [mms] API CHANGE: Added Horde_Imap_Client_Mailbox to provide way to accurately switch between UTF7-IMAP and UTF-8 mailbox representations.
+    [mms] API CHANGE: Deprecate Horde_Imap_Client_Base::parseCommandArray() - use Horde_Imap_Client_Utils::parseCommandArray() instead.
+    [mms] API CHANGE: Added a required parameter ('baseob') to Horde_Imap_Client_Cache constructor.
+    [mms] API CHANGE: Added Horde_Imap_Client_Base::writeDebug().
+    [mms] API CHANGE: Added Horde_Imap_Client_Base::getIdsOb().
+    [mms] API CHANGE: Deprecate Horde_Imap_Client_Cache::singleton().
+1.1.0:
+  api: 1.1.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-10-08
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix client-side Cc/From/To sorting (Bug #10503).
+    [mms] Improved IMAP debug logging.
+    [mms] Fix search charset determination for servers that support SORT & ESORT (Bug #10479).
+    [mms] Improved phpdoc documentation.
+    [mms] API CHANGE: Add shortcuts to get MIME decoded envelope information.
+    [mms] Automatically authenticate to server when using a command that requires an authenticated/selected state (Bug #10473).
+1.0.15:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-08-31
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Remove dependency on Auth_SASL.
+1.0.14:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-08-30
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Add support for CRAM-SHA1 and CRAM-SHA256 authentication (available in Courier SASL library).
+    [mms] Remove dependency on Auth_SASL for CRAM-MD5 authentication.
+    [mms] Ignore unknown authentication methods; otherwise, they give false positive when authenticating (Bug #10453).
+1.0.13:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-08-23
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix rare race condition that may cause FETCH requests in the IMAP Socket driver to return empty results (Bug #10434).
+1.0.12:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-08-17
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix typo that prevented deletion of messages on POP3 servers (Bug #10424).
+1.0.11:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-08-09
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix regression in POP3 Socket driver that caused incorrect parsing of server data (Bug #10417).
+1.0.10:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-08-03
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix OR search if first search element contains more than one search criteria (Bug #10404).
+    [mms] Fix invalid IMAP command being sent if a changedsince search was empty.
+1.0.9:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-07-05
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [jan] Fix stripping attachments from mailboxes with non-ascii names.
+    [mjr] Fix incorrect method name in Pop3 Socket driver.
+1.0.8:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-06-14
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix re-subscribing to child mailboxes of a renamed mailbox (Bug #10212).
+    [mms] Fix base subject generation under RFC 5256 [2.1].
+1.0.7:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-06-01
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Support response code for POP3 servers (RFC 2449/3206).
+    [mms] Enable cache support for POP3 Socket driver (FETCH data only).
+    [mms] Fix APOP authentication for POP3 Socket driver.
+    [mms] Fix regression with UTF7-IMAP encoding of non-ascii folder names (Bug #10093).
+1.0.6:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-05-25
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix changedsince FETCH results when no cacheable fields were present in query.
+    [mms] Fix/optimize updating Sequence -> UID list when processing EXPUNGEs (Bug #10097).
+    [mms] Fix UTF-8 -> UTF7-IMAP encoding of ampersands (Bug #10093).
+    [mms] Fix setACL() for Socket driver (was always doing replace instead of add/remove).
+    [mms] Fix ACL parsing on RFC 2086 server implementations (Bug #10079).
+    [mms] More than one SEARCH response may be sent, so don't overwrite existing values.
+    [mms] Disable search caching if a mailbox reports it does not support mod sequences (Bug #9833).
+    [mms] Fix storing IMAP flag cache info if specifying both add and remove options to store().
+1.0.5:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-05-11
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix OVERQUOTA Exception error constant (Bug #10068; Felipe Zipitría <fzipi@fing.edu.uy>).
+    [mms] Correctly return PERMANENTFLAGS information if missing in server return.
+    [mms] Optimizing expunging when using QRESYNC.
+    [mms] Optimize re-opening a mailbox R/W if using CONDSTORE/QRESYNC.
+    [mms] Optimize statusMultiple() for currently selected mailbox.
+    [mms] Optimize search()/thread() in empty mailboxes.
+1.0.4:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-04-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Filter CAPABILITY return if sent in response code (Bug #9976).
+    [mms] Correctly limit FETCH results when specifying changedsince or vanished options and all requested fetch data is already cached.
+    [mms] Fix intermittent issues retrieving FETCH results in Socket driver.
+    [mms] Optimize expunging in Socket driver with UIDPLUS servers.
+    [mms] Fix parsing NAMESPACE response in Socket driver (Bug #9970).
+1.0.3:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-04-21
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Return cloned objects from Data results, to prevent issues when caching (Bug #9931).
+    [mms] Optimize listing subscribed mailboxes for certain queries.
+    [mms] Add support for PARTIAL search/sort results return (RFC 5267 [4.4]).
+    [mms] Add support for SEARCH=FUZZY (RFC 6203).
+1.0.2:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-04-21
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Correct fix for Bug #9915 (Bug #9943).
+1.0.1:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-04-20
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Work around broken IMAP servers that send EXISTS data in EXPUNGE response (Bug #9915).
+    [mms] Work around broken ESEARCH on Cyrus (Bug #9842).
+    [mms] Parse broken date strings that contain timezone information in parantheses (Request #9847).
+    [mms] Fix for IMAP servers that report MODSEQ information even though CONDSTORE has not been enabled (Bug #9845).
+    [mms] Fix server-side sorting of subjects in Socket driver (Bug #9840).
+    [mms] Fix UIDVALIDITY determination for POP3 servers that support UIDL.
+    [mms] Added Horde_Imap_Client_Data_Fetch_Pop3 object.
+1.0.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-04-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First stable release for Horde 4.
+    [mms] Fixes for IMAP servers that support CONDSTORE but disable MODSEQs in mialboxes (Bug #9796).
+    [mms] Fix obtaining fetch results when searching by sequence number and using caching.
+    [mms] Add ability to sort mailboxes return from Horde_Imap_Client_Base#statusMultiple().
+1.0.0RC2:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    Second release candidate for Horde 4.
+    [mms] Provide way to indicate mailboxes that should not have FETCH data cached.
+1.0.0RC1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First release candidate for Horde 4.
+    [mms] Use UIDPLUS results to copy cached data to new mailbox when copying messags.
+    [mms] Fix fetching by sequence number when caching.
+1.0.0beta1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-16
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix client-side sorting using envelope data.
+    [mms] Workaround PHP < 5.2.6 (broken stream handling) (Bug #9644).
+    [mms] Add basic UTF7-IMAP conversion unit test.
+1.0.0alpha1:
+  api: 1.0.0
+  state:
+    release: alpha
+    api: alpha
+  date: 2011-03-08
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Add PHPUnit test framework.
+    [mms] Added constants for RFC-defined flags.
+    [mms] Supported finalized SPECIAL-USE capability (RFC 6154).
+    [mms] Add Horde_Imap_Client_Data_AclNegative object.
+    [mms] Add Horde_Imap_Client_Base#allAclRights().
+    [mms] Add Horde_Imap_Client_Data_Acl and Horde_Imap_Client_Data_AclRights objects.
+    [mms] Horde_Imap_Client_Base#getNamespaces() now returns integer constants for the 'type' parameter.
+    [mms] Add Horde_Imap_Client_Data_Fetch data object.
+    [mms] Add Horde_Imap_Client_Ids data object.
+    [mms] Add Horde_Imap_Client_Fetch_Query data object.
+    [mms] Add Horde_Imap_Client_Data_Envelope data object.
