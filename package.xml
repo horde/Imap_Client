@@ -10,7 +10,7 @@
   <email>slusarz@horde.org</email>
   <active>yes</active>
  </lead>
- <date>2017-08-28</date>
+ <date>2017-10-30</date>
  <version>
   <release>2.29.16</release>
   <api>2.29.0</api>
@@ -33,6 +33,7 @@
         <file name="tutorial.md" role="doc" />
         <file name="tutorial.rst" role="doc" />
        </dir> <!-- /doc/Horde/Imap/Client/examples -->
+       <file name="CHANGES" role="doc" />
        <file name="COPYING" role="doc" />
        <file name="UPGRADING" role="doc" />
       </dir> <!-- /doc/Horde/Imap/Client -->
@@ -573,6 +574,7 @@
  </dependencies>
  <phprelease>
   <filelist>
+   <install as="CHANGES" name="doc/Horde/Imap/Client/CHANGES" />
    <install as="COPYING" name="doc/Horde/Imap/Client/COPYING" />
    <install as="UPGRADING" name="doc/Horde/Imap/Client/UPGRADING" />
    <install as="examples/tutorial.md" name="doc/Horde/Imap/Client/examples/tutorial.md" />
@@ -3133,7 +3135,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-08-28</date>
+   <date>2017-10-30</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * 
