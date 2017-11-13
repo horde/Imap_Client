@@ -26,4 +26,4 @@ before_script:
   - pear install channel://pear.horde.org/Horde_Test
   - pear install -a -B package.xml
 script:
-  - php $(find test -name AllTests.php)
+  - php $(pear config-get php_dir)/Horde/Test/vendor/phpunit/phpunit/phpunit
