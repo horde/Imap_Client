@@ -13,7 +13,7 @@ authors:
     name: Michael Slusarz
     user: slusarz
     email: slusarz@horde.org
-    active: true
+    active: false
     role: lead
 version:
   release: 2.29.16
