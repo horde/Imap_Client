@@ -1,6 +1,9 @@
-------------
-v2.29.16-git
-------------
+--------
+v2.29.16
+--------
+
+[mjr] Fix fatal error in dealing with certain exceptions.
+
 
 
 --------
