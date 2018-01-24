@@ -8,7 +8,9 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes:
+  notes: |+
+    [mjr] Fix fatal error in dealing with certain exceptions.
+    
 2.29.15:
   api: 2.29.0
   state:
