@@ -2844,15 +2844,17 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                 if ($e->getCode() === $e::UNKNOWNCTE) {
                     /* UNKNOWN-CTE error. Redo the query without the BINARY
                      * elements. */
-                    $bq = $pipeline->data['binaryquery'];
-
-                    foreach ($queries as $val) {
-                        foreach ($bq as $key2 => $val2) {
-                            unset($val2['decode']);
-                            $val['_query']->bodyPart($key2, $val2);
-                            $val['_query']->remove(Horde_Imap_Client::FETCH_BODYPARTSIZE, $key2);
+                    if(defined($bq = $pipeline->data['binaryquery']) ){
+                        foreach ($queries as $val) {
+                            foreach ($bq as $key2 => $val2) {
+                                unset($val2['decode']);
+                                $val['_query']->bodyPart($key2, $val2);
+                                $val['_query']->remove(Horde_Imap_Client::FETCH_BODYPARTSIZE, $key2);
+                            }
+                            $pipeline->data['fetch_followup'][] = $val;
                         }
-                        $pipeline->data['fetch_followup'][] = $val;
+                    } else {
+                        $this->noop();
                     }
                 } elseif ($sequence) {
                     /* A NO response, when coupled with a sequence FETCH, most
