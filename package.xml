@@ -21,6 +21,8 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
+* [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
+* [mjr] Fix issues when retrying a failed connection to the IMAP server (PR #1, Antoine Deschênes).
 * [mjr] Fix fatal error in dealing with certain exceptions.
  </notes>
  <contents>
@@ -3440,6 +3442,8 @@
    <date>2017-10-20</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
+* [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
+* [mjr] Fix issues when retrying a failed connection to the IMAP server (PR #1, Antoine Deschênes).
 * [mjr] Fix fatal error in dealing with certain exceptions.
    </notes>
   </release>
