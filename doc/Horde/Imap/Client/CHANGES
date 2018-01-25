@@ -2,8 +2,10 @@
 v2.29.16
 --------
 
+./
+[mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1,
+      stefanolaf).
 [mjr] Fix fatal error in dealing with certain exceptions.
-
 
 
 --------
