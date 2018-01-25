@@ -4829,7 +4829,7 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                     $ob,
                     $pipeline
                 );
-                $e->messagePrintf(array(strval($ob->token));
+                $e->messagePrintf(array(strval($ob->token)));
                 throw $e;
             }
             break;
