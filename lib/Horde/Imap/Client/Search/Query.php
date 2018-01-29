@@ -89,8 +89,8 @@ class Horde_Imap_Client_Search_Query implements Serializable
 
         foreach (array('and', 'or') as $item) {
             if (isset($this->_search[$item])) {
-                foreach ($this->_search[$item] as &$val) {
-                    $val->charset($charset, $convert);
+                foreach ($this->_search[$item] as &$tval) {
+                    $tval->charset($charset, $convert);
                 }
             }
         }
