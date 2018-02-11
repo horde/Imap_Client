@@ -21,7 +21,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-* ./
+* [mjr] Fix corruption of search terms due to sticky reference (PR #2).
 * [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
 * [mjr] Fix fatal error in dealing with certain exceptions.
  </notes>
@@ -1571,7 +1571,7 @@
    <date>2012-08-07</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* 
+*
    </notes>
   </release>
   <release>
@@ -3442,7 +3442,7 @@
    <date>2017-10-20</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* ./
+* [mjr] Fix corruption of search terms due to sticky reference (PR #2)
 * [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
 * [mjr] Fix fatal error in dealing with certain exceptions.
    </notes>
