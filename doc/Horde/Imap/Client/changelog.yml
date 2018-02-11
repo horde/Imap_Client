@@ -9,6 +9,7 @@
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
   notes: |
+    [mjr] Fix corruption of search terms due to stick reference (PR #2)
     [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
     [mjr] Fix fatal error in dealing with certain exceptions.
 2.29.15:
