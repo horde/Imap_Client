@@ -95,6 +95,9 @@ class Horde_Imap_Client_Search_Query implements Serializable
             }
         }
 
+        // Unset the reference to avoid corrupting $this->_search below.
+        unset($val);
+
         foreach (array('header', 'text') as $item) {
             if (isset($this->_search[$item])) {
                 foreach ($this->_search[$item] as $key => $val) {
