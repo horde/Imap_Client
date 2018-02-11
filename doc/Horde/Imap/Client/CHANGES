@@ -2,10 +2,9 @@
 v2.29.16
 --------
 
+[mjr] Fix corruption of search terms due to stick reference (PR #2)
 [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1,
       stefanolaf).
-[mjr] Fix issues when retrying a failed connection to the IMAP server (PR #1,
-      Antoine Deschênes).
 [mjr] Fix fatal error in dealing with certain exceptions.
 
 
