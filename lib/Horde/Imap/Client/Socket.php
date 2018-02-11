@@ -2841,9 +2841,13 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
             }
         } catch (Horde_Imap_Client_Exception_ServerResponse $e) {
             if ($e->status === Horde_Imap_Client_Interaction_Server::NO) {
-                if ($e->getCode() === $e::UNKNOWNCTE) {
+                if ($e->getCode() === $e::UNKNOWNCTE ||
+                    $e->getCode() === $e::PARSEERROR) {
                     /* UNKNOWN-CTE error. Redo the query without the BINARY
-                     * elements. */
+                     * elements. Also include PARSEERROR in this as
+                     * Dovecot >= 2.2 binary fetch treats broken email as PARSE
+                     * error and no longer UNKNOWN-CTE
+                     */
                     if (!empty($pipline->date['binaryquery'])) {
                         foreach ($queries as $val) {
                             foreach ($pipeline->date['binaryquery'] as $key2 => $val2) {
