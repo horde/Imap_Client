@@ -2848,9 +2848,9 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                      * Dovecot >= 2.2 binary fetch treats broken email as PARSE
                      * error and no longer UNKNOWN-CTE
                      */
-                    if (!empty($pipline->date['binaryquery'])) {
+                    if (!empty($pipeline->data['binaryquery'])) {
                         foreach ($queries as $val) {
-                            foreach ($pipeline->date['binaryquery'] as $key2 => $val2) {
+                            foreach ($pipeline->data['binaryquery'] as $key2 => $val2) {
                                 unset($val2['decode']);
                                 $val['_query']->bodyPart($key2, $val2);
                                 $val['_query']->remove(Horde_Imap_Client::FETCH_BODYPARTSIZE, $key2);
