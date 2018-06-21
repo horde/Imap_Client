@@ -205,7 +205,7 @@ class Horde_Imap_Client_Data_Sync
 
         /* Flag changes. */
         if ($sync_all || ($criteria & Horde_Imap_Client::SYNC_FLAGS)) {
-            $this->flags = !($this->highestmodseq && isset($curr['H']) && $this->highestmodseq != $curr['H']);
+            $this->flags = !($this->highestmodseq && isset($curr['H']) && ($this->highestmodseq != $curr['H']));
         }
 
         if ($sync_all || ($criteria & Horde_Imap_Client::SYNC_FLAGSUIDS)) {
