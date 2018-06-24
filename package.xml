@@ -10,7 +10,7 @@
   <email>slusarz@horde.org</email>
   <active>no</active>
  </lead>
- <date>2017-11-14</date>
+ <date>2018-06-24</date>
  <version>
   <release>2.29.16</release>
   <api>2.29.0</api>
@@ -3440,7 +3440,7 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2017-10-20</date>
+   <date>2018-06-24</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * [mjr] Allow searching by DateTime as well as Date (PR #3, Robin Appelman &lt;robin@icewind.nl&gt;).
