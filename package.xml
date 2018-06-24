@@ -12,7 +12,7 @@
  </lead>
  <date>2018-06-24</date>
  <version>
-  <release>2.29.16</release>
+  <release>2.29.17</release>
   <api>2.29.0</api>
  </version>
  <stability>
@@ -21,10 +21,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-* [mjr] Allow searching by DateTime as well as Date (PR #3, Robin Appelman &lt;robin@icewind.nl&gt;).
-* [mjr] Fix corruption of search terms due to sticky reference (PR #2).
-* [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
-* [mjr] Fix fatal error in dealing with certain exceptions.
+* 
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -3447,6 +3444,21 @@
 * [mjr] Fix corruption of search terms due to sticky reference (PR #2).
 * [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
 * [mjr] Fix fatal error in dealing with certain exceptions.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>2.29.17</release>
+    <api>2.29.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2018-06-24</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* 
    </notes>
   </release>
  </changelog>
