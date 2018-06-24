@@ -2,7 +2,9 @@
 v2.29.16
 --------
 
-[mjr] Fix corruption of search terms due to stick reference (PR #2)
+[mjr] Allow searching by DateTime as well as Date (PR #3, Robin Appelman
+      <robin@icewind.nl>).
+[mjr] Fix corruption of search terms due to sticky reference (PR #2).
 [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1,
       stefanolaf).
 [mjr] Fix fatal error in dealing with certain exceptions.
