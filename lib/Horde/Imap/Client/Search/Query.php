@@ -700,6 +700,42 @@ class Horde_Imap_Client_Search_Query implements Serializable
     }
 
     /**
+     * Search for messages within a date and time range.
+     *
+     * @param mixed $date    DateTime or Horde_Date object.
+     * @param string $range  Either:
+     *   - Horde_Imap_Client_Search_Query::DATE_BEFORE
+     *   - Horde_Imap_Client_Search_Query::DATE_ON
+     *   - Horde_Imap_Client_Search_Query::DATE_SINCE
+     * @param boolean $header  If true, search using the date in the message
+     *                         headers. If false, search using the internal
+     *                         IMAP date (usually arrival time).
+     * @param boolean $not     If true, do a 'NOT' search of the range.
+     * @param array $opts      Additional options:
+     *   - fuzzy: (boolean) If true, perform a fuzzy search. The IMAP server
+     *            MUST support RFC 6203.
+     */
+    public function dateTimeSearch($date, $range, $header = true, $not = false,
+                                   array $opts = array())
+    {
+        if (!isset($this->_search['date'])) {
+            $this->_search['date'] = array();
+        }
+
+        // We should really be storing the raw DateTime object as data,
+        // but all versions of the query object have converted at this stage.
+        $ob = new Horde_Imap_Client_Data_Format_DateTime($date);
+
+        $this->_search['date'][] = array_filter(array(
+            'date' => $ob->escape(),
+            'fuzzy' => !empty($opts['fuzzy']),
+            'header' => $header,
+            'range' => $range,
+            'not' => $not
+        ));
+    }
+
+    /**
      * Search for messages within a given interval. Only one interval of each
      * type can be specified per search query. If the IMAP server supports
      * the WITHIN extension (RFC 5032), it will be used.  Otherwise, the
