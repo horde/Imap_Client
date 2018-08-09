@@ -54,8 +54,8 @@ msgstr ""
 "A keresésben használt karakterkódolás nem használható a levelezőszerveren."
 
 #: lib/Horde/Imap/Client/Socket.php:1076
-msgid "Could not open mailbox \"%s\"."
-msgstr "A \"%s\" mappa nem nyitható meg."
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
+msgstr "A \"%s\" felhasználó számára a \"%s\" mappa nem nyitható meg."
 
 #: lib/Horde/Imap/Client/Socket.php:393
 msgid "Could not open secure TLS connection to the IMAP server."

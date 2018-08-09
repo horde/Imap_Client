@@ -58,8 +58,8 @@ msgstr "Karakterset in zoekopdracht wordt niet ondersteund op de mailserver."
 
 #: lib/Horde/Imap/Client/Socket.php:931
 #, php-format
-msgid "Could not open mailbox \"%s\"."
-msgstr "Kan map \"%s\" niet openen."
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
+msgstr "Kan map \"%s\" niet openen voor gebruiker \"%s\"."
 
 #: lib/Horde/Imap/Client/Socket.php:335
 msgid "Could not open secure TLS connection to the IMAP server."

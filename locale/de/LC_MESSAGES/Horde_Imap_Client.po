@@ -65,8 +65,8 @@ msgstr ""
 
 #: lib/Horde/Imap/Client/Socket.php:1240
 #, php-format
-msgid "Could not open mailbox \"%s\"."
-msgstr "Ordner \"%s\" konnte nicht geöffnet werden."
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
+msgstr "Ordner \"%s\" konnte für Benutzer \"%s\" nicht geöffnet werden."
 
 #: lib/Horde/Imap/Client/Socket.php:358 lib/Horde/Imap/Client/Socket.php:400
 msgid "Could not open secure TLS connection to the IMAP server."

@@ -33,8 +33,8 @@ msgstr "Huts egitea autentifikazioan."
 
 #: lib/Horde/Imap/Client/Socket.php:931
 #, php-format
-msgid "Could not open mailbox \"%s\"."
-msgstr "Ezin izan da ireki \"%s\" postontzia."
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
+msgstr "Ezin izan da ireki \"%s\" postontzia \"%s\" erabiltzaileentzat."
 
 #: lib/Horde/Imap/Client/Socket.php:335
 #, fuzzy

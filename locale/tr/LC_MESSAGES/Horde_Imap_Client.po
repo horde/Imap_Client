@@ -63,8 +63,8 @@ msgstr ""
 
 #: lib/Horde/Imap/Client/Socket.php:1240
 #, php-format
-msgid "Could not open mailbox \"%s\"."
-msgstr "Dizin \"%s\" açılamadı."
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
+msgstr "Kullanıcı \"%s\"'si için dizin \"%s\" açılamadı."
 
 #: lib/Horde/Imap/Client/Socket.php:358 lib/Horde/Imap/Client/Socket.php:400
 msgid "Could not open secure TLS connection to the IMAP server."

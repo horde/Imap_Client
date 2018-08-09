@@ -57,8 +57,8 @@ msgstr "Palvelin ei tue haussa käytettyä merkistöä."
 
 #: lib/Horde/Imap/Client/Socket.php:931
 #, php-format
-msgid "Could not open mailbox \"%s\"."
-msgstr "Ei voitu aukaista postilaatikkoa \"%s\"."
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
+msgstr "Ei voitu aukaista postilaatikkoa \"%s\" käyttäjälle \"%s\"."
 
 #: lib/Horde/Imap/Client/Socket.php:335
 msgid "Could not open secure TLS connection to the IMAP server."

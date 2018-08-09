@@ -1237,10 +1237,10 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                 $this->_mode = 0;
                 if (!$e->getCode()) {
                     $e = new Horde_Imap_Client_Exception(
-                        Horde_Imap_Client_Translation::r("Could not open mailbox \"%s\"."),
+                        Horde_Imap_Client_Translation::r("Could not open mailbox \"%s\" for user \"%s\"."),
                         Horde_Imap_Client_Exception::MAILBOX_NOOPEN
                     );
-                    $e->messagePrintf(array($mailbox));
+                    $e->messagePrintf(array($mailbox, $GLOBALS['registry']->getAuth()));
                 }
             }
             throw $e;

@@ -62,8 +62,8 @@ msgstr ""
 
 #: lib/Horde/Imap/Client/Socket.php:1139
 #, php-format
-msgid "Could not open mailbox \"%s\"."
-msgstr "Δεν ήταν δυνατό  το άνοιγμα της γραμματοθυρίδας \"% s \"."
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
+msgstr "Δεν ήταν δυνατό  το άνοιγμα της γραμματοθυρίδας \"%s\" για τον χρήστη \"%s\"."
 
 #: lib/Horde/Imap/Client/Socket.php:357 lib/Horde/Imap/Client/Socket.php:399
 msgid "Could not open secure TLS connection to the IMAP server."
@@ -119,12 +119,12 @@ msgstr "Ο διακομιστής ανέφερε σφάλμα IMAP."
 #: lib/Horde/Imap/Client/Socket.php:3904
 #, php-format
 msgid "Invalid METADATA entry: \"%s\"."
-msgstr "Άκυρη καταχώρηση μεταδεδομένων: \"% s \"."
+msgstr "Άκυρη καταχώρηση μεταδεδομένων: \"%s\"."
 
 #: lib/Horde/Imap/Client/Socket.php:3997
 #, php-format
 msgid "Invalid METADATA value type \"%s\"."
-msgstr "Μη έγκυρη τιμή μεταδεδομένων \"% s \"."
+msgstr "Μη έγκυρη τιμή μεταδεδομένων \"%s\"."
 
 #: lib/Horde/Imap/Client/Socket/Connection/Socket.php:148
 msgid "Mail server closed the connection unexpectedly."

@@ -55,8 +55,8 @@ msgstr "Tegnsættet brugt i søgeteksten er ikke understøttet på mail serveren
 
 #: lib/Horde/Imap/Client/Socket.php:1077
 #, php-format
-msgid "Could not open mailbox \"%s\"."
-msgstr "Kunne ikke åbne mail mappen \"%s\"."
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
+msgstr "Kunne ikke åbne mail mappen \"%s\" for bruger \"%s\"."
 
 #: lib/Horde/Imap/Client/Socket.php:393
 msgid "Could not open secure TLS connection to the IMAP server."

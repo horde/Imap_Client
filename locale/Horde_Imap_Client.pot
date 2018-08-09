@@ -61,7 +61,7 @@ msgstr ""
 
 #: lib/Horde/Imap/Client/Socket.php:1240
 #, php-format
-msgid "Could not open mailbox \"%s\"."
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
 msgstr ""
 
 #: lib/Horde/Imap/Client/Socket.php:358 lib/Horde/Imap/Client/Socket.php:400

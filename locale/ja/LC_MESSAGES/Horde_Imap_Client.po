@@ -57,8 +57,8 @@ msgstr "検索文字中の文字セットはメールサーバではサポート
 
 #: lib/Horde/Imap/Client/Socket.php:1077
 #, php-format
-msgid "Could not open mailbox \"%s\"."
-msgstr "メールボックス \"%s\" が開けません。"
+msgid "Could not open mailbox \"%s\" for user \"%s\"."
+msgstr "ユーザー \"%s\" のメールボックス \"%s\" が開けません。"
 
 #: lib/Horde/Imap/Client/Socket.php:393
 msgid "Could not open secure TLS connection to the IMAP server."
