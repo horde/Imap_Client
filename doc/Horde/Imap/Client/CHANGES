@@ -2,15 +2,14 @@
 v2.29.17
 --------
 
-
+[jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) <stronk7@moodle.org>,
+      PR 6).
 
 
 --------
 v2.29.16
 --------
 
-[jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) <stronk7@moodle.org>,
-      PR 6).
 [mjr] Allow searching by DateTime as well as Date (PR #3, Robin Appelman
       <robin@icewind.nl>).
 [mjr] Fix corruption of search terms due to sticky reference (PR #2).
