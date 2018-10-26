@@ -21,7 +21,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-* 
+* [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) &lt;stronk7@moodle.org&gt;, PR 6).
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -3458,7 +3458,7 @@
    <date>2018-06-24</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* 
+* [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) &lt;stronk7@moodle.org&gt;, PR 6).
    </notes>
   </release>
  </changelog>

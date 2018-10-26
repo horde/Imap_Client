@@ -2,7 +2,8 @@
 v2.29.17
 --------
 
-
+[jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) <stronk7@moodle.org>,
+      PR 6).
 
 
 --------
