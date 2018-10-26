@@ -8,8 +8,8 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-    
+  notes: |
+    [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) <stronk7@moodle.org>, PR 6).
 2.29.16:
   api: 2.29.0
   state:
@@ -20,7 +20,6 @@
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
   notes: |
-    [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) <stronk7@moodle.org>, PR 6).
     [mjr] Allow searching by DateTime as well as Date (PR #3, Robin Appelman <robin@icewind.nl>).
     [mjr] Fix corruption of search terms due to sticky reference (PR #2).
     [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
