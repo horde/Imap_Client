@@ -8,8 +8,8 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-    
+  notes: |
+    [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) <stronk7@moodle.org>, PR 6).
 2.29.16:
   api: 2.29.0
   state:
