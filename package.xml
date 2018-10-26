@@ -21,6 +21,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
+* [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) &lt;stronk7@moodle.org&gt;, PR 6).
 * [mjr] Allow searching by DateTime as well as Date (PR #3, Robin Appelman &lt;robin@icewind.nl&gt;).
 * [mjr] Fix corruption of search terms due to sticky reference (PR #2).
 * [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
@@ -3443,6 +3444,7 @@
    <date>2017-10-20</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
+* [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) &lt;stronk7@moodle.org&gt;, PR 6).
 * [mjr] Allow searching by DateTime as well as Date (PR #3, Robin Appelman &lt;robin@icewind.nl&gt;).
 * [mjr] Fix corruption of search terms due to sticky reference (PR #2).
 * [mjr] Fix retrying FETCH after an UNKNOWN-CTE error in certain cases (PR #1, stefanolaf).
