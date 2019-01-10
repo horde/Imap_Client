@@ -4005,8 +4005,8 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
      */
     protected function _getAnnotateMoreEntry($name)
     {
-        if (substr($name, 0, 7) === '/shared') {
-            return array(substr($name, 7), 'value.shared');
+        if (substr($name, 0, 7) === '/vendor') {
+            return array($name, 'value.shared');
         } else if (substr($name, 0, 8) === '/private') {
             return array(substr($name, 8), 'value.priv');
         }
