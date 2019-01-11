@@ -663,7 +663,11 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
      */
     protected function _tryLogin($method)
     {
-        $username = $this->getParam('username');
+	$username = $this->getParam('username');
+        if (is_null($this->getParam('authusername')))
+		$authusername = $username;
+	else
+		$authusername = $this->getParam('authusername');
         $password = $this->getParam('password');
 
         switch ($method) {
@@ -764,7 +768,7 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                 $method,
                 base64_encode(implode("\0", array(
                     $username,
-                    $username,
+                    $authusername,
                     $password
                 ))),
                 $username
