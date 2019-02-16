@@ -21,6 +21,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
+* [mjr] Provide SASL PLAIN authentication as another user (Marco Favero &lt;m.faverof@gmail.com&gt;, PR #7).
 * [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) &lt;stronk7@moodle.org&gt;, PR 6).
  </notes>
  <contents>
@@ -3458,6 +3459,7 @@
    <date>2018-06-24</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
+* [mjr] Provide SASL PLAIN authentication as another user (Marco Favero &lt;m.faverof@gmail.com&gt;, PR #7).
 * [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) &lt;stronk7@moodle.org&gt;, PR 6).
    </notes>
   </release>

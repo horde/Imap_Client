@@ -2,6 +2,8 @@
 v2.29.17
 --------
 
+[mjr] Provide SASL PLAIN authentication as another user (Marco Favero
+      <m.faverof@gmail.com>, PR #7).
 [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) <stronk7@moodle.org>,
       PR 6).
 
