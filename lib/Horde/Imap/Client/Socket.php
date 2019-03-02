@@ -2405,10 +2405,12 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
             $cmd->add($tmp);
 
             /* Charset is mandatory for SORT (RFC 5256 [3]).
-             * However, if UTF-8 support is activated, a client MUST NOT
-             * send the charset specification (RFC 6855 [3]; Errata 4029). */
+             * If UTF-8 support is activated, a client MUST ONLY
+             * send the 'UTF-8' specification (RFC 6855 [3]; Errata 4029). */
             if (!$this->_capability()->isEnabled('UTF8=ACCEPT')) {
                 $cmd->add($charset);
+            } else {
+                $cmd->add('UTF-8');
             }
         } else {
             $cmd = $this->_command(
@@ -2753,11 +2755,14 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
             empty($options['sequence']) ? 'UID THREAD' : 'THREAD'
         )->add($tsort);
 
-        /* If UTF-8 support is activated, a client MUST NOT
-         * send the charset specification (RFC 6855 [3]; Errata 4029). */
+        /* If UTF-8 support is activated, a client MUST send the UTF-8
+         * charset specification since charset is mandatory for this
+         * command (RFC 6855 [3]; Errata 4029). */
         if (empty($options['search'])) {
             if (!$this->_capability()->isEnabled('UTF8=ACCEPT')) {
                 $cmd->add('US-ASCII');
+            } else {
+                $cmd->add('UTF-8');
             }
             $cmd->add('ALL');
         } else {
