@@ -114,6 +114,9 @@ class Horde_Imap_Client
     const FETCH_MODSEQ = 15;
     /* @since 2.11.0 */
     const FETCH_DOWNGRADED = 16;
+    /* Dovecot virtual folder fetch */
+    const FETCH_XMAILBOX = 17;
+    const FETCH_XREALUID = 18;
 
     /* Namespace constants. @deprecated */
     const NS_PERSONAL = 1;

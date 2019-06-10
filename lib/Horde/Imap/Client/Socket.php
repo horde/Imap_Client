@@ -3042,6 +3042,14 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                     $fetch->add('MODSEQ');
                 }
                 break;
+
+            case Horde_Imap_Client::FETCH_XMAILBOX:
+                $fetch->add('X-MAILBOX');
+                break;
+
+            case Horde_Imap_Client::FETCH_XREALUID:
+                $fetch->add('X-REAL-UID');
+                break;
             }
         }
 
@@ -3190,6 +3198,14 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                      * once a tagged response is received (RFC 7162 [6]). */
                     $pipeline->data['modseqs'][] = $modseq;
                 }
+                break;
+
+            case 'X-MAILBOX':
+                $ob->setXMailbox($data->next());
+                break;
+
+            case 'X-REAL-UID':
+                $ob->setXRealUid($data->next());
                 break;
 
             default:

@@ -56,7 +56,9 @@ implements Serializable, SplObserver
         Horde_Imap_Client::FETCH_HEADERS => 'HIChdrs',
         Horde_Imap_Client::FETCH_IMAPDATE => 'HICdate',
         Horde_Imap_Client::FETCH_SIZE => 'HICsize',
-        Horde_Imap_Client::FETCH_STRUCTURE => 'HICstruct'
+        Horde_Imap_Client::FETCH_STRUCTURE => 'HICstruct',
+        Horde_Imap_Client::FETCH_XMAILBOX => 'HICxmailbox',
+        Horde_Imap_Client::FETCH_XREALUID => 'HICxrealuid'
     );
 
     /**
@@ -189,6 +191,8 @@ implements Serializable, SplObserver
      *     - Horde_Imap_Client::FETCH_IMAPDATE
      *     - Horde_Imap_Client::FETCH_SIZE
      *     - Horde_Imap_Client::FETCH_STRUCTURE
+     *     - Horde_Imap_Client::FETCH_XMAILBOX
+     *     - Horde_Imap_Client::FETCH_XREALUID
      * - capability_ignore: (array) A list of IMAP capabilites to ignore, even
      *                      if they are supported on the server.
      *                      DEFAULT: No supported capabilities are ignored.
@@ -2548,6 +2552,8 @@ implements Serializable, SplObserver
                 case Horde_Imap_Client::FETCH_IMAPDATE:
                 case Horde_Imap_Client::FETCH_SIZE:
                 case Horde_Imap_Client::FETCH_STRUCTURE:
+                case Horde_Imap_Client::FETCH_XMAILBOX:
+                case Horde_Imap_Client::FETCH_XREALUID:
                     $cache_array[$k] = $v;
                     break;
 
@@ -2683,6 +2689,20 @@ implements Serializable, SplObserver
                     if (isset($data[$uid][$cid]) &&
                         ($data[$uid][$cid] instanceof Horde_Mime_Part)) {
                         $entry->setStructure($data[$uid][$cid]);
+                        unset($crit[$key]);
+                    }
+                    break;
+
+                case Horde_Imap_Client::FETCH_XMAILBOX:
+                    if (isset($data[$uid][$cid])) {
+                        $entry->setXMailbox($data[$uid][$cid]);
+                        unset($crit[$key]);
+                    }
+                    break;
+
+                case Horde_Imap_Client::FETCH_XREALUID:
+                    if (isset($data[$uid][$cid])) {
+                        $entry->setXRealUid($data[$uid][$cid]);
                         unset($crit[$key]);
                     }
                     break;
@@ -3713,6 +3733,14 @@ implements Serializable, SplObserver
 
                     case Horde_Imap_Client::FETCH_STRUCTURE:
                         $tmp[$val] = clone $v->getStructure();
+                        break;
+
+                    case Horde_Imap_Client::FETCH_XMAILBOX:
+                        $tmp[$val] = $v->getXMailbox();
+                        break;
+
+                    case Horde_Imap_Client::FETCH_XREALUID:
+                        $tmp[$val] = $v->getXRealUid();
                         break;
                     }
                 }
