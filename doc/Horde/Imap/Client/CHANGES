@@ -2,7 +2,8 @@
 v2.29.18
 --------
 
-
+[mjr] Fix LIST-STATUS parsing when using wildcards (Bug #14937,
+      mariusz.goch@spacja.com).
 
 
 --------
