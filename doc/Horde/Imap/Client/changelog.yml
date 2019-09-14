@@ -1,15 +1,25 @@
 ---
+2.29.18:
+  api: 2.29.0
+  state:
+    release: stable
+    api: stable
+  date: 2019-09-14
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |+
+      [mjr] Fix LIST-STATUS parsing when using wildcards (Bug #14937, mariusz.goch@spacja.com).
 2.29.17:
   api: 2.29.0
   state:
     release: stable
     api: stable
-  date: 2018-06-24
+  date: 2019-03-02
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
   notes: |
-    [mjr] Fix LIST-STATUS parsing when using wildcards (Bug #14937, mariusz.goch@spacja.com).
     [mjr] Fix SORT and THREAD commands when UTF8=ACCEPT.
     [mjr] Provide SASL PLAIN authentication as another user (Marco Favero <m.faverof@gmail.com>, PR #7).
     [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) <stronk7@moodle.org>, PR 6).
