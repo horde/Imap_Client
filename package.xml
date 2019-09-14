@@ -3,15 +3,14 @@
  <name>Horde_Imap_Client</name>
  <channel>pear.horde.org</channel>
  <summary>IMAP client library</summary>
- <description>Interface to access IMAP4rev1 (RFC 3501) mail servers. Also supports connections to POP3 (STD 53/RFC 1939).
-</description>
+ <description>A library to access IMAP4rev1 (RFC 3501) mail servers. Also supports connections to POP3 (STD 53/RFC 1939).</description>
  <lead>
   <name>Michael Slusarz</name>
   <user>slusarz</user>
   <email>slusarz@horde.org</email>
   <active>no</active>
  </lead>
- <date>2019-03-02</date>
+ <date>2019-09-14</date>
  <version>
   <release>2.29.18</release>
   <api>2.29.0</api>
@@ -3473,7 +3472,7 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2019-03-02</date>
+   <date>2019-09-14</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * [mjr] Fix LIST-STATUS parsing when using wildcards (Bug #14937, mariusz.goch@spacja.com).
