@@ -21,7 +21,8 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-* 
+* [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -3490,7 +3491,8 @@
    <date>2019-09-14</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* 
+* [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
+* |+
    </notes>
   </release>
  </changelog>
