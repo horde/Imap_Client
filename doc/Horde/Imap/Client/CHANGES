@@ -1,10 +1,9 @@
---------
-v2.29.19
---------
+-------
+v2.30.0
+-------
 
 [mjr] Support returning entire thread list (Ticket #14943,
       mariusz.goch@spacja.com).
-|+
 
 
 --------
