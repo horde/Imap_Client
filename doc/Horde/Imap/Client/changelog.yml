@@ -8,8 +8,9 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-    
+  notes: |
+    [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
+    |+
 2.29.18:
   api: 2.29.0
   state:
