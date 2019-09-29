@@ -1,9 +1,23 @@
+-------
+v2.30.0
+-------
+
+[mjr] Support returning entire thread list (Ticket #14943,
+      mariusz.goch@spacja.com).
+
+
 --------
-v2.29.17
+v2.29.18
 --------
 
 [mjr] Fix LIST-STATUS parsing when using wildcards (Bug #14937,
       mariusz.goch@spacja.com).
+
+
+--------
+v2.29.17
+--------
+
 [mjr] Fix SORT and THREAD commands when UTF8=ACCEPT.
 [mjr] Provide SASL PLAIN authentication as another user (Marco Favero
       <m.faverof@gmail.com>, PR #7).

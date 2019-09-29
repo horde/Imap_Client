@@ -3,17 +3,17 @@
  <name>Horde_Imap_Client</name>
  <channel>pear.horde.org</channel>
  <summary>IMAP client library</summary>
- <description>Interface to access IMAP4rev1 (RFC 3501) mail servers. Also supports connections to POP3 (STD 53/RFC 1939).</description>
+ <description>A library to access IMAP4rev1 (RFC 3501) mail servers. Also supports connections to POP3 (STD 53/RFC 1939).</description>
  <lead>
   <name>Michael Slusarz</name>
   <user>slusarz</user>
   <email>slusarz@horde.org</email>
-  <active>yes</active>
+  <active>no</active>
  </lead>
- <date>2018-06-24</date>
+ <date>2019-09-29</date>
  <version>
-  <release>2.29.17</release>
-  <api>2.29.0</api>
+  <release>2.30.0</release>
+  <api>2.30.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -21,10 +21,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-* [mjr] Fix LIST-STATUS parsing when using wildcards (Bug #14937, mariusz.goch@spacja.com).
-* [mjr] Fix SORT and THREAD commands when UTF8=ACCEPT.
-* [mjr] Provide SASL PLAIN authentication as another user (Marco Favero &lt;m.faverof@gmail.com&gt;, PR #7).
-* [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) &lt;stronk7@moodle.org&gt;, PR 6).
+* [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -3458,13 +3455,42 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2018-06-24</date>
+   <date>2019-03-02</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* [mjr] Fix LIST-STATUS parsing when using wildcards (Bug #14937, mariusz.goch@spacja.com).
 * [mjr] Fix SORT and THREAD commands when UTF8=ACCEPT.
 * [mjr] Provide SASL PLAIN authentication as another user (Marco Favero &lt;m.faverof@gmail.com&gt;, PR #7).
 * [jan] Fix warning with PHP 7.3 (Eloy Lafuente (stronk7) &lt;stronk7@moodle.org&gt;, PR 6).
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>2.29.18</release>
+    <api>2.29.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2019-09-14</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* [mjr] Fix LIST-STATUS parsing when using wildcards (Bug #14937, mariusz.goch@spacja.com).
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>2.30.0</release>
+    <api>2.30.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2019-09-29</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
    </notes>
   </release>
  </changelog>
