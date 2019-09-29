@@ -1,16 +1,15 @@
 ---
-2.29.19:
-  api: 2.29.0
+2.30.0:
+  api: 2.30.0
   state:
     release: stable
     api: stable
-  date: 2019-09-14
+  date: 2019-09-29
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
   notes: |
     [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
-    |+
 2.29.18:
   api: 2.29.0
   state:
