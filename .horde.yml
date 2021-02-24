@@ -26,32 +26,32 @@ license:
   uri: http://www.horde.org/licenses/lgpl21
 dependencies:
   required:
-    php: ^5.3 || ^7
-    pear:
-      pear.horde.org/Horde_Exception: ^2
-      pear.horde.org/Horde_Mail: ^2
-      pear.horde.org/Horde_Mime: ^2.5.2
-      pear.horde.org/Horde_Socket_Client: ^2
-      pear.horde.org/Horde_Stream: ^1.4
-      pear.horde.org/Horde_Secret: ^2
-      pear.horde.org/Horde_Stream_Filter: ^2
-      pear.horde.org/Horde_Translation: ^2.2
-      pear.horde.org/Horde_Util: ^2
+    php: ^7
+    composer:
+      horde/exception: ^3
+      horde/mail: ^3
+      horde/mime: ^3
+      horde/socket_client: ^3
+      horde/stream: ^2
+      horde/secret: ^3
+      horde/stream_filter: ^3
+      horde/translation: ^3
+      horde/util: ^3
     ext:
       hash: '*'
       json: '*'
   optional:
-    pear:
-      pear.horde.org/Horde_Cache: ^2
-      pear.horde.org/Horde_Compress_Fast: ^1
-      pear.horde.org/Horde_Crypt_Blowfish: ^1.1
-      pear.horde.org/Horde_Db: ^2.2
-      pear.horde.org/Horde_HashTable: ^1
-      pear.horde.org/Horde_Mongo: ^1
-      pear.horde.org/Horde_Pack: ^1
-      pear.horde.org/Horde_Stringprep: ^1
-      pear.horde.org/Horde_Support: ^2
-      pear.horde.org/Horde_Test: ^2.2.7
+    composer:
+      horde/cache: ^3
+      horde/compress_fast: ^2
+      horde/crypt_blowfish: ^2
+      horde/db: ^3
+      horde/hashtable: ^2
+      horde/mongo: ^2
+      horde/pack: ^2
+      horde/stringprep: ^2
+      horde/support: ^3
+      horde/test: ^3
     ext:
       intl: '*'
       mbstring: '*'
