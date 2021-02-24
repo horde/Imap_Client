@@ -10,8 +10,8 @@
     uri: http://www.horde.org/licenses/lgpl21
   notes: |
     [mjr] PHP 7.4 compatibility fixes (Remi Collet <remi@famillecollet.com>, PR #9).
-2.30.0:
-  api: 2.30.0
+3.0.0alpha1:
+  api: 3.0.0alpha1
   state:
     release: stable
     api: stable
@@ -1484,7 +1484,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes:
+  notes: ~
 2.0.0beta1:
   api: 2.0.0beta1
   state:

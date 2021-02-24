@@ -16,11 +16,11 @@ authors:
     active: false
     role: lead
 version:
-  release: 2.30.0
-  api: 2.30.0
+  release: 3.0.0alpha1
+  api: 3.0.0alpha1
 state:
-  release: stable
-  api: stable
+  release: alpha
+  api: alpha
 license:
   identifier: LGPL-2.1
   uri: http://www.horde.org/licenses/lgpl21
