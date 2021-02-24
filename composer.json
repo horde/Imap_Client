@@ -51,9 +51,6 @@
     "autoload": {
         "psr-0": {
             "Horde_Imap_Client": "lib/"
-        },
-        "psr-4": {
-            "Horde\\Imap\\Client\\": "src/"
         }
     }
 }
