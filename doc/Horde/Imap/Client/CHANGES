@@ -1,9 +1,24 @@
 ------------
+v3.0.0alpha2
+------------
+
+
+
+
+------------
 v3.0.0alpha1
 ------------
 
 [mjr] Support returning entire thread list (Ticket #14943,
       mariusz.goch@spacja.com).
+
+
+-------
+v2.30.1
+-------
+
+[mjr] PHP 7.4 compatibility fixes (Remi Collet <remi@famillecollet.com>, PR
+      #9).
 
 
 --------

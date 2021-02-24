@@ -1,15 +1,15 @@
 ---
-2.30.1:
-  api: 2.30.0
+3.0.0alpha2:
+  api: 3.0.0alpha1
   state:
-    release: stable
-    api: stable
-  date: 2019-09-29
+    release: alpha
+    api: alpha
+  date: 2021-02-24
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mjr] PHP 7.4 compatibility fixes (Remi Collet <remi@famillecollet.com>, PR #9).
+  notes: |+
+    
 3.0.0alpha1:
   api: 3.0.0alpha1
   state:
@@ -21,6 +21,17 @@
     uri: http://www.horde.org/licenses/lgpl21
   notes: |
     [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
+2.30.1:
+  api: 2.30.0
+  state:
+    release: stable
+    api: stable
+  date: 2019-09-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] PHP 7.4 compatibility fixes (Remi Collet <remi@famillecollet.com>, PR #9).
 2.29.18:
   api: 2.29.0
   state:
