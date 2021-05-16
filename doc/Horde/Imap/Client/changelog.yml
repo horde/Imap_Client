@@ -31,6 +31,7 @@
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
   notes: |
+    [mjr] Remove redundant array_diff that could cause removal of emails from local message cache (PR #3, Silvio Zimmer <silvio.zimmer@die-kinderwelt.com>).
     [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
 2.29.18:
   api: 2.29.0
@@ -1495,7 +1496,7 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes:
+  notes: ~
 2.0.0beta1:
   api: 2.0.0beta1
   state:
