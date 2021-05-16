@@ -10,7 +10,7 @@
   <email>slusarz@horde.org</email>
   <active>no</active>
  </lead>
- <date>2019-11-03</date>
+ <date>2021-05-16</date>
  <version>
   <release>2.30.2</release>
   <api>2.30.0</api>
@@ -21,7 +21,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-* 
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -3490,6 +3490,7 @@
    <date>2019-09-29</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
+* [mjr] Remove redundant array_diff that could cause removal of emails from local message cache (PR #3, Silvio Zimmer &lt;silvio.zimmer@die-kinderwelt.com&gt;).
 * [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
    </notes>
   </release>
@@ -3520,7 +3521,7 @@
    <date>2019-11-03</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* 
+* |+
    </notes>
   </release>
  </changelog>
