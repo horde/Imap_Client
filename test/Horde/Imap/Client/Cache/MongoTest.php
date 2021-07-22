@@ -11,6 +11,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Cache;
 
 /**
  * Tests for the Mongo cache driver.
@@ -23,7 +24,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Cache_MongoTest extends Horde_Imap_Client_Cache_TestBase
+class MongoTest extends TestBase
 {
     private $_dbname = 'horde_imap_client_cache_mongodbtest';
     private $_mongo;
@@ -51,7 +52,7 @@ class Horde_Imap_Client_Cache_MongoTest extends Horde_Imap_Client_Cache_TestBase
         ));
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (!empty($this->_mongo)) {
             $this->_mongo->selectDB(null)->drop();

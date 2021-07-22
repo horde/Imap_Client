@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Data_BaseSubject;
 
 /**
  * Tests for Subject parsing.
@@ -23,8 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_SubjectParseTest
-extends PHPUnit_Framework_TestCase
+class SubjectParseTest extends TestCase
 {
     /**
      * @dataProvider subjectParseProvider

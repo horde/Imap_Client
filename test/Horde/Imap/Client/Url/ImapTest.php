@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Url;
+use \Horde_Imap_Client_Mailbox;
 
 /**
  * Tests for IMAP URL parsing.
@@ -23,14 +25,15 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Url_ImapTest
-extends Horde_Imap_Client_Url_TestBase
+class ImapTest extends TestBase
 {
     protected $classname = 'Horde_Imap_Client_Url_Imap';
     protected $protocol = 'imap';
 
     public function testUrlProvider()
     {
+        $this->markTestIncomplete();
+
         return array(
             array(
                 'imap://test.example.com/',

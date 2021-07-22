@@ -11,6 +11,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Fetch;
 
 /**
  * Tests for the Horde_Imap_Client_Data_Fetch_Pop3 object.
@@ -23,8 +24,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Fetch_FetchPop3Test
-extends Horde_Imap_Client_Data_Fetch_TestBase
+class FetchPop3Test extends TestBase
 {
     protected function _setUp()
     {

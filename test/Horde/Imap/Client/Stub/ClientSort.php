@@ -11,6 +11,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Stub;
+use Horde_Imap_Client_Socket_ClientSort;
+use Horde_Imap_Client_Socket;
+use \Collator;
 
 /**
  * Stub for testing the IMAP Socket client sorting library.
@@ -25,8 +29,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Stub_ClientSort
-extends Horde_Imap_Client_Socket_ClientSort
+class ClientSort extends Horde_Imap_Client_Socket_ClientSort
 {
     public function __construct(Horde_Imap_Client_Socket $socket)
     {

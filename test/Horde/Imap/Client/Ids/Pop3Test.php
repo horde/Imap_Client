@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Ids;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Ids_Pop3;
 
 /**
  * POP3 specific tests for the Ids object.
@@ -23,7 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Ids_Pop3Test extends PHPUnit_Framework_TestCase
+class Pop3Test extends TestCase
 {
     /**
      * @dataProvider pop3SequenceStringGenerateProvider

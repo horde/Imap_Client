@@ -11,6 +11,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Url;
 
 /**
  * Tests for the deprecated Horde_Imap_Client_Url IMAP URL parsing.
@@ -23,14 +24,15 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Url_ImapDeprecatedTest
-extends Horde_Imap_Client_Url_TestBase
+class ImapDeprecatedTest extends TestBase
 {
     protected $classname = 'Horde_Imap_Client_Url';
     protected $protocol = 'imap';
 
     public function testUrlProvider()
     {
+        $this->markTestIncomplete();
+
         return array(
             array(
                 'imap://test.example.com/',

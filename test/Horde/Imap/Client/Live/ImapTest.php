@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Live;
+use Horde_Test_Case as TestCase;
+use \PHPUnit\Framework\TestSuite;
 
 /**
  * Package testing on a real (live) IMAP server.
@@ -23,14 +26,14 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Live_ImapTest extends Horde_Test_Case
+class ImapTest extends TestCase
 {
     /**
      * Add the tests to the current test runner.
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite;
+        $suite = new TestSuite;
 
         $c = self::getConfig('IMAPCLIENT_TEST_CONFIG', __DIR__ . '/../');
         if (!is_null($c) && !empty($c['imapclient'])) {

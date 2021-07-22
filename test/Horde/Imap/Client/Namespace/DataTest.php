@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Data_Namespace;
 
 /**
  * Tests for the Namespace data object.
@@ -23,12 +26,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Namespace_DataTest
-extends PHPUnit_Framework_TestCase
+class DataTest extends TestCase
 {
     private $ob;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->ob = new Horde_Imap_Client_Data_Namespace();
     }

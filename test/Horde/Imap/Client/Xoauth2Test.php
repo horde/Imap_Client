@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Password_Xoauth2;
 
 /**
  * Tests for the mailbox object.
@@ -23,7 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Xoauth2Test extends PHPUnit_Framework_TestCase
+class Xoauth2Test extends TestCase
 {
     public function testTokenGeneration()
     {

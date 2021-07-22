@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Format;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Data_Format_Atom;
 
 /**
  * Base test provider for data format objects.
@@ -23,8 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-abstract class Horde_Imap_Client_Data_Format_TestBase
-extends PHPUnit_Framework_TestCase
+abstract class TestBase extends TestCase
 {
     abstract protected function getTestObs();
 

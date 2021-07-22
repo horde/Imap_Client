@@ -11,6 +11,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Live;
 
 /**
  * Package testing on a real (live) IMAP server.
@@ -23,7 +24,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
+class Imap extends Base
 {
     const DEFAULT_MBOX = '_____TestMailboxTest';
     const DEFAULT_MBOX_UTF8 = '_____TestMailboxTest1è';

@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Base class for URL tests.
@@ -23,8 +25,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-abstract class Horde_Imap_Client_Url_TestBase
-extends PHPUnit_Framework_TestCase
+abstract class TestBase extends TestCase
 {
     protected $classname;
 

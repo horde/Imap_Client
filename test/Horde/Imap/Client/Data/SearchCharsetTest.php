@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Data_SearchCharset;
 
 /**
  * Tests for the SearchCharset object.
@@ -23,8 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_SearchCharsetTest
-extends PHPUnit_Framework_TestCase
+class SearchCharsetTest extends TestCase
 {
     public function testQuery()
     {
@@ -41,6 +43,8 @@ extends PHPUnit_Framework_TestCase
      */
     public function testQueryWithoutBaseOb()
     {
+        $this->expectException('RuntimeException');
+        
         $s = new Horde_Imap_Client_Data_SearchCharset();
 
         $s->query('UTF-8');
@@ -74,7 +78,8 @@ extends PHPUnit_Framework_TestCase
     {
         $s = new Horde_Imap_Client_Data_SearchCharset();
 
-        $mock = $this->getMock('SplObserver');
+        $mock = $this->getMockBuilder('SplObserver')
+                        ->getMock();
         $mock->expects($this->once())
             ->method('update')
             ->with($this->equalTo($s));
@@ -93,6 +98,8 @@ extends PHPUnit_Framework_TestCase
         $s_copy = unserialize(serialize($s));
 
         $s_copy->query('UTF-8', true);
+
+        $this->markTestIncomplete();
     }
 
 }

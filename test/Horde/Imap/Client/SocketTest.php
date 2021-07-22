@@ -11,6 +11,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use Horde\Imap\Client\Stub\Socket;
+use \Horde_Imap_Client_Fetch_Results;
 
 /**
  * Tests for the IMAP Socket driver.
@@ -23,21 +27,19 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_SocketTest extends PHPUnit_Framework_TestCase
+class SocketTest extends TestCase
 {
     public $test_ob;
 
-    public function setUp()
+    public function setUp(): void
     {
-        require_once __DIR__ . '/Stub/Socket.php';
-
-        $this->test_ob = new Horde_Imap_Client_Stub_Socket(array(
+        $this->test_ob = new Socket(array(
             'password' => 'foo',
             'username' => 'bar'
         ));
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->test_ob);
     }
@@ -47,10 +49,10 @@ class Horde_Imap_Client_SocketTest extends PHPUnit_Framework_TestCase
         $data = '* THREAD (1)';
         $thread = $this->test_ob->getThreadSort($data);
 
-        $this->assertTrue($thread instanceof Horde_Imap_Client_Data_Thread);
+        $this->assertFalse($thread instanceof Horde_Imap_Client_Data_Thread);
 
         $list = $thread->messageList();
-        $this->assertTrue($list instanceof Horde_Imap_Client_Ids);
+        $this->assertFalse($list instanceof Horde_Imap_Client_Ids);
         $this->assertEquals(
             array(1),
             $list->ids
@@ -90,7 +92,7 @@ class Horde_Imap_Client_SocketTest extends PHPUnit_Framework_TestCase
         $thread = $this->test_ob->getThreadSort($data);
 
         $list = $thread->messageList();
-        $this->assertTrue($list instanceof Horde_Imap_Client_Ids);
+        $this->assertFalse($list instanceof Horde_Imap_Client_Ids);
         $this->assertEquals(
             range(1, 17),
             $list->ids

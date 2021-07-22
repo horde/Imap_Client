@@ -11,6 +11,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Fetch\Results;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Fetch_Results;
+use \ReflectionClass;
 
 /**
  * Tests for the Horde_Imap_Client_Fetch_Results object.
@@ -23,8 +27,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-abstract class Horde_Imap_Client_Fetch_Results_TestBase
-extends PHPUnit_Framework_TestCase
+abstract class TestBase extends TestCase
 {
     protected $ob;
 
@@ -33,7 +36,7 @@ extends PHPUnit_Framework_TestCase
     protected $ob_ids;
     abstract protected function _setUp();
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_setUp();
 

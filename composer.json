@@ -1,5 +1,5 @@
 {
-    "name": "horde/imap-client",
+    "name": "horde/imap_client",
     "description": "IMAP client library",
     "type": "library",
     "homepage": "https://www.horde.org/libraries/Horde_Imap_Client",
@@ -11,45 +11,41 @@
             "role": "lead"
         }
     ],
-    "version": "2.30.0",
-    "time": "2019-09-29",
+    "time": "2021-07-22",
     "repositories": [
         {
-            "type": "pear",
-            "url": "https://pear.horde.org"
+            "type": "composer",
+            "url": "https://horde-satis.maintaina.com/"
         }
     ],
     "require": {
-        "php": "^5.3 || ^7",
-        "pear-pear.horde.org/Horde_Exception": "^2",
-        "pear-pear.horde.org/Horde_Mail": "^2",
-        "pear-pear.horde.org/Horde_Mime": "^2.5.2",
-        "pear-pear.horde.org/Horde_Socket_Client": "^2",
-        "pear-pear.horde.org/Horde_Stream": "^1.4",
-        "pear-pear.horde.org/Horde_Secret": "^2",
-        "pear-pear.horde.org/Horde_Stream_Filter": "^2",
-        "pear-pear.horde.org/Horde_Translation": "^2.2",
-        "pear-pear.horde.org/Horde_Util": "^2",
+        "php": "^7 || ^8",
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
+        "horde/mail": "^3 || dev-FRAMEWORK_6_0",
+        "horde/mime": "^3 || dev-FRAMEWORK_6_0",
+        "horde/socket_client": "^3 || dev-FRAMEWORK_6_0",
+        "horde/stream": "^2 || dev-FRAMEWORK_6_0",
+        "horde/secret": "^3 || dev-FRAMEWORK_6_0",
+        "horde/stream_filter": "^3 || dev-FRAMEWORK_6_0",
+        "horde/translation": "^3 || dev-FRAMEWORK_6_0",
+        "horde/util": "^3 || dev-FRAMEWORK_6_0",
         "ext-hash": "*",
         "ext-json": "*"
     },
+    "require-dev": {},
     "suggest": {
-        "pear-pear.horde.org/Horde_Cache": "^2",
-        "pear-pear.horde.org/Horde_Compress_Fast": "^1",
-        "pear-pear.horde.org/Horde_Crypt_Blowfish": "^1.1",
-        "pear-pear.horde.org/Horde_Db": "^2.2",
-        "pear-pear.horde.org/Horde_HashTable": "^1",
-        "pear-pear.horde.org/Horde_Mongo": "^1",
-        "pear-pear.horde.org/Horde_Pack": "^1",
-        "pear-pear.horde.org/Horde_Stringprep": "^1",
-        "pear-pear.horde.org/Horde_Support": "^2",
-        "pear-pear.horde.org/Horde_Test": "^2.2.7",
+        "horde/cache": "^3 || dev-FRAMEWORK_6_0",
+        "horde/compress_fast": "^2 || dev-FRAMEWORK_6_0",
+        "horde/crypt_blowfish": "^2 || dev-FRAMEWORK_6_0",
+        "horde/db": "^3 || dev-FRAMEWORK_6_0",
+        "horde/hashtable": "^2 || dev-FRAMEWORK_6_0",
+        "horde/mongo": "^2 || dev-FRAMEWORK_6_0",
+        "horde/pack": "^2 || dev-FRAMEWORK_6_0",
+        "horde/stringprep": "^2 || dev-FRAMEWORK_6_0",
+        "horde/support": "^3 || dev-FRAMEWORK_6_0",
+        "horde/test": "^3 || dev-FRAMEWORK_6_0",
         "ext-intl": "*",
         "ext-mbstring": "*"
-    },
-    "replace": {
-        "pear-pear.horde.org/Horde_Imap_Client": "2.*",
-        "pear-horde/Horde_Imap_Client": "2.*"
     },
     "autoload": {
         "psr-0": {

@@ -11,6 +11,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Mailbox;
+use \Horde_Imap_Client_Data_Format_Mailbox;
+use \Horde_Imap_Client_Data_Format_Mailbox_Utf8;
 
 /**
  * Tests for the mailbox object.
@@ -23,7 +28,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_MailboxTest extends PHPUnit_Framework_TestCase
+class MailboxTest extends TestCase
 {
     public function testMailboxClone()
     {

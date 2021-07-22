@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Tokenize;
 
 /**
  * Tests for the IMAP string tokenizer.
@@ -23,7 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_TokenizeTest extends PHPUnit_Framework_TestCase
+class TokenizeTest extends TestCase
 {
     public function testTokenizeSimple()
     {
@@ -554,22 +557,20 @@ EOT;
         $this->assertEquals(str_repeat('Z', 200), strval($stream));
     }
 
-    /**
-     * @expectedException LogicException
-     */
     public function testClone()
     {
+        $this->expectException('LogicException');
+
         $test = 'FOO BAR';
         $token = new Horde_Imap_Client_Tokenize($test);
 
         clone $token;
     }
 
-    /**
-     * @expectedException LogicException
-     */
     public function testSerialize()
     {
+        $this->expectException('LogicException');
+        
         $test = 'FOO BAR';
         $token = new Horde_Imap_Client_Tokenize($test);
 

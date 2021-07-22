@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Live;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Base class for live server testing.
@@ -23,7 +25,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Live_Base extends PHPUnit_Framework_TestCase
+class Base extends TestCase
 {
     public static $live;
 

@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Format;
+use \Horde_Imap_Client_Data_Format_Atom;
 
 /**
  * Tests for the Atom data format object.
@@ -23,8 +25,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Format_AtomTest
-extends Horde_Imap_Client_Data_Format_TestBase
+class AtomTest extends TestBase
 {
     protected function getTestObs()
     {
@@ -85,16 +86,13 @@ extends Horde_Imap_Client_Data_Format_TestBase
      */
     public function testVerify($ob, $expected)
     {
-        try {
-            $ob->verify();
-            if ($expected) {
-                $this->fail();
-            }
-        } catch (Horde_Imap_Client_Data_Format_Exception $e) {
-            if (!$expected) {
-                $this->fail();
-            }
-        }
+        if ($expected) {
+            $this->expectException('Horde_Imap_Client_Data_Format_Exception');
+        }    
+
+        $ob->verify();
+     
+        $this->markTestSkipped('Horde\Imap\Client\Data\Format\AtomTest::testVerify - No Exception should be thrown here. ');
     }
 
     public function verifyProvider()

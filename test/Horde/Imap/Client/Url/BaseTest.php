@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for base URL parsing.
@@ -23,8 +25,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Url_BaseTest
-extends PHPUnit_Framework_TestCase
+class BaseTest extends TestCase
 {
     /**
      * @dataProvider badUrlProvider

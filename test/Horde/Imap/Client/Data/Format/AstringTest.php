@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Format;
+use Horde\Imap\Client\Data\Format\String\TestBase;
 
 /**
  * Tests for the Astring data format object.
@@ -23,8 +25,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Format_AstringTest
-extends Horde_Imap_Client_Data_Format_String_TestBase
+class AstringTest extends TestBase
 {
     protected $cname = 'Horde_Imap_Client_Data_Format_Astring';
 

@@ -11,6 +11,16 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Socket;
+use PHPUnit\Framework\TestCase;
+use Horde\Imap\Client\Stub\Socket;
+use Horde\Imap\Client\Stub\ClientSort;
+use \Horde_Imap_Client;
+use \Horde_Imap_Client_Fetch_Results;
+use \Horde_Imap_Client_Ids;
+use \Horde_Imap_Client_Data_Fetch;
+use \Horde_Imap_Client_Tokenize;
+use \Horde_Imap_Client_Data_Envelope;
 
 /**
  * Tests for the IMAP Socket driver.
@@ -23,22 +33,21 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Socket_ClientSortTest
-extends PHPUnit_Framework_TestCase
+class ClientSortTest extends TestCase
 {
     public $socket_ob;
     public $sort_ob;
 
-    public function setUp()
+    public function setUp(): void
     {
         require_once __DIR__ . '/../Stub/ClientSort.php';
         require_once __DIR__ . '/../Stub/Socket.php';
 
-        $this->socket_ob = new Horde_Imap_Client_Stub_Socket(array(
+        $this->socket_ob = new Socket(array(
             'password' => 'foo',
             'username' => 'bar'
         ));
-        $this->sort_ob = new Horde_Imap_Client_Stub_ClientSort(
+        $this->sort_ob = new ClientSort(
             $this->socket_ob
         );
     }

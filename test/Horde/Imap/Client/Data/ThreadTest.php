@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Data_Thread;
 
 /**
  * Tests for the thread data object.
@@ -23,7 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_ThreadTest extends PHPUnit_Framework_TestCase
+class ThreadTest extends TestCase
 {
     /**
      * @dataProvider countProvider

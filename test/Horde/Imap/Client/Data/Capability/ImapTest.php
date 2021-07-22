@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Capability;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Data_Capability_Imap;
 
 /**
  * Tests for the IMAP-specific capability object.
@@ -23,8 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Capability_ImapTest
-extends PHPUnit_Framework_TestCase
+class ImapTest extends TestCase
 {
     public function testImpliedExtensions()
     {
@@ -94,7 +96,8 @@ extends PHPUnit_Framework_TestCase
     public function testObserver()
     {
         $c = new Horde_Imap_Client_Data_Capability_Imap();
-        $mock = $this->getMock('SplObserver');
+        $mock = $this->getMockBuilder('SplObserver')
+                        ->getMock();
         $mock->expects($this->once())
             ->method('update')
             ->with($this->equalTo($c));
@@ -114,7 +117,8 @@ extends PHPUnit_Framework_TestCase
         $c->add('BAR');
         $c->enable('BAR');
 
-        $mock = $this->getMock('SplObserver');
+        $mock = $this->getMockBuilder('SplObserver')
+                        ->getMock();
         $mock->expects($this->never())
             ->method('update')
             ->with($this->equalTo($c));

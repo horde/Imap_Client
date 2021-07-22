@@ -11,6 +11,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Stub;
+use Horde_Imap_Client_Socket;
+use \Horde_Imap_Client_Interaction_Server;
+use \Horde_Imap_Client_Tokenize;
+use \Horde_Imap_Client_Data_Thread;
 
 /**
  * Stub for testing the IMAP Socket library.
@@ -24,7 +29,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Stub_Socket extends Horde_Imap_Client_Socket
+class Socket extends Horde_Imap_Client_Socket
 {
     public $fetch_results;
 
