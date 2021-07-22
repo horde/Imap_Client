@@ -11,6 +11,16 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Fetch;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Data_Fetch;
+use \Horde_Imap_Client;
+use \Horde_Mime_Part;
+use \Horde_Mime_Headers;
+use \Horde_Stream_String;
+use \Horde_Imap_Client_DateTime;
+use \Horde_Imap_Client_Data_Envelope;
+use \Horde_Stream;
 
 /**
  * Base class for testing the Horde_Imap_Client_Data_Fetch object.
@@ -23,8 +33,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-abstract class Horde_Imap_Client_Data_Fetch_TestBase
-extends PHPUnit_Framework_TestCase
+abstract class TestBase extends TestCase
 {
     private $ob;
 
@@ -32,7 +41,7 @@ extends PHPUnit_Framework_TestCase
     protected $ob_class;
     abstract protected function _setUp();
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_setUp();
 

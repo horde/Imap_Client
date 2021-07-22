@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Format\Mailbox;
+use \Horde_Imap_Client_Data_Format_Mailbox;
 
 /**
  * Tests for the Mailbox data format object.
@@ -23,8 +25,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Format_Mailbox_MailboxTest
-extends Horde_Imap_Client_Data_Format_Mailbox_TestBase
+class MailboxTest extends TestBase
 {
     protected $cname = 'Horde_Imap_Client_Data_Format_Mailbox';
 

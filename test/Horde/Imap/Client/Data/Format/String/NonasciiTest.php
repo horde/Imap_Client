@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Format\String;
+use Horde\Imap\Client\Data\Format\StringTest;
 
 /**
  * Tests for the String/Nonascii data format object.
@@ -23,8 +25,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Format_String_NonasciiTest
-extends Horde_Imap_Client_Data_Format_StringTest
+class NonasciiTest extends StringTest
 {
     protected $cname = 'Horde_Imap_Client_Data_Format_String_Nonascii';
 

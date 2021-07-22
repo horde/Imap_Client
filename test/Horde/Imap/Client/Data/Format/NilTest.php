@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Format;
+use \Horde_Imap_Client_Data_Format_Nil;
 
 /**
  * Tests for the Nil data format object.
@@ -23,8 +25,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Format_NilTest
-extends Horde_Imap_Client_Data_Format_TestBase
+class NilTest extends TestBase
 {
     protected function getTestObs()
     {

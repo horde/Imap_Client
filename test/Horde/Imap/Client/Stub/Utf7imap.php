@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Stub;
+use Horde_Imap_Client_Utf7imap;
 
 /**
  * Stub for testing the IMAP UTF7-IMAP conversion library.
@@ -24,7 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Stub_Utf7imap extends Horde_Imap_Client_Utf7imap
+class Utf7imap extends Horde_Imap_Client_Utf7imap
 {
     public static function setMbstring($val)
     {

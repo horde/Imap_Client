@@ -11,6 +11,12 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Interaction;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Interaction_Command;
+use \Horde_Imap_Client_Interaction_Command_Continuation;
+use \Horde_Imap_Client_Data_Format_List;
+use \Horde_Imap_Client_Data_Format_String_Nonascii;
 
 /**
  * Tests for the Interaction Command object
@@ -23,8 +29,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Interaction_CommandTest
-    extends PHPUnit_Framework_TestCase
+class CommandTest extends TestCase
 {
     /**
      * @dataProvider continuationCheckProvider

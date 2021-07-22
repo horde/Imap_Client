@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Mailbox_List;
 
 /**
  * Tests for IMAP mailbox sorting.
@@ -23,7 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_SortTest extends PHPUnit_Framework_TestCase
+class SortTest extends TestCase
 {
     /**
      * @dataProvider numericComponentSortingProvider

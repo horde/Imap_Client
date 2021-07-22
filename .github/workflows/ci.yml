@@ -1,0 +1,64 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches:
+      - master
+      - maintaina-composerfixed
+      - FRAMEWORK_6_0
+  pull_request:
+    branches:
+      - master
+      - maintaina-composerfixed
+      - FRAMEWORK_6_0
+
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  run:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: ['ubuntu-20.04']
+        php-versions: ['7.4']
+        phpunit-versions: ['latest', '9.5', '9.0']
+    steps:
+    - name: Setup github ssh key
+      run:  mkdir -p ~/.ssh/ && ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        extensions: bcmath, ctype, curl, dom, gd, gettext, iconv, imagick, json, ldap, mbstring, mysql, opcache, openssl, pcntl, pdo, posix, redis, soap, sockets, sqlite, tokenizer, xmlwriter
+        ini-values: post_max_size=512M, max_execution_time=360
+        coverage: xdebug
+        tools: php-cs-fixer, phpunit:${{ matrix.phpunit-versions }}, composer:v2
+    - name: Setup Github Token as composer credential
+      run: composer config -g github-oauth.github.com ${{ secrets.GITHUB_TOKEN }}
+    - name: Install horde/test dependency and other dependencies
+      run: |
+        ## For unclear reasons, github action fails randomly if we do not install before we require.
+        COMPOSER_ROOT_VERSION=dev-FRAMEWORK_6_0 composer install
+        COMPOSER_ROOT_VERSION=dev-FRAMEWORK_6_0 composer require --dev horde/test dev-FRAMEWORK_6_0 horde/log dev-FRAMEWORK_6_0
+    - name: install horde/db ^3
+      run: composer require horde/db ^3
+    - name: install horde/cli ^3
+      run: composer require horde/cli ^3
+    - name: install horde/cache ^3
+      run: composer require horde/cache ^3
+    - name: install horde/hashtable ^2
+      run: composer require horde/hashtable ^2
+    - name: install horde/pack ^2
+      run: composer require horde/pack ^2
+    - name: run phpunit
+      run: phpunit --bootstrap test/Horde/Imap/Client/bootstrap.php test/Horde/Imap/Client/

@@ -11,6 +11,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use Horde\Imap\Client\Stub\DigestMD5;
+use Horde\Imap\Client\Stub\Scram;
 
 /**
  * Tests for the Imap Client ACL Auth features.
@@ -24,9 +28,9 @@
  * @subpackage UnitTests
 
  */
-class Horde_Imap_Client_AuthTest extends PHPUnit_Framework_TestCase
+class AuthTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         require_once __DIR__ . '/Stub/DigestMD5.php';
         require_once __DIR__ . '/Stub/Scram.php';
@@ -37,7 +41,7 @@ class Horde_Imap_Client_AuthTest extends PHPUnit_Framework_TestCase
      */
     public function testDigestMd5($c)
     {
-        $ob = new Horde_Imap_Client_Stub_Auth_DigestMD5(
+        $ob = new DigestMD5(
             $c['user'],
             $c['pass'],
             $c['challenge'],
@@ -75,7 +79,9 @@ class Horde_Imap_Client_AuthTest extends PHPUnit_Framework_TestCase
      */
     public function testScram($c)
     {
-        $ob = new Horde_Imap_Client_Stub_Auth_Scram(
+        $this->expectException('Horde_Imap_Client_Exception');
+
+        $ob = new Scram(
             $c['user'],
             $c['pass'],
             $c['hash']

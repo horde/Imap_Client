@@ -11,6 +11,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Ids_Map;
+use \Horde_Imap_Client_Ids;
 
 /**
  * Tests for the UID -> Sequence Number mapping object.
@@ -23,12 +27,12 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_MapTest extends PHPUnit_Framework_TestCase
+class MapTest extends TestCase
 {
     private $lookup;
     private $map;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->lookup = array(
             2 => 5,

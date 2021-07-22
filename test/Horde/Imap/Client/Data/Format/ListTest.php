@@ -11,6 +11,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Format;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Data_Format_List;
+use \Horde_Imap_Client_Data_Format_String;
+use \Horde_Imap_Client_Data_Format_Atom;
 
 /**
  * Tests for the List data format object.
@@ -23,8 +28,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Format_ListTest
-extends PHPUnit_Framework_TestCase
+class ListTest extends TestCase
 {
     public function testBasicListFunctions()
     {

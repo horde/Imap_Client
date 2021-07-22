@@ -11,6 +11,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Live;
 
 /**
  * Package testing on a (live) POP3 server.
@@ -23,7 +24,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Live_Pop3 extends Horde_Imap_Client_Live_Base
+class Pop3 extends Base
 {
     public static $config;
 

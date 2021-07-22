@@ -11,6 +11,8 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Stub;
+use Horde_Imap_Client_Auth_DigestMD5;
 
 /**
  * Stub for testing the Digest MD5 library.
@@ -24,7 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Stub_Auth_DigestMD5 extends Horde_Imap_Client_Auth_DigestMD5
+class DigestMD5 extends Horde_Imap_Client_Auth_DigestMD5
 {
     /**
      * Cnonce to use.

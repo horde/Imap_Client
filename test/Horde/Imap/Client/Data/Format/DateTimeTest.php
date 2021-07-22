@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Format;
+use \Horde_Imap_Client_Data_Format_DateTime;
+use \Horde_Imap_Client_DateTime;
 
 /**
  * Tests for the DateTime data format object.
@@ -23,8 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Format_DateTimeTest
-extends Horde_Imap_Client_Data_Format_TestBase
+class DateTimeTest extends TestBase
 {
     protected function getTestObs()
     {

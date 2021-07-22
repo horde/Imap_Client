@@ -11,6 +11,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data\Format\Mailbox;
 
 /**
  * Tests for the UTF-8 Mailbox data format object.
@@ -23,8 +24,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_Format_Mailbox_MailboxUtf8Test
-extends Horde_Imap_Client_Data_Format_Mailbox_TestBase
+class MailboxUtf8Test extends TestBase
 {
     protected $cname = 'Horde_Imap_Client_Data_Format_Mailbox_Utf8';
 
@@ -105,11 +105,10 @@ extends Horde_Imap_Client_Data_Format_Mailbox_TestBase
         );
     }
 
-    /**
-     * @expectedException Horde_Imap_Client_Data_Format_Exception
-     */
     public function testBadInput()
     {
+        $this->expectException('Horde_Imap_Client_Data_Format_Exception');
+
         new $this->cname("foo\1");
     }
 

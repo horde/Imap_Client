@@ -11,6 +11,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Ids;
+use \Horde_Imap_Client_Data_Capability_Imap;
 
 /**
  * Tests for the Search Query object.
@@ -23,14 +27,14 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
+class SearchTest extends TestCase
 {
     /**
      * @dataProvider flagQueryProvider
      */
     public function testFlagQuery($flags, $fuzzy, $expected)
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
 
         foreach ($flags as $val) {
             $ob->flag($val[0], $val[1], array('fuzzy' => $fuzzy));
@@ -75,7 +79,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
      */
     public function testNewMsgsQuery($newmsgs, $fuzzy, $expected)
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->newMsgs($newmsgs, array('fuzzy' => $fuzzy));
 
         $this->assertEquals(
@@ -99,7 +103,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
      */
     public function testHeaderTextQuery($not, $fuzzy, $expected)
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->headerText('Foo', 'Bar', $not, array('fuzzy' => $fuzzy));
 
         $this->assertEquals(
@@ -120,15 +124,11 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
 
     public function testHeaderTextUtf8Query()
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->headerText('Foo', 'EëE');
 
-        try {
-            $ob->build();
-            $this->fail();
-        } catch (Horde_Imap_Client_Data_Format_Exception $e) {
-            // Expected
-        }
+        $this->expectException('Horde_Imap_Client_Data_Format_Exception');    
+        $ob->build();
 
         $ob->charset('UTF-8', false);
 
@@ -140,7 +140,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
      */
     public function testTextQuery($body, $not, $fuzzy, $expected)
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->text('foo', $body, $not, array('fuzzy' => $fuzzy));
 
         $this->assertEquals(
@@ -168,7 +168,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
      */
     public function testSizeQuery($larger, $not, $fuzzy, $expected)
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->size(100, $larger, $not, array('fuzzy' => $fuzzy));
 
         $this->assertEquals(
@@ -196,7 +196,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
      */
     public function testIdsQuery($ids, $not, $fuzzy, $expected)
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->ids(new Horde_Imap_Client_Ids($ids), $not, array(
             'fuzzy' => $fuzzy
         ));
@@ -224,9 +224,9 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
         $range, $header, $not, $fuzzy, $expected
     )
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->dateSearch(
-            new DateTime('January 1, 2010'),
+            new \DateTime('January 1, 2010'),
             $range,
             $header,
             $not,
@@ -243,126 +243,126 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                Horde_Imap_Client_Search_Query::DATE_BEFORE,
+                \Horde_Imap_Client_Search_Query::DATE_BEFORE,
                 true,
                 false,
                 false,
                 'SENTBEFORE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_BEFORE,
+                \Horde_Imap_Client_Search_Query::DATE_BEFORE,
                 false,
                 false,
                 false,
                 'BEFORE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_BEFORE,
+                \Horde_Imap_Client_Search_Query::DATE_BEFORE,
                 true,
                 true,
                 false,
                 'NOT SENTBEFORE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_BEFORE,
+                \Horde_Imap_Client_Search_Query::DATE_BEFORE,
                 false,
                 true,
                 false,
                 'NOT BEFORE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_BEFORE,
+                \Horde_Imap_Client_Search_Query::DATE_BEFORE,
                 true,
                 true,
                 true,
                 'FUZZY NOT SENTBEFORE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_BEFORE,
+                \Horde_Imap_Client_Search_Query::DATE_BEFORE,
                 false,
                 true,
                 true,
                 'FUZZY NOT BEFORE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_ON,
+                \Horde_Imap_Client_Search_Query::DATE_ON,
                 true,
                 false,
                 false,
                 'SENTON 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_ON,
+                \Horde_Imap_Client_Search_Query::DATE_ON,
                 false,
                 false,
                 false,
                 'ON 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_ON,
+                \Horde_Imap_Client_Search_Query::DATE_ON,
                 true,
                 true,
                 false,
                 'NOT SENTON 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_ON,
+                \Horde_Imap_Client_Search_Query::DATE_ON,
                 false,
                 true,
                 false,
                 'NOT ON 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_ON,
+                \Horde_Imap_Client_Search_Query::DATE_ON,
                 true,
                 true,
                 true,
                 'FUZZY NOT SENTON 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_ON,
+                \Horde_Imap_Client_Search_Query::DATE_ON,
                 false,
                 true,
                 true,
                 'FUZZY NOT ON 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_SINCE,
+                \Horde_Imap_Client_Search_Query::DATE_SINCE,
                 true,
                 false,
                 false,
                 'SENTSINCE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_SINCE,
+                \Horde_Imap_Client_Search_Query::DATE_SINCE,
                 false,
                 false,
                 false,
                 'SINCE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_SINCE,
+                \Horde_Imap_Client_Search_Query::DATE_SINCE,
                 true,
                 true,
                 false,
                 'NOT SENTSINCE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_SINCE,
+                \Horde_Imap_Client_Search_Query::DATE_SINCE,
                 false,
                 true,
                 false,
                 'NOT SINCE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_SINCE,
+                \Horde_Imap_Client_Search_Query::DATE_SINCE,
                 true,
                 true,
                 true,
                 'FUZZY NOT SENTSINCE 1-Jan-2010',
             ),
             array(
-                Horde_Imap_Client_Search_Query::DATE_SINCE,
+                \Horde_Imap_Client_Search_Query::DATE_SINCE,
                 false,
                 true,
                 true,
@@ -376,7 +376,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
      */
     public function testIntervalSearchQuery($range, $not, $fuzzy, $expected)
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->intervalSearch(30, $range, $not, array('fuzzy' => $fuzzy));
 
         $this->assertEquals(
@@ -389,49 +389,49 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                Horde_Imap_Client_Search_Query::INTERVAL_OLDER,
+                \Horde_Imap_Client_Search_Query::INTERVAL_OLDER,
                 false,
                 false,
                 'OLDER 30'
             ),
             array(
-                Horde_Imap_Client_Search_Query::INTERVAL_OLDER,
+                \Horde_Imap_Client_Search_Query::INTERVAL_OLDER,
                 true,
                 false,
                 'NOT OLDER 30'
             ),
             array(
-                Horde_Imap_Client_Search_Query::INTERVAL_OLDER,
+                \Horde_Imap_Client_Search_Query::INTERVAL_OLDER,
                 false,
                 true,
                 'FUZZY OLDER 30'
             ),
             array(
-                Horde_Imap_Client_Search_Query::INTERVAL_OLDER,
+                \Horde_Imap_Client_Search_Query::INTERVAL_OLDER,
                 true,
                 true,
                 'FUZZY NOT OLDER 30'
             ),
             array(
-                Horde_Imap_Client_Search_Query::INTERVAL_YOUNGER,
+                \Horde_Imap_Client_Search_Query::INTERVAL_YOUNGER,
                 false,
                 false,
                 'YOUNGER 30'
             ),
             array(
-                Horde_Imap_Client_Search_Query::INTERVAL_YOUNGER,
+                \Horde_Imap_Client_Search_Query::INTERVAL_YOUNGER,
                 true,
                 false,
                 'NOT YOUNGER 30'
             ),
             array(
-                Horde_Imap_Client_Search_Query::INTERVAL_YOUNGER,
+                \Horde_Imap_Client_Search_Query::INTERVAL_YOUNGER,
                 false,
                 true,
                 'FUZZY YOUNGER 30'
             ),
             array(
-                Horde_Imap_Client_Search_Query::INTERVAL_YOUNGER,
+                \Horde_Imap_Client_Search_Query::INTERVAL_YOUNGER,
                 true,
                 true,
                 'FUZZY NOT YOUNGER 30'
@@ -441,15 +441,15 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
 
     public function testOrQueries()
     {
-        $ob2 = new Horde_Imap_Client_Search_Query();
+        $ob2 = new \Horde_Imap_Client_Search_Query();
         $ob2->flag('\\deleted', false);
         $ob2->headerText('from', 'ABC');
 
-        $ob3 = new Horde_Imap_Client_Search_Query();
+        $ob3 = new \Horde_Imap_Client_Search_Query();
         $ob3->flag('\\deleted', true);
         $ob3->headerText('from', 'DEF');
 
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->orSearch(array($ob2, $ob3));
 
         $this->assertEquals(
@@ -457,11 +457,11 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
             strval($ob)
         );
 
-        $ob4 = new Horde_Imap_Client_Search_Query();
+        $ob4 = new \Horde_Imap_Client_Search_Query();
         $ob4->flag('\\flagged', true);
         $ob4->headerText('from', 'GHI');
 
-        $ob5 = new Horde_Imap_Client_Search_Query();
+        $ob5 = new \Horde_Imap_Client_Search_Query();
         $ob5->orSearch(array($ob2, $ob3, $ob4));
 
         $this->assertEquals(
@@ -472,19 +472,19 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
 
     public function testOrQueriesWithABaseQuery()
     {
-        $or_ob = new Horde_Imap_Client_Search_Query();
+        $or_ob = new \Horde_Imap_Client_Search_Query();
 
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->flag('\\deleted', false);
         $ob->headerText('from', 'ABC');
         $or_ob->orSearch($ob);
 
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->flag('\\deleted', true);
         $ob->headerText('from', 'DEF');
         $or_ob->orSearch($ob);
 
-        $base_ob = new Horde_Imap_Client_Search_Query();
+        $base_ob = new \Horde_Imap_Client_Search_Query();
         $base_ob->flag('\\seen', false);
         $base_ob->andSearch($or_ob);
 
@@ -499,7 +499,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
      */
     public function testModseq($name, $type, $not, $fuzzy, $expected)
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->modseq(123, $name, $type, $not, array('fuzzy' => $fuzzy));
 
         $this->assertEquals(
@@ -539,7 +539,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
      */
     public function testPreviousSearchQuery($not, $fuzzy, $expected)
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->previousSearch($not, array('fuzzy' => $fuzzy));
 
         $this->assertEquals(
@@ -560,7 +560,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
 
     public function testClone()
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->text('foo');
 
         $ob2 = clone $ob;
@@ -578,7 +578,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
 
     public function testSerialize()
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->ids(new Horde_Imap_Client_Ids('1:3'), true);
         $ob->text('foo');
         $ob->charset('US-ASCII', false);
@@ -591,7 +591,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
 
     public function testBug13971()
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->ids(new Horde_Imap_Client_Ids(array()));
         $ob->text('foo');
 
@@ -600,7 +600,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
             strval($ob)
         );
 
-        $ob2 = new Horde_Imap_Client_Search_Query();
+        $ob2 = new \Horde_Imap_Client_Search_Query();
         $ob2->text('foo2');
         $ob2->andSearch($ob);
 
@@ -609,7 +609,7 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
             strval($ob2)
         );
 
-        $ob3 = new Horde_Imap_Client_Search_Query();
+        $ob3 = new \Horde_Imap_Client_Search_Query();
         $ob3->text('foo3');
         $ob3->orSearch($ob);
 
@@ -636,25 +636,25 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider inconsistentCharsetsInAndOrSearchesProvider
-     * @expectedException InvalidArgumentException
      */
     public function testInconsistentCharsetsInAndOrSearches($query)
     {
+        $this->expectException('InvalidArgumentException');
         $query->build(null);
     }
 
     public function inconsistentCharsetsInAndOrSearchesProvider()
     {
-        $ob = new Horde_Imap_Client_Search_Query();
+        $ob = new \Horde_Imap_Client_Search_Query();
         $ob->text('foo');
         $ob->charset('UTF-8', false);
 
-        $ob2 = new Horde_Imap_Client_Search_Query();
+        $ob2 = new \Horde_Imap_Client_Search_Query();
         $ob2->text('foo2');
         $ob2->charset('ISO-8859-1', false);
         $ob2->andSearch($ob);
 
-        $ob3 = new Horde_Imap_Client_Search_Query();
+        $ob3 = new \Horde_Imap_Client_Search_Query();
         $ob3->text('foo2');
         $ob3->charset('ISO-8859-1', false);
         $ob3->orSearch($ob);

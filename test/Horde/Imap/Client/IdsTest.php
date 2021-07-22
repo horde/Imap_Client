@@ -11,6 +11,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Ids;
+use \stdClass;
 
 /**
  * Tests for the Ids object.
@@ -23,7 +27,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_IdsTest extends PHPUnit_Framework_TestCase
+class IdsTest extends TestCase
 {
     public function testBasicAddingOfIds()
     {

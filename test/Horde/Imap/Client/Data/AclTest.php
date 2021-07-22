@@ -11,6 +11,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+namespace Horde\Imap\Client\Data;
+use PHPUnit\Framework\TestCase;
+use \Horde_Imap_Client_Data_Acl;
 
 /**
  * Tests for the Imap Client ACL data object.
@@ -23,7 +26,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_AclTest extends PHPUnit_Framework_TestCase
+class AclTest extends TestCase
 {
     public function testIterator()
     {
