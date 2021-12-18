@@ -27,8 +27,8 @@ jobs:
     strategy:
       matrix:
         operating-system: ['ubuntu-20.04']
-        php-versions: ['7.4']
-        phpunit-versions: ['latest', '9.5', '9.0']
+        php-versions: ['7.4', '8.0', 'latest']
+        phpunit-versions: ['latest', '9.5']
     steps:
     - name: Setup github ssh key
       run:  mkdir -p ~/.ssh/ && ssh-keyscan -t rsa github.com > ~/.ssh/known_hosts
