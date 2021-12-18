@@ -10,7 +10,7 @@
   <email>slusarz@horde.org</email>
   <active>no</active>
  </lead>
- <date>2021-06-12</date>
+ <date>2021-12-18</date>
  <version>
   <release>2.30.4</release>
   <api>2.30.0</api>
@@ -21,7 +21,8 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
  <notes>
-* 
+* [mjr] Fix deprecated optional parameters in PHP 8 (christoph@winzerhof-wurst.at).
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -779,169 +780,6 @@
    </filelist>
  </phprelease>
  <changelog>
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
   <release>
    <version>
     <release>1.0.0alpha1</release>
@@ -3685,7 +3523,7 @@
    <date>2021-05-16</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* |+
+* [mjr] Remove redundant array_diff that could cause removal of emails from local message cache (PR #3, Silvio Zimmer &lt;silvio.zimmer@die-kinderwelt.com&gt;).
    </notes>
   </release>
   <release>
@@ -3700,7 +3538,7 @@
    <date>2021-06-12</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* |+
+* [mjr] Fix removing fetch query labels in PHP 8 (PR #12, Ralf Becker&lt;rb@egroupware.org&gt;).
    </notes>
   </release>
   <release>
@@ -3712,10 +3550,11 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2021-06-12</date>
+   <date>2021-12-18</date>
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
-* 
+* [mjr] Fix deprecated optional parameters in PHP 8 (christoph@winzerhof-wurst.at).
+* |+
    </notes>
   </release>
  </changelog>

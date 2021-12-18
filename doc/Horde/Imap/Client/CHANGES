@@ -2,20 +2,26 @@
 v2.30.4
 -------
 
-
+[mjr] Fix deprecated optional parameters in PHP 8
+      (christoph@winzerhof-wurst.at).
+|+
 
 
 -------
 v2.30.3
 -------
 
-|+
+[mjr] Fix removing fetch query labels in PHP 8 (PR #12, Ralf
+      Becker<rb@egroupware.org>).
+
 
 -------
 v2.30.2
 -------
 
-|+
+[mjr] Remove redundant array_diff that could cause removal of emails from local
+      message cache (PR #3, Silvio Zimmer <silvio.zimmer@die-kinderwelt.com>).
+
 
 -------
 v2.30.1
