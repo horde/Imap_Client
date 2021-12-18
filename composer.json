@@ -3,7 +3,7 @@
     "description": "IMAP client library",
     "type": "library",
     "homepage": "https://www.horde.org/libraries/Horde_Imap_Client",
-    "license": "LGPL-2.1",
+    "license": "LGPL-2.1-only",
     "authors": [
         {
             "name": "Michael Slusarz",
@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": "^7 || ^8",
+        "php": "^7.4 || ^8",
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/mail": "^3 || dev-FRAMEWORK_6_0",
         "horde/mime": "^3 || dev-FRAMEWORK_6_0",

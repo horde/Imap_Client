@@ -59,8 +59,8 @@ jobs:
         chmod +x "${BIN_DIR}/phpdocumentor"
         echo "Creating UUT related dir in docu repo"
         mkdir -p $UUT_DIR/phpdoc-git/${GITHUB_REF##*/}/${REPO}/
-        ## TODO: check for and include lib, src, app (if they exist) but not test or script dirs
-        $BIN_DIR/phpdocumentor -d $UUT_DIR/lib/ -t "${UUT_DIR}/phpdoc-git/${GITHUB_REF##*/}/${REPO}/"
+        ## Look into any of lib, src, app (if they exist) but not test, migration, bin, locale or script dirs
+        $BIN_DIR/phpdocumentor -d $UUT_DIR/lib/ -d $UUT_DIR/src/ -d $UUT_DIR/app/ -t "${UUT_DIR}/phpdoc-git/${GITHUB_REF##*/}/${REPO}/"
         cd ${UUT_DIR}/phpdoc-git
         git add "${GITHUB_REF##*/}/${REPO}"
         php indexer.php ${GITHUB_REF##*/} $REPO
