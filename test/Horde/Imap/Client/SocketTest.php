@@ -23,12 +23,13 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_SocketTest extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_SocketTest extends \PHPUnit\Framework\TestCase
 {
     public $test_ob;
 
-    public function setUp()
+    public function setUp(): void
     {
+        parent::setUp();
         require_once __DIR__ . '/Stub/Socket.php';
 
         $this->test_ob = new Horde_Imap_Client_Stub_Socket(array(
@@ -37,8 +38,9 @@ class Horde_Imap_Client_SocketTest extends PHPUnit_Framework_TestCase
         ));
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
+        parent::tearDown();
         unset($this->test_ob);
     }
 

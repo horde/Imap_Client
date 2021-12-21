@@ -28,15 +28,12 @@ extends Horde_Imap_Client_Cache_TestBase
 {
     protected function _getBackend()
     {
-        $factory_hashtable = new Horde_Test_Factory_Hashtable();
-
-        try {
-            return new Horde_Imap_Client_Cache_Backend_Hashtable(array(
-                'hashtable' => $factory_hashtable->create()
-            ));
-        } catch (Horde_Test_Exception $e) {
-            $this->markTestSkipped('HashTable not available.');
+        if (!class_exists('Horde_HashTable_Base')) {
+            $this->markTestSkipped('The HashTable package is unavailable!');
         }
-    }
 
+        return new Horde_Imap_Client_Cache_Backend_Hashtable(array(
+            'hashtable' => new Horde_HashTable_Memory
+        ));
+    }
 }

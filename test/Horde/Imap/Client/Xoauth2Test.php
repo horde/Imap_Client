@@ -23,7 +23,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Xoauth2Test extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_Xoauth2Test extends \PHPUnit\Framework\TestCase
 {
     public function testTokenGeneration()
     {

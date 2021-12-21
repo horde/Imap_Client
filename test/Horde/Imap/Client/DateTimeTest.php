@@ -23,7 +23,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_DateTimeTest extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_DateTimeTest extends \PHPUnit\Framework\TestCase
 {
     public function provider()
     {

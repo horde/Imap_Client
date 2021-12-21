@@ -24,7 +24,7 @@
  * @subpackage UnitTests
  */
 abstract class Horde_Imap_Client_Fetch_Results_TestBase
-extends PHPUnit_Framework_TestCase
+extends \PHPUnit\Framework\TestCase
 {
     protected $ob;
 
@@ -33,8 +33,9 @@ extends PHPUnit_Framework_TestCase
     protected $ob_ids;
     abstract protected function _setUp();
 
-    public function setUp()
+    public function setUp(): void
     {
+        parent::setUp();
         $this->_setUp();
 
         $this->ob = new Horde_Imap_Client_Fetch_Results($this->ob_class);

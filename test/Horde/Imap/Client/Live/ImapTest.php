@@ -23,14 +23,14 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Live_ImapTest extends Horde_Test_Case
+class Horde_Imap_Client_Live_ImapTest extends Horde_Imap_Client_BaseTestCase
 {
     /**
      * Add the tests to the current test runner.
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite;
+        $suite = new \PHPUnit\Framework\TestSuite;
 
         $c = self::getConfig('IMAPCLIENT_TEST_CONFIG', __DIR__ . '/../');
         if (!is_null($c) && !empty($c['imapclient'])) {
@@ -55,5 +55,4 @@ class Horde_Imap_Client_Live_ImapTest extends Horde_Test_Case
 
         return $suite;
     }
-
 }

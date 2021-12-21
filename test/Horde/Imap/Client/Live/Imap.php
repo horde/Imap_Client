@@ -36,8 +36,9 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
     private static $test_mbox_utf8;
     private static $test_spam_mailbox;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
+        parent::setUpBeforeClass();
         $c = array_shift(self::$config);
 
         self::$created = false;
@@ -64,7 +65,7 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
         );
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (self::$created) {
             foreach (array(self::$test_mbox, self::$test_mbox_utf8) as $val) {
@@ -133,7 +134,7 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
             $this->markTestSkipped('No support for ID extension');
         }
 
-        $this->assertInternalType('array', $id);
+        $this->assertIsArray($id);
     }
 
     /**
@@ -147,7 +148,7 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
             $this->markTestSkipped('No support for LANGUAGE extension');
         }
 
-        $this->assertInternalType('array', $lang);
+        $this->assertIsArray($lang);
     }
 
     /**
@@ -278,7 +279,7 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
             Horde_Imap_Client::MBOX_ALL,
             array('flat' => true)
         );
-        $this->assertInternalType('array', $l);
+        $this->assertIsArray($l);
 
         // Listing all mailboxes (flat format).
         $l = self::$live->listMailboxes(
@@ -286,7 +287,7 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
             Horde_Imap_Client::MBOX_ALL,
             array('flat' => true)
         );
-        $this->assertInternalType('array', $l);
+        $this->assertIsArray($l);
 
         // Listing subscribed mailboxes (flat format).
         $l = self::$live->listMailboxes(
@@ -294,7 +295,7 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
             Horde_Imap_Client::MBOX_SUBSCRIBED,
             array('flat' => true)
         );
-        $this->assertInternalType('array', $l);
+        $this->assertIsArray($l);
 
         // Listing unsubscribed mailboxes in base level (with attribute
         // information).
@@ -303,7 +304,7 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
             Horde_Imap_Client::MBOX_UNSUBSCRIBED,
             array('attributes' => true)
         );
-        $this->assertInternalType('array', $l);
+        $this->assertIsArray($l);
     }
 
     /**
@@ -328,14 +329,14 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
             self::$test_mbox,
             Horde_Imap_Client::STATUS_ALL
         );
-        $this->assertInternalType('array', $s);
+        $this->assertIsArray($s);
 
         // Only UIDNEXT status information for test mailbox.
         $s = self::$live->status(
             self::$test_mbox,
             Horde_Imap_Client::STATUS_UIDNEXT
         );
-        $this->assertInternalType('array', $s);
+        $this->assertIsArray($s);
 
         // Only FIRSTUNSEEN, FLAGS, PERMFLAGS, HIGHESTMODSEQ, and UIDNOTSTICKY
         // status information for test mailbox.
@@ -343,7 +344,7 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
             self::$test_mbox,
             Horde_Imap_Client::STATUS_FIRSTUNSEEN | Horde_Imap_Client::STATUS_FLAGS | Horde_Imap_Client::STATUS_PERMFLAGS | Horde_Imap_Client::STATUS_HIGHESTMODSEQ | Horde_Imap_Client::STATUS_UIDNOTSTICKY
         );
-        $this->assertInternalType('array', $s);
+        $this->assertIsArray($s);
 
         // Github Issue #134 (UTF8 mailbox)
         $s = self::$live->status(
@@ -846,8 +847,7 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
         );
 
         /* Return stream instead. */
-        $this->assertInternalType(
-            'resource',
+        $this->assertIsResource(
             $res[3]->getHeaders('headersearch1', Horde_Imap_Client_Data_Fetch::HEADER_STREAM)
         );
 
@@ -954,10 +954,11 @@ class Horde_Imap_Client_Live_Imap extends Horde_Imap_Client_Live_Base
 
     /**
      * @depends testLogin
-     * @expectedException Horde_Imap_Client_Exception
      */
     public function testAppendToNonExistentMailbox()
     {
+        $this->expectException(Horde_Imap_Client_Exception::class);
+
         // Do a test append to a non-existent mailbox - this MUST fail (RFC
         // 3501 [6.3.11]).
         self::$live->append(

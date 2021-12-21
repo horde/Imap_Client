@@ -23,14 +23,14 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Live_Pop3Test extends Horde_Test_Case
+class Horde_Imap_Client_Live_Pop3Test extends Horde_Imap_Client_BaseTestCase
 {
     /**
      * Add the tests to the current test runner.
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite;
+        $suite = new \PHPUnit\Framework\TestSuite;
 
         $c = self::getConfig('IMAPCLIENT_TEST_CONFIG_POP3', __DIR__ . '/../');
         if (!is_null($c) && !empty($c['pop3client'])) {

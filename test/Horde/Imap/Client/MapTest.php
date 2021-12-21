@@ -23,13 +23,14 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_MapTest extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_MapTest extends \PHPUnit\Framework\TestCase
 {
     private $lookup;
     private $map;
 
-    public function setUp()
+    public function setUp(): void
     {
+        parent::setUp();
         $this->lookup = array(
             2 => 5,
             4 => 10,

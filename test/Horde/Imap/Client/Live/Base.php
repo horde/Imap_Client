@@ -23,16 +23,17 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Live_Base extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_Live_Base extends \PHPUnit\Framework\TestCase
 {
     public static $live;
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
+        parent::tearDownAfterClass();
         self::$live = null;
     }
 
-    public function onNotSuccessfulTest(Exception $e)
+    public function onNotSuccessfulTest(Throwable $e): void
     {
         if ($e instanceof Horde_Imap_Client_Exception) {
             $e->setMessage($e->getMessage() . ' [' . self::$live->url . ']');

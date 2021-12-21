@@ -24,7 +24,7 @@
  * @subpackage UnitTests
  */
 class Horde_Imap_Client_Url_BaseTest
-extends PHPUnit_Framework_TestCase
+extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider badUrlProvider

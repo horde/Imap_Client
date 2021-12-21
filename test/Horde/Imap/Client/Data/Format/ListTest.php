@@ -24,7 +24,7 @@
  * @subpackage UnitTests
  */
 class Horde_Imap_Client_Data_Format_ListTest
-extends PHPUnit_Framework_TestCase
+extends \PHPUnit\Framework\TestCase
 {
     public function testBasicListFunctions()
     {

@@ -105,11 +105,9 @@ extends Horde_Imap_Client_Data_Format_Mailbox_TestBase
         );
     }
 
-    /**
-     * @expectedException Horde_Imap_Client_Data_Format_Exception
-     */
     public function testBadInput()
     {
+        $this->expectException(Horde_Imap_Client_Data_Format_Exception::class);
         new $this->cname("foo\1");
     }
 

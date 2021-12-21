@@ -23,7 +23,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_MailboxTest extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_MailboxTest extends \PHPUnit\Framework\TestCase
 {
     public function testMailboxClone()
     {

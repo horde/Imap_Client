@@ -27,6 +27,10 @@ class Horde_Imap_Client_Cache_DbTest extends Horde_Imap_Client_Cache_TestBase
 {
     protected function _getBackend()
     {
+        if (!class_exists('Horde_Db_Adapter_Pdo_Sqlite')) {
+            $this->markTestSkipped('The "Horde_Db_Adapter_Pdo_Sqlite" class is unavailable!');
+        }
+
         $factory_db = new Horde_Test_Factory_Db();
 
         try {

@@ -27,10 +27,12 @@ class Horde_Imap_Client_Cache_CacheTest extends Horde_Imap_Client_Cache_TestBase
 {
     protected function _getBackend()
     {
-        $factory_cache = new Horde_Test_Factory_Cache();
+        if (! class_exists('Horde_Cache')) {
+            $this->markTestSkipped('The "Horde_Cache" class is unavailable!');
+        }
 
         return new Horde_Imap_Client_Cache_Backend_Cache(array(
-            'cacheob' => $factory_cache->create()
+            'cacheob' => new Horde_Cache(new Horde_Cache_Storage_Mock())
         ));
     }
 

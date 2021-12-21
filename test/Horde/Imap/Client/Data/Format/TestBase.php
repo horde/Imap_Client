@@ -24,7 +24,7 @@
  * @subpackage UnitTests
  */
 abstract class Horde_Imap_Client_Data_Format_TestBase
-extends PHPUnit_Framework_TestCase
+extends \PHPUnit\Framework\TestCase
 {
     abstract protected function getTestObs();
 

@@ -23,7 +23,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-abstract class Horde_Imap_Client_Cache_TestBase extends Horde_Test_Case
+abstract class Horde_Imap_Client_Cache_TestBase extends Horde_Imap_Client_BaseTestCase
 {
     const HOSTSPEC = 'foo.example.com';
     const PORT = 143;
@@ -31,9 +31,10 @@ abstract class Horde_Imap_Client_Cache_TestBase extends Horde_Test_Case
 
     private $_cache;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $baseob = $this->getMock('Horde_Imap_Client_Socket', array(), array(), '', false);
+        parent::setUp();
+        $baseob = $this->createMock('Horde_Imap_Client_Socket');
         $baseob->expects($this->any())
             ->method('getParam')
             ->will($this->returnCallback(array($this, '_baseobHandler')));
@@ -92,8 +93,9 @@ abstract class Horde_Imap_Client_Cache_TestBase extends Horde_Test_Case
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
+        parent::tearDown();
         unset($this->_cache);
     }
 

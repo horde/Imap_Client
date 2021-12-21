@@ -24,7 +24,7 @@
  * @subpackage UnitTests
  */
 class Horde_Imap_Client_Interaction_CommandTest
-    extends PHPUnit_Framework_TestCase
+    extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider continuationCheckProvider
