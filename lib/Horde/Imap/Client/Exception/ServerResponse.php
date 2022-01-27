@@ -50,10 +50,10 @@ class Horde_Imap_Client_Exception_ServerResponse extends Horde_Imap_Client_Excep
      * @param Horde_Imap_Client_Interaction_Pipeline $pipeline  Pipeline ob.
      */
     public function __construct(
-        $msg,
-        $code,
         Horde_Imap_Client_Interaction_Server $server,
-        Horde_Imap_Client_Interaction_Pipeline $pipeline
+        Horde_Imap_Client_Interaction_Pipeline $pipeline,
+        $msg,
+        $code
     )
     {
         $this->details = strval($server->token);
