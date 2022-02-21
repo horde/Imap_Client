@@ -260,6 +260,23 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                 isset($cap_list[1]) ? array($cap_list[1]) : null
             );
         }
+	    
+	// WORKAROUND: Apple's IMAP implementation advertises several features
+        // that they provide incomplete/non-compliant support for. We'll detect
+        // Apple servers and disable those capabilities.
+        if($c->query('XAPPLEPUSHSERVICE')) {
+
+            // While the server advertises the ESEARCH capability, it does not
+            // support many of its features; it will always e.g. omit MIN and
+            // MAX; which causes errors in how we enumerate messages.
+            $c->remove('ESEARCH');
+
+            // Apple's BINARY support is unfortunately broken; their server
+            // will issue parse errors on valid requests. We don't yet speak
+            // their custom subset of IMAP; so we'll just remove the
+            // capability.
+            $c->remove('BINARY');
+        }
 
         $this->_setInit('capability', $c);
     }
