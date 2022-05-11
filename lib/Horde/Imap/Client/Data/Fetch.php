@@ -625,7 +625,12 @@ class Horde_Imap_Client_Data_Fetch
                 $hdrs = $this->_getHeaders($id, self::HEADER_STREAM, $key);
             }
 
-            return Horde_Mime_Headers::parseHeaders($hdrs);
+            $parsed = Horde_Mime_Headers::parseHeaders($hdrs);
+			if (is_resource($hdrs)) {
+				// Close the temporary stream
+				fclose($hdrs);
+			}
+			return $parsed;
         }
 
         if (!isset($this->_data[$key][$id])) {
