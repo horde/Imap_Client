@@ -623,7 +623,7 @@ class Horde_Imap_Client_Data_Fetch
             } else {
                 $hdrs = $this->_getHeaders($id, self::HEADER_STREAM, $key);
                 $parsed = Horde_Mime_Headers::parseHeaders($hdrs);
-                fclose($headers);
+                fclose($hdrs);
                 return $parsed;
             }
         }
