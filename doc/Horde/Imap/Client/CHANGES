@@ -2,7 +2,9 @@
 v2.30.5
 -------
 
-
+[mjr] Fix possible memory leak from unclosed stream (PR #18, Christoph Wurst
+      <christoph@winzerhof-wurst.at>).
+|+
 
 
 -------
