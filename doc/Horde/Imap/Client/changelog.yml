@@ -1,4 +1,15 @@
 ---
+2.30.5:
+  api: 2.30.0
+  state:
+    release: stable
+    api: stable
+  date: 2021-12-18
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] Fix possible memory leak from unclosed stream (PR #18, Christoph Wurst <christoph@winzerhof-wurst.at>).
 2.30.4:
   api: 2.30.0
   state:
@@ -10,7 +21,6 @@
     uri: http://www.horde.org/licenses/lgpl21
   notes: |
     [mjr] Fix deprecated optional parameters in PHP 8 (christoph@winzerhof-wurst.at).
-    |+
 2.30.3:
   api: 2.30.0
   state:
