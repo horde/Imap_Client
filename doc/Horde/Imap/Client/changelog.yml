@@ -8,8 +8,9 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-    
+  notes: |
+    [mjr] Fix possible memory leak from unclosed stream (PR #18, Christoph Wurst <christoph@winzerhof-wurst.at>).
+    |+
 2.30.4:
   api: 2.30.0
   state:
