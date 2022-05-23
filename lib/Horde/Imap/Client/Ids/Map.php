@@ -196,6 +196,7 @@ class Horde_Imap_Client_Ids_Map implements Countable, IteratorAggregate, Seriali
 
     /**
      */
+    #[ReturnTypeWillChange]
     public function count()
     {
         return count($this->_ids);
@@ -205,6 +206,7 @@ class Horde_Imap_Client_Ids_Map implements Countable, IteratorAggregate, Seriali
 
     /**
      */
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->_ids);
