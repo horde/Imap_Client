@@ -377,6 +377,7 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
 
     /**
      */
+    #[ReturnTypeWillChange]
     public function count()
     {
         return is_array($this->_ids)
@@ -388,6 +389,7 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
 
     /**
      */
+    #[ReturnTypeWillChange]
     public function current()
     {
         return is_array($this->_ids)
@@ -397,6 +399,7 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
 
     /**
      */
+    #[ReturnTypeWillChange]
     public function key()
     {
         return is_array($this->_ids)
@@ -406,6 +409,7 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
 
     /**
      */
+    #[ReturnTypeWillChange]
     public function next()
     {
         if (is_array($this->_ids)) {
@@ -415,6 +419,7 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
 
     /**
      */
+    #[ReturnTypeWillChange]
     public function rewind()
     {
         if (is_array($this->_ids)) {
@@ -424,6 +429,7 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
 
     /**
      */
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return !is_null($this->key());
