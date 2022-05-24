@@ -441,6 +441,21 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
      */
     public function serialize()
     {
+        return serialize($this->__serialize());
+    }
+
+    /**
+     */
+    public function unserialize($data)
+    {
+        $this->__unserialize(@unserialize($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
         $save = array();
 
         if ($this->duplicates) {
@@ -456,44 +471,40 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
         }
 
         switch ($this->_ids) {
-        case self::ALL:
-            $save['a'] = true;
-            break;
+            case self::ALL:
+                $save['a'] = true;
+                break;
 
-        case self::LARGEST:
-            $save['l'] = true;
-            break;
+            case self::LARGEST:
+                $save['l'] = true;
+                break;
 
-        case self::SEARCH_RES:
-            $save['sr'] = true;
-            break;
+            case self::SEARCH_RES:
+                $save['sr'] = true;
+                break;
 
-        default:
-            $save['i'] = strval($this);
-            break;
+            default:
+                $save['i'] = strval($this);
+                break;
         }
 
-        return serialize($save);
+        return $save;
     }
 
-    /**
-     */
-    public function unserialize($data)
+    public function __unserialize(array $data)
     {
-        $save = @unserialize($data);
+        $this->duplicates = !empty($data['d']);
+        $this->_sequence = !empty($data['s']);
+        $this->_sorted = !empty($data['is']);
 
-        $this->duplicates = !empty($save['d']);
-        $this->_sequence = !empty($save['s']);
-        $this->_sorted = !empty($save['is']);
-
-        if (isset($save['a'])) {
+        if (isset($data['a'])) {
             $this->_ids = self::ALL;
-        } elseif (isset($save['l'])) {
+        } elseif (isset($data['l'])) {
             $this->_ids = self::LARGEST;
-        } elseif (isset($save['sr'])) {
+        } elseif (isset($data['sr'])) {
             $this->_ids = self::SEARCH_RES;
-        } elseif (isset($save['i'])) {
-            $this->add($save['i']);
+        } elseif (isset($data['i'])) {
+            $this->add($data['i']);
         }
     }
 

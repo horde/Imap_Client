@@ -866,17 +866,7 @@ class Horde_Imap_Client_Search_Query implements Serializable
      */
     public function serialize()
     {
-        $data = array(
-            // Serialized data ID.
-            self::VERSION,
-            $this->_search
-        );
-
-        if (!is_null($this->_charset)) {
-            $data[] = $this->_charset;
-        }
-
-        return serialize($data);
+        return serialize($this->__serialize());
     }
 
     /**
@@ -888,9 +878,29 @@ class Horde_Imap_Client_Search_Query implements Serializable
      */
     public function unserialize($data)
     {
-        $data = @unserialize($data);
-        if (!is_array($data) ||
-            !isset($data[0]) ||
+        $this->__unserialize(@unserialize($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        $data = array(
+            self::VERSION,
+            $this->_search,
+        );
+
+        if ($this->_charset !== null) {
+            $data[] = $this->_charset;
+        }
+
+        return $data;
+    }
+
+    public function __unserialize(array $data)
+    {
+        if (!isset($data[0]) ||
             ($data[0] != self::VERSION)) {
             throw new Exception('Cache version change');
         }

@@ -204,14 +204,27 @@ implements Serializable, SplSubject
      */
     public function serialize()
     {
-        return json_encode($this->_data);
+        return json_encode($this->__serialize());
     }
 
     /**
      */
     public function unserialize($data)
     {
-        $this->_data = json_decode($data, true);
+        $this->__unserialize(json_decode($data, true));
+    }
+
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        return $this->_data;
+    }
+
+    public function __unserialize(array $data)
+    {
+        $this->_data = $data;
     }
 
 }
