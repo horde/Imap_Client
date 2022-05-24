@@ -211,4 +211,17 @@ implements Serializable, SplSubject
         $this->_data = json_decode($data, true);
     }
 
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        return $this->_data;
+    }
+
+    public function __unserialize(array $data)
+    {
+        $this->_data = $data;
+    }
+
 }
