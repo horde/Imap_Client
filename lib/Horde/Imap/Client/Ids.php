@@ -508,4 +508,25 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
         }
     }
 
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array(
+            'd' => $this->duplicates,
+            's' => $this->_sequence,
+            'is' => $this->_sorted,
+            'ids' => $this->_ids,
+        );
+    }
+
+    public function __unserialize(array $data)
+    {
+        $this->duplicates = $data['d'];
+        $this->_sequence = $data['s'];
+        $this->_sorted = $data['is'];
+        $this->_ids = $data['ids'];
+    }
+
 }

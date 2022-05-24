@@ -403,6 +403,30 @@ implements Serializable, SplObserver
     }
 
     /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array(
+            'i' => $this->_init,
+            'p' => $this->_params,
+            'v' => self::VERSION
+        );
+    }
+
+    public function __unserialize(array $data)
+    {
+        if (empty($data['v']) || $data['v'] != self::VERSION) {
+            throw new Exception('Cache version change');
+        }
+
+        $this->_init = $data['i'];
+        $this->_params = $data['p'];
+
+        $this->_initOb();
+    }
+
+    /**
      */
     public function __get($name)
     {
