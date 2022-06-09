@@ -201,17 +201,30 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
      */
     public function serialize()
     {
-        return json_encode(array(
-            $this->_required,
-            $this->_optional
-        ));
+        return json_encode($this->__serialize());
     }
 
     /**
      */
     public function unserialize($data)
     {
-        list($this->_required, $this->_optional) = json_decode($data);
+        $this->__unserialize(json_decode($data, true));
+    }
+
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array(
+            $this->_required,
+            $this->_optional,
+        );
+    }
+
+    public function __unserialize(array $data)
+    {
+        list($this->_required, $this->_optional) = $data;
     }
 
 }

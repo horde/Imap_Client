@@ -364,20 +364,31 @@ implements Serializable, SplObserver
      */
     public function serialize()
     {
-        return serialize(array(
-            'i' => $this->_init,
-            'p' => $this->_params,
-            'v' => self::VERSION
-        ));
+        return serialize($this->__serialize());
     }
 
     /**
      */
     public function unserialize($data)
     {
-        $data = @unserialize($data);
-        if (!is_array($data) ||
-            !isset($data['v']) ||
+        $this->__unserialize(@unserialize($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array(
+            'i' => $this->_init,
+            'p' => $this->_params,
+            'v' => self::VERSION
+        );
+    }
+
+    public function __unserialize(array $data)
+    {
+        if (!isset($data['v']) ||
             ($data['v'] != self::VERSION)) {
             throw new Exception('Cache version change');
         }
