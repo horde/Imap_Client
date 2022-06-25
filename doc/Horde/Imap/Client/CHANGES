@@ -2,7 +2,9 @@
 v2.30.6
 -------
 
-
+[mjr] Null string fixes for PHP 8.1 (PR #4, Christoph Wurst
+      <christoph@winzerhof-wurst.at>)
+|+
 
 
 -------
