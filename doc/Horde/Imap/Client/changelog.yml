@@ -8,8 +8,9 @@
   license:
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-    
+  notes: |
+    [mjr] Null string fixes for PHP 8.1 (PR #4, Christoph Wurst <christoph@winzerhof-wurst.at>)
+    |+
 2.30.5:
   api: 2.30.0
   state:
