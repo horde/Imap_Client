@@ -51,7 +51,7 @@ class Horde_Imap_Client_Socket_ClientSort
         $this->_socket = $socket;
 
         if (class_exists('Collator')) {
-            $this->_collator = new Collator(null);
+            $this->_collator = new Collator('');
         }
     }
 
