@@ -168,7 +168,7 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
             } elseif ($add = $this->_resolveIds($ids)) {
                 if (is_array($this->_ids) && !empty($this->_ids)) {
                     foreach ($add as $val) {
-                        $this->_ids[] = $val;
+                        $this->_ids[] = (int)$val;
                     }
                 } else {
                     $this->_ids = $add;
@@ -363,10 +363,10 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
             $range = explode(':', $val);
             if (isset($range[1])) {
                 for ($i = min($range), $j = max($range); $i <= $j; ++$i) {
-                    $ids[] = $i;
+                    $ids[] = (int)$i;
                 }
             } else {
-                $ids[] = $val;
+                $ids[] = (int)$val;
             }
         }
 
