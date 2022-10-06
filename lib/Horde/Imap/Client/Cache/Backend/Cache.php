@@ -436,8 +436,8 @@ extends Horde_Imap_Client_Cache_Backend
      */
     protected function _loadSliceMap($mailbox, $uidvalid = null)
     {
-        if (!isset($this->_slicemap[$mailbox]) &&
-            (($data = $this->_cache->get($this->_getCid($mailbox, 'slicemap'), 0)) !== false)) {
+        if ($this->_cache && (!isset($this->_slicemap[$mailbox]) &&
+            (($data = $this->_cache->get($this->_getCid($mailbox, 'slicemap'), 0)) !== false))) {
             try {
                 if (($slice = @unserialize($data)) &&
                     is_array($slice)) {
