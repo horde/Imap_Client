@@ -12,7 +12,7 @@
  </lead>
  <date>2022-10-08</date>
  <version>
-  <release>3.0.0alpha4</release>
+  <release>3.0.0alpha5</release>
   <api>3.0.0alpha1</api>
  </version>
  <stability>
@@ -21,11 +21,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1-only</license>
  <notes>
-* [rla] Fix some PHP 8.1 issues. Safeguard against missing cache object.
-* [rla] Added CI jobs for github actions (with Corbinian Koch).
-* [rla] changed package data for composer2 support.
-* [rla] Updated unit tests for PHPUnit 9 (with Marco Abbrancati)
-* |+
+* 
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -660,6 +656,175 @@
   </filelist>
  </phprelease>
  <changelog>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   <release>
    <version>
     <release>1.0.0alpha1</release>
@@ -3503,14 +3668,29 @@
     <release>alpha</release>
     <api>alpha</api>
    </stability>
-   <date>2021-03-13</date>
-   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1-only</license>
+   <date>2022-10-08</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * [rla] Fix some PHP 8.1 issues. Safeguard against missing cache object.
 * [rla] Added CI jobs for github actions (with Corbinian Koch).
 * [rla] changed package data for composer2 support.
 * [rla] Updated unit tests for PHPUnit 9 (with Marco Abbrancati)
 * |+
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>3.0.0alpha5</release>
+    <api>3.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2022-10-08</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* 
    </notes>
   </release>
  </changelog>
