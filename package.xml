@@ -10,21 +10,32 @@
   <email>slusarz@horde.org</email>
   <active>no</active>
  </lead>
- <date>2019-09-29</date>
+ <date>2022-10-08</date>
  <version>
-  <release>2.30.0</release>
-  <api>2.30.0</api>
+  <release>3.0.0alpha4</release>
+  <api>3.0.0alpha1</api>
  </version>
  <stability>
-  <release>stable</release>
-  <api>stable</api>
+  <release>alpha</release>
+  <api>alpha</api>
  </stability>
- <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+ <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1-only</license>
  <notes>
-* [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
+* [rla] Fix some PHP 8.1 issues. Safeguard against missing cache object.
+* [rla] Added CI jobs for github actions (with Corbinian Koch).
+* [rla] changed package data for composer2 support.
+* [rla] Updated unit tests for PHPUnit 9 (with Marco Abbrancati)
+* |+
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
+   <dir name=".github">
+    <dir name="workflows">
+     <file name="ci.yml" role="php" />
+     <file name="phpdoc.yml" role="php" />
+     <file name="update-satis.yml" role="php" />
+    </dir> <!-- /.github/workflows -->
+   </dir> <!-- /.github -->
    <dir name="doc">
     <dir name="Horde">
      <dir name="Imap">
@@ -415,76 +426,13 @@
  <dependencies>
   <required>
    <php>
-    <min>5.3.0</min>
-    <max>8.0.0alpha1</max>
-    <exclude>8.0.0alpha1</exclude>
+    <min>7.4.0</min>
+    <max>9.0.0alpha1</max>
+    <exclude>9.0.0alpha1</exclude>
    </php>
    <pearinstaller>
     <min>1.7.0</min>
    </pearinstaller>
-   <package>
-    <name>Horde_Exception</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Mail</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Mime</name>
-    <channel>pear.horde.org</channel>
-    <min>2.5.2</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Socket_Client</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Stream</name>
-    <channel>pear.horde.org</channel>
-    <min>1.4.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Secret</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Stream_Filter</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Translation</name>
-    <channel>pear.horde.org</channel>
-    <min>2.2.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Util</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
    <extension>
     <name>hash</name>
    </extension>
@@ -493,76 +441,6 @@
    </extension>
   </required>
   <optional>
-   <package>
-    <name>Horde_Cache</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Compress_Fast</name>
-    <channel>pear.horde.org</channel>
-    <min>1.0.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Crypt_Blowfish</name>
-    <channel>pear.horde.org</channel>
-    <min>1.1.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Db</name>
-    <channel>pear.horde.org</channel>
-    <min>2.2.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_HashTable</name>
-    <channel>pear.horde.org</channel>
-    <min>1.0.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Mongo</name>
-    <channel>pear.horde.org</channel>
-    <min>1.0.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Pack</name>
-    <channel>pear.horde.org</channel>
-    <min>1.0.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Stringprep</name>
-    <channel>pear.horde.org</channel>
-    <min>1.0.0</min>
-    <max>2.0.0alpha1</max>
-    <exclude>2.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Support</name>
-    <channel>pear.horde.org</channel>
-    <min>2.0.0</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
-   <package>
-    <name>Horde_Test</name>
-    <channel>pear.horde.org</channel>
-    <min>2.2.7</min>
-    <max>3.0.0alpha1</max>
-    <exclude>3.0.0alpha1</exclude>
-   </package>
    <extension>
     <name>intl</name>
    </extension>
@@ -573,6 +451,9 @@
  </dependencies>
  <phprelease>
   <filelist>
+   <install as="workflows/ci.yml" name=".github/workflows/ci.yml" />
+   <install as="workflows/phpdoc.yml" name=".github/workflows/phpdoc.yml" />
+   <install as="workflows/update-satis.yml" name=".github/workflows/update-satis.yml" />
    <install as="CHANGES" name="doc/Horde/Imap/Client/CHANGES" />
    <install as="examples/tutorial.md" name="doc/Horde/Imap/Client/examples/tutorial.md" />
    <install as="examples/tutorial.rst" name="doc/Horde/Imap/Client/examples/tutorial.rst" />
@@ -3491,6 +3372,145 @@
    <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
    <notes>
 * [mjr] Support returning entire thread list (Ticket #14943, mariusz.goch@spacja.com).
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>2.30.1</release>
+    <api>2.30.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2019-09-29</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* [mjr] PHP 7.4 compatibility fixes (Remi Collet &lt;remi@famillecollet.com&gt;, PR #9).
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>2.30.2</release>
+    <api>2.30.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2021-05-16</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* [mjr] Remove redundant array_diff that could cause removal of emails from local message cache (PR #3, Silvio Zimmer &lt;silvio.zimmer@die-kinderwelt.com&gt;).
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>2.30.3</release>
+    <api>2.30.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2021-06-12</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* [mjr] Fix removing fetch query labels in PHP 8 (PR #12, Ralf Becker&lt;rb@egroupware.org&gt;).
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>2.30.4</release>
+    <api>2.30.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2021-12-18</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* [mjr] Fix deprecated optional parameters in PHP 8 (christoph@winzerhof-wurst.at).
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>2.30.5</release>
+    <api>2.30.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2021-12-18</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* [mjr] Fix possible memory leak from unclosed stream (PR #18, Christoph Wurst &lt;christoph@winzerhof-wurst.at&gt;).
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>3.0.0alpha1</release>
+    <api>3.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2021-02-24</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* |+
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>3.0.0alpha2</release>
+    <api>2.30.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2022-05-15</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* [mjr] Null string fixes for PHP 8.1 (PR #4, Christoph Wurst &lt;christoph@winzerhof-wurst.at&gt;)
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>3.0.0alpha3</release>
+    <api>3.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2021-03-13</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1</license>
+   <notes>
+* |+
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>3.0.0alpha4</release>
+    <api>3.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2021-03-13</date>
+   <license uri="http://www.horde.org/licenses/lgpl21">LGPL-2.1-only</license>
+   <notes>
+* [rla] Fix some PHP 8.1 issues. Safeguard against missing cache object.
+* [rla] Added CI jobs for github actions (with Corbinian Koch).
+* [rla] changed package data for composer2 support.
+* [rla] Updated unit tests for PHPUnit 9 (with Marco Abbrancati)
+* |+
    </notes>
   </release>
  </changelog>

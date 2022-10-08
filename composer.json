@@ -11,11 +11,11 @@
             "role": "lead"
         }
     ],
-    "time": "2021-07-22",
+    "time": "2022-10-08",
     "repositories": [
         {
             "type": "composer",
-            "url": "https://horde-satis.maintaina.com/"
+            "url": "https://horde-satis.maintaina.com"
         }
     ],
     "require": {
@@ -50,6 +50,16 @@
     "autoload": {
         "psr-0": {
             "Horde_Imap_Client": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Horde\\Imap\\Client\\Test\\": "test/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "horde/horde-installer-plugin": true
         }
     }
 }
