@@ -214,4 +214,21 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
         list($this->_required, $this->_optional) = json_decode($data);
     }
 
+    /**
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array(
+            'required' => $this->_required,
+            'optional' => $this->_optional,
+        );
+    }
+
+    public function __unserialize(array $data)
+    {
+        $this->_required = $data['required'];
+        $this->_optional = $data['optional'];
+    }
+
 }
