@@ -201,17 +201,18 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
      */
     public function serialize()
     {
-        return json_encode(array(
-            $this->_required,
-            $this->_optional
-        ));
+        return serialize($this->__serialize());
     }
 
     /**
      */
     public function unserialize($data)
     {
-        list($this->_required, $this->_optional) = json_decode($data);
+        $data = @unserialize($data);
+        if (!is_array($data)) {
+            throw new Exception('Cache version changed.');
+        }
+        $this->__unserialize($data);
     }
 
     /**
@@ -219,16 +220,14 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
      */
     public function __serialize()
     {
-        return array(
-            'required' => $this->_required,
-            'optional' => $this->_optional,
-        );
+        return array(json_encode(
+            array($this->_required, $this->_optional)
+        ));
     }
 
     public function __unserialize(array $data)
     {
-        $this->_required = $data['required'];
-        $this->_optional = $data['optional'];
+        list($this->_required, $this->_optional) = json_decode($data[0], true);
     }
 
 }

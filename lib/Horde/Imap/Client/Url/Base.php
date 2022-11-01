@@ -160,14 +160,18 @@ abstract class Horde_Imap_Client_Url_Base implements Serializable
      */
     public function serialize()
     {
-        return strval($this);
+        return serialize($this->__serialize());
     }
 
     /**
      */
     public function unserialize($data)
     {
-        $this->_parse($data);
+        $data = @unserialize($data);
+        if (!is_array($data)) {
+            throw new Exception('Cache version change.');
+        }
+        $this->__unserialize($data);
     }
 
     /**
@@ -175,14 +179,12 @@ abstract class Horde_Imap_Client_Url_Base implements Serializable
      */
     public function __serialize()
     {
-        return array(
-            'value' => (string)$this,
-        );
+        return array((string)$this);
     }
 
     public function __unserialize(array $data)
     {
-        $this->_parse($data['value']);
+        $this->_parse($data[0]);
     }
 
 }

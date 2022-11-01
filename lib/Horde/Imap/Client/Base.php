@@ -364,11 +364,7 @@ implements Serializable, SplObserver
      */
     public function serialize()
     {
-        return serialize(array(
-            'i' => $this->_init,
-            'p' => $this->_params,
-            'v' => self::VERSION
-        ));
+        return serialize($this->__serialize());
     }
 
     /**
@@ -376,16 +372,10 @@ implements Serializable, SplObserver
     public function unserialize($data)
     {
         $data = @unserialize($data);
-        if (!is_array($data) ||
-            !isset($data['v']) ||
-            ($data['v'] != self::VERSION)) {
+        if (!is_array($data)) {
             throw new Exception('Cache version change');
         }
-
-        $this->_init = $data['i'];
-        $this->_params = $data['p'];
-
-        $this->_initOb();
+        $this->__unserialize($data);
     }
 
     /**

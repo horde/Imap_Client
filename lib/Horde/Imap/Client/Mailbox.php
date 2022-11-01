@@ -134,14 +134,18 @@ class Horde_Imap_Client_Mailbox implements Serializable
      */
     public function serialize()
     {
-        return json_encode(array($this->_utf7imap, $this->_utf8));
+        return serialize($this->__serialize());
     }
 
     /**
      */
     public function unserialize($data)
     {
-        list($this->_utf7imap, $this->_utf8) = json_decode($data, true);
+        $data = @unserialize($data);
+        if (!is_array($data)) {
+            throw new Exception('Cache value changed.');
+        }
+        $this->__unserialize($data);
     }
 
     /**
@@ -149,16 +153,12 @@ class Horde_Imap_Client_Mailbox implements Serializable
      */
     public function __serialize()
     {
-        return array(
-            'utf7imap' => $this->_utf7imap,
-            'utf8' => $this->_utf8,
-        );
+        return array(json_encode(array($this->_utf7imap, $this->_utf8)));
     }
 
     public function __unserialize(array $data)
     {
-        $this->_utf7imap = $data['utf7imap'];
-        $this->_utf8 = $data['utf8'];
+        list($this->_utf7imap, $this->_utf8) = json_decode($data[0], true);
     }
 
 }

@@ -183,17 +183,18 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
      */
     public function serialize()
     {
-        return json_encode(array(
-            $this->_thread,
-            $this->_type
-        ));
+        return serialize($this->__serialize());
     }
 
     /**
      */
     public function unserialize($data)
     {
-        list($this->_thread, $this->_type) = json_decode($data, true);
+        $data = @unserialize($data);
+        if (!is_array($data)) {
+            throw new Exception('Cache version changed.');
+        }
+        $this->__unserialize($data);
     }
 
     /**
@@ -201,16 +202,15 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
      */
     public function __serialize()
     {
-        return array(
-            'thread' => $this->_thread,
-            'type' => $this->_type,
-        );
+        return array(json_encode(array(
+            $this->_thread,
+            $this->_type,
+        )));
     }
 
     public function __unserialize(array $data)
     {
-        $this->_thread = $data['thread'];
-        $this->_type = $data['type'];
+        list($this->_thread, $this->_type) = json_decode($data[0], true);
     }
 
     /* Protected methods. */

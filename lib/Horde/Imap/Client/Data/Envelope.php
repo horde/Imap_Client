@@ -205,22 +205,14 @@ class Horde_Imap_Client_Data_Envelope implements Serializable
      */
     public function serialize()
     {
-        return serialize(array(
-            'd' => $this->_data,
-            'v' => self::VERSION
-        ));
+        return serialize($this->__serialize());
     }
 
     /**
      */
     public function unserialize($data)
     {
-        $data = @unserialize($data);
-        if (empty($data['v']) || ($data['v'] != self::VERSION)) {
-            throw new Exception('Cache version change');
-        }
-
-        $this->_data = $data['d'];
+        $this->__unserialize(@unserialize($data));
     }
 
     /**

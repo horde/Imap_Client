@@ -204,14 +204,18 @@ implements Serializable, SplSubject
      */
     public function serialize()
     {
-        return json_encode($this->_data);
+        return serialize($this->__serialize());
     }
 
     /**
      */
     public function unserialize($data)
     {
-        $this->_data = json_decode($data, true);
+        $data = @unserialize($data);
+        if (!is_array($data)) {
+            throw new Exception('Cache version change.');
+        }
+        $this->__unserialize();
     }
 
     /**
@@ -219,12 +223,12 @@ implements Serializable, SplSubject
      */
     public function __serialize()
     {
-        return $this->_data;
+        return array(json_encode($this->_data));
     }
 
     public function __unserialize(array $data)
     {
-        $this->_data = $data;
+        $this->_data = json_decode($data[0], true);
     }
 
 }
