@@ -149,12 +149,12 @@ class Horde_Imap_Client_Data_Namespace implements Serializable
      */
     public function __serialize()
     {
-        return array(json_encode($this->_data));
+        return $this->_data;
     }
 
     public function __unserialize(array $data)
     {
-        $this->_data = json_decode($data[0], true);
+        $this->_data = $data;
     }
 
 }

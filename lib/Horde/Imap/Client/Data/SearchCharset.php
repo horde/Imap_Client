@@ -187,12 +187,12 @@ implements Serializable, SplSubject
      */
     public function __serialize()
     {
-        return array(json_encode($this->_charsets));
+        return $this->_charsets;
     }
 
     public function __unserialize(array $data)
     {
-        $this->_charsets = json_decode($data[0], true);
+        $this->_charsets = $data;
     }
 
 }
