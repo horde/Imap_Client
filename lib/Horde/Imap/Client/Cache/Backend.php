@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
  *
@@ -173,6 +174,6 @@ abstract class Horde_Imap_Client_Cache_Backend implements Serializable
     public function __unserialize(array $data)
     {
         $this->_params = $data;
+        $this->_initOb();
     }
-
 }
