@@ -1,5 +1,4 @@
 {
-    "minimum-stability": "dev",
     "name": "horde/imap_client",
     "description": "IMAP client library",
     "type": "library",
@@ -12,7 +11,7 @@
             "role": "lead"
         }
     ],
-    "time": "2022-10-08",
+    "time": "2022-12-05",
     "repositories": [
         {
             "type": "composer",
