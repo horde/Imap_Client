@@ -1,4 +1,5 @@
 {
+    "minimum-stability": "dev",
     "name": "horde/imap_client",
     "description": "IMAP client library",
     "type": "library",
