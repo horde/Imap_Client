@@ -48,7 +48,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
         $this->_required = $required;
 
         foreach ($optional as $val) {
-            foreach (str_split($val) as $right) {
+            foreach (mb_str_split($val) as $right) {
                 $this->_optional[$right] = $val;
             }
         }

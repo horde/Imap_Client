@@ -3362,7 +3362,7 @@ implements Serializable, SplObserver
 
         if ($capability = $this->_capability()->getParams('RIGHTS')) {
             // Add rights defined in CAPABILITY string (RFC 4314).
-            return array_merge($rights, str_split(reset($capability)));
+            return array_merge($rights, mb_str_split(reset($capability)));
         }
 
         // Add RFC 2086 rights (deprecated by RFC 4314, but need to keep for
