@@ -598,7 +598,8 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                 $this->getParam('context'),
                 array(
                     'debug' => $this->_debug,
-                    'debugliteral' => $this->getParam('debug_literal')
+                    'debugliteral' => $this->getParam('debug_literal'),
+                    'read_timeout' => $this->getParam('read_timeout'),
                 )
             );
         } catch (Horde\Socket\Client\Exception $e) {

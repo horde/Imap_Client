@@ -183,22 +183,50 @@ extends Horde_Imap_Client_Socket_Connection_Base
 
             $old_len = $literal_len;
 
-            while (($literal_len > 0) && !feof($this->_stream)) {
-                $in = fread($this->_stream, min($literal_len, 8192));
-                /* Only store in stream if this is something more than a
-                 * nominal number of bytes. */
-                if ($old_len > 256) {
-                    $token->addLiteralStream($in);
-                } else {
-                    $token->add($in);
-                }
+            try {
+                stream_set_blocking($this->_stream, false);
 
-                if (!empty($this->_params['debugliteral'])) {
-                    $this->_params['debug']->raw($in);
-                }
+                while (($literal_len > 0) && !feof($this->_stream)) {
+                    $in = fread($this->_stream, min($literal_len, 8192));
 
-                $got_data = true;
-                $literal_len -= strlen($in);
+                    if (empty($in)) {
+                        if (! isset($read_start)) {
+                            $read_start = microtime(true);
+                        }
+
+                        $read_now = microtime(true);
+                        $t_read = $read_now - $read_start;
+                        if ($t_read > $this->_params['read_timeout']) {
+                            $this->_params['debug']->info(sprintf('ERROR: read timeout. No data received for %d seconds.', $this->_params['read_timeout']));
+
+                            throw new Horde_Imap_Client_Exception(
+                                Horde_Imap_Client_Translation::r("Read timeout."),
+                                Horde_Imap_Client_Exception::DISCONNECT
+                            );
+                        }
+
+                        continue;
+                    }
+
+                    $read_start = null;
+
+                    /* Only store in stream if this is something more than a
+                     * nominal number of bytes. */
+                    if ($old_len > 256) {
+                        $token->addLiteralStream($in);
+                    } else {
+                        $token->add($in);
+                    }
+
+                    if (!empty($this->_params['debugliteral'])) {
+                        $this->_params['debug']->raw($in);
+                    }
+
+                    $got_data = true;
+                    $literal_len -= strlen($in);
+                }
+            } finally {
+                stream_set_blocking($this->_stream, true);
             }
 
             $literal_len = null;
