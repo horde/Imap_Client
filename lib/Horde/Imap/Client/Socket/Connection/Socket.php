@@ -196,12 +196,12 @@ extends Horde_Imap_Client_Socket_Connection_Base
 
                         $read_now = microtime(true);
                         $t_read = $read_now - $read_start;
-                        if ($t_read > $this->_params['read_timeout']) {
+                        if ($t_read > $this->_params['timeout']) {
                             $this->_params['debug']->info(sprintf('ERROR: read timeout. No data received for %d seconds.', $this->_params['read_timeout']));
 
                             throw new Horde_Imap_Client_Exception(
                                 Horde_Imap_Client_Translation::r("Read timeout."),
-                                Horde_Imap_Client_Exception::DISCONNECT
+                                Horde_Imap_Client_Exception::SERVER_READTIMEOUT
                             );
                         }
 
@@ -237,10 +237,10 @@ extends Horde_Imap_Client_Socket_Connection_Base
         } while (true);
 
         if (!$got_data) {
-            $this->_params['debug']->info('ERROR: read/timeout error.');
+            $this->_params['debug']->info('ERROR: read timeout error.');
             throw new Horde_Imap_Client_Exception(
                 Horde_Imap_Client_Translation::r("Error when communicating with the mail server."),
-                Horde_Imap_Client_Exception::SERVER_READERROR
+                Horde_Imap_Client_Exception::SERVER_READTIMEOUT
             );
         }
 

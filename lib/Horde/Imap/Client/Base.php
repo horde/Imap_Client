@@ -231,7 +231,7 @@ implements Serializable, SplObserver
      * - timeout: (integer)  Connection timeout, in seconds.
      *            DEFAULT: 30 seconds
      * - read_timeout: (integer) Read timeout, in seconds.
-     *                 DEFAULT: 30 seconds
+     *                 DEFAULT: 120 seconds
      * - username: (string) [REQUIRED] The username.
      * - authusername (string) The username used for SASL authentication.
      * 	 If specified this is the user name whose password is used
@@ -254,7 +254,7 @@ implements Serializable, SplObserver
             'hostspec' => 'localhost',
             'secure' => false,
             'timeout' => 30,
-            'read_timeout' => 30,
+            'read_timeout' => 120,
         ), array_filter($params));
 
         if (!isset($params['port']) && strpos($params['hostspec'], 'unix://') !== 0) {
