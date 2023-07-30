@@ -429,11 +429,24 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
         return !is_null($this->key());
     }
 
-    /* Serializable methods. */
+    public function serialize()
+    {
+        return serialize($this->__serialize());
+    }
+
+    public function unserialize($data)
+    {
+        $data = @unserialize($data);
+        if (!is_array($data)) {
+            throw new Exception('Cache version change.');
+        }
+
+        $this->__unserialize($data);
+    }
 
     /**
      */
-    public function serialize()
+    public function __serialize()
     {
         $save = array();
 
@@ -467,27 +480,25 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
             break;
         }
 
-        return serialize($save);
+        return $save;
     }
 
     /**
      */
-    public function unserialize($data)
+    public function __unserialize($data)
     {
-        $save = @unserialize($data);
+        $this->duplicates = !empty($data['d']);
+        $this->_sequence = !empty($data['s']);
+        $this->_sorted = !empty($data['is']);
 
-        $this->duplicates = !empty($save['d']);
-        $this->_sequence = !empty($save['s']);
-        $this->_sorted = !empty($save['is']);
-
-        if (isset($save['a'])) {
+        if (isset($data['a'])) {
             $this->_ids = self::ALL;
-        } elseif (isset($save['l'])) {
+        } elseif (isset($data['l'])) {
             $this->_ids = self::LARGEST;
-        } elseif (isset($save['sr'])) {
+        } elseif (isset($data['sr'])) {
             $this->_ids = self::SEARCH_RES;
-        } elseif (isset($save['i'])) {
-            $this->add($save['i']);
+        } elseif (isset($data['i'])) {
+            $this->add($data['i']);
         }
     }
 
