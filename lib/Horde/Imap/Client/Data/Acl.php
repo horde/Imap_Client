@@ -168,14 +168,14 @@ class Horde_Imap_Client_Data_Acl extends Horde_Imap_Client_Data_AclCommon implem
     /**
      * @return array
      */
-    public function __serialize()
+    public function __serialize(): array
     {
         return array(
             'rights' => $this->_rights
         );
     }
 
-    public function __unserialize(array $data)
+    public function __unserialize(array $data): void
     {
         $this->_rights = $data['rights'];
     }

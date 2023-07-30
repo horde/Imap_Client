@@ -30,7 +30,7 @@ class Horde_Imap_Client_Live_Pop3Test extends Horde_Test_Case
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite;
+        $suite = new Horde_test_Case;
 
         $c = self::getConfig('IMAPCLIENT_TEST_CONFIG_POP3', __DIR__ . '/../');
         if (!is_null($c) && !empty($c['pop3client'])) {

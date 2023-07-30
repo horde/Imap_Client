@@ -218,7 +218,7 @@ class Horde_Imap_Client_Data_Envelope implements Serializable
     /**
      * @return array
      */
-    public function __serialize()
+    public function __serialize(): array
     {
         return array(
             'd' => $this->_data,
@@ -226,7 +226,7 @@ class Horde_Imap_Client_Data_Envelope implements Serializable
         );
     }
 
-    public function __unserialize(array $data)
+    public function __unserialize(array $data): void
     {
         if (empty($data['v']) || $data['v'] != self::VERSION) {
             throw new Exception('Cache version change');

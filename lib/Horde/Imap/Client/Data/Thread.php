@@ -199,12 +199,12 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
     /**
      * @return array
      */
-    public function __serialize()
+    public function __serialize(): array
     {
         return [$this->_thread, $this->_type];
     }
 
-    public function __unserialize(array $data)
+    public function __unserialize(array $data): void
     {
         list($this->_thread, $this->_type) = $data;
     }

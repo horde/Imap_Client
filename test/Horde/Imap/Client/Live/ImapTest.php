@@ -30,7 +30,7 @@ class Horde_Imap_Client_Live_ImapTest extends Horde_Test_Case
      */
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite;
+        $suite = new Horde_Test_Case;
 
         $c = self::getConfig('IMAPCLIENT_TEST_CONFIG', __DIR__ . '/../');
         if (!is_null($c) && !empty($c['imapclient'])) {
