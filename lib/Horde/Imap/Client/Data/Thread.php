@@ -171,7 +171,7 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
 
     /**
      */
-    public function count()
+    public function count(): int
     {
         return count($this->_getAllIndices());
     }

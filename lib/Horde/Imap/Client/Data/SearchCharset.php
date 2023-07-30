@@ -133,7 +133,7 @@ implements Serializable, SplSubject
 
     /**
      */
-    public function attach(SplObserver $observer)
+    public function attach(SplObserver $observer): void
     {
         $this->detach($observer);
         $this->_observers[] = $observer;
@@ -141,7 +141,7 @@ implements Serializable, SplSubject
 
     /**
      */
-    public function detach(SplObserver $observer)
+    public function detach(SplObserver $observer): void
     {
         if (($key = array_search($observer, $this->_observers, true)) !== false) {
             unset($this->_observers[$key]);
@@ -152,7 +152,7 @@ implements Serializable, SplSubject
      * Notification is triggered internally whenever the object's internal
      * data storage is altered.
      */
-    public function notify()
+    public function notify(): void
     {
         foreach ($this->_observers as $val) {
             $val->update($this);

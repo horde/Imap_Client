@@ -141,7 +141,7 @@ class Horde_Imap_Client_Mailbox_List implements Countable, IteratorAggregate
 
     /**
      */
-    public function count()
+    public function count(): int
     {
         return count($this->_mboxes);
     }
@@ -150,7 +150,7 @@ class Horde_Imap_Client_Mailbox_List implements Countable, IteratorAggregate
 
     /**
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->_mboxes);
     }

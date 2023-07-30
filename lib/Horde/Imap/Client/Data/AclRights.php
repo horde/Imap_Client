@@ -94,14 +94,14 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
 
     /**
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return (bool)$this[$offset];
     }
 
     /**
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if (isset($this->_optional[$offset])) {
             return $this->_optional[$offset];
@@ -116,7 +116,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
 
     /**
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->_optional[$offset] = $value;
         $this->_normalize();
@@ -124,7 +124,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
 
     /**
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->_optional[$offset]);
         $this->_required = array_values(array_diff($this->_required, array($offset)));
@@ -140,7 +140,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
 
     /**
      */
-    public function current()
+    public function current(): mixed
     {
         $val = current($this->_required);
         return is_null($val)
@@ -150,7 +150,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
 
     /**
      */
-    public function key()
+    public function key(): mixed
     {
         $key = key($this->_required);
         return is_null($key)
@@ -160,7 +160,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
 
     /**
      */
-    public function next()
+    public function next(): void
     {
         if (key($this->_required) === null) {
             next($this->_optional);
@@ -171,7 +171,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
 
     /**
      */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->_required);
         reset($this->_optional);
@@ -179,7 +179,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
 
     /**
      */
-    public function valid()
+    public function valid(): bool
     {
         return ((key($this->_required) !== null) ||
                 (key($this->_optional) !== null));

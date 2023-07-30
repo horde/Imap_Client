@@ -302,14 +302,14 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
 
     /**
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->_data[$offset]);
     }
 
     /**
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return isset($this->_data[$offset])
             ? $this->_data[$offset]
@@ -318,14 +318,14 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
 
     /**
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->_data[$offset] = $value;
     }
 
     /**
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->_data[$offset]);
     }
@@ -334,7 +334,7 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
 
     /**
      */
-    public function count()
+    public function count(): int
     {
         return count($this->_data);
     }
@@ -343,7 +343,7 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
 
     /**
      */
-    public function current()
+    public function current(): mixed
     {
         $opts = current($this->_data);
 
@@ -354,28 +354,28 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
 
     /**
      */
-    public function key()
+    public function key(): mixed
     {
         return key($this->_data);
     }
 
     /**
      */
-    public function next()
+    public function next(): void
     {
         next($this->_data);
     }
 
     /**
      */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->_data);
     }
 
     /**
      */
-    public function valid()
+    public function valid(): bool
     {
         return !is_null($this->key());
     }

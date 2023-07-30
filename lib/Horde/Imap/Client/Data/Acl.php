@@ -100,21 +100,21 @@ class Horde_Imap_Client_Data_Acl extends Horde_Imap_Client_Data_AclCommon implem
 
     /**
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this[$offset];
     }
 
     /**
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return in_array($offset, $this->_rights);
     }
 
     /**
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if ($value) {
             if (!$this[$offset]) {
@@ -133,14 +133,14 @@ class Horde_Imap_Client_Data_Acl extends Horde_Imap_Client_Data_AclCommon implem
 
     /**
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $this->_rights = array_values(array_diff($this->_rights, array($offset)));
     }
 
     /* IteratorAggregate method. */
 
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->_rights);
     }

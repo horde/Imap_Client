@@ -143,7 +143,7 @@ class Horde_Imap_Client_Interaction_Pipeline implements Countable, IteratorAggre
 
     /**
      */
-    public function count()
+    public function count(): int
     {
         return count($this->_commands);
     }
@@ -152,7 +152,7 @@ class Horde_Imap_Client_Interaction_Pipeline implements Countable, IteratorAggre
 
     /**
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->_commands);
     }

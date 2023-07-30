@@ -77,13 +77,14 @@ implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->_ns[strval($offset)]);
     }
 
     /**
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         $offset = strval($offset);
@@ -95,7 +96,7 @@ implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         if ($value instanceof Horde_Imap_Client_Data_Namespace) {
             $this->_ns[strval($value)] = $value;
@@ -104,7 +105,7 @@ implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->_ns[strval($offset)]);
     }
@@ -113,7 +114,7 @@ implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      */
-    public function count()
+    public function count(): int
     {
         return count($this->_ns);
     }
@@ -122,7 +123,7 @@ implements ArrayAccess, Countable, IteratorAggregate
 
     /**
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->_ns);
     }

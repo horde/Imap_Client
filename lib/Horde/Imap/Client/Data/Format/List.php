@@ -88,7 +88,7 @@ class Horde_Imap_Client_Data_Format_List extends Horde_Imap_Client_Data_Format i
 
     /**
      */
-    public function count()
+    public function count(): int
     {
         return count($this->_data);
     }
@@ -98,7 +98,7 @@ class Horde_Imap_Client_Data_Format_List extends Horde_Imap_Client_Data_Format i
     /**
      * Iterator loops through the data elements contained in this list.
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->_data);
     }
