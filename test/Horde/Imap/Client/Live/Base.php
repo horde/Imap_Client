@@ -23,11 +23,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Live_Base extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_Live_Base extends Horde_Test_Case
 {
     public static $live;
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$live = null;
     }

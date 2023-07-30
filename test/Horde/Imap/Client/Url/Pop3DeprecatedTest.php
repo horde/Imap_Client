@@ -31,6 +31,8 @@ extends Horde_Imap_Client_Url_TestBase
 
     public function testUrlProvider()
     {
+        $this->expectNotToPerformAssertions();
+
         return array(
             array(
                 'pop://test.example.com/',

@@ -85,6 +85,8 @@ extends Horde_Imap_Client_Data_Format_TestBase
      */
     public function testVerify($ob, $expected)
     {
+        $this->expectNotToPerformAssertions();
+
         try {
             $ob->verify();
             if ($expected) {

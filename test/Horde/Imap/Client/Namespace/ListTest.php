@@ -24,11 +24,11 @@
  * @subpackage UnitTests
  */
 class Horde_Imap_Client_Namespace_ListTest
-extends PHPUnit_Framework_TestCase
+extends Horde_Test_Case
 {
     private $ob;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->ob = new Horde_Imap_Client_Namespace_List();
 

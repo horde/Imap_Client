@@ -27,7 +27,7 @@ class Horde_Imap_Client_Live_Pop3 extends Horde_Imap_Client_Live_Base
 {
     public static $config;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $c = array_shift(self::$config);
 
@@ -108,7 +108,7 @@ class Horde_Imap_Client_Live_Pop3 extends Horde_Imap_Client_Live_Base
     {
         $s = self::$live->status('INBOX', Horde_Imap_Client::STATUS_ALL);
 
-        $this->assertInternalType('array', $s);
+        $this->assertIsArray($s);
 
         $this->assertArrayHasKey('messages', $s);
         $this->assertArrayHasKey('recent', $s);

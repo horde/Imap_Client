@@ -23,11 +23,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Base_MailboxTest extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_Base_MailboxTest extends Horde_Test_Case
 {
     private $ob;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->ob = new Horde_Imap_Client_Base_Mailbox();
     }
@@ -79,7 +79,7 @@ class Horde_Imap_Client_Base_MailboxTest extends PHPUnit_Framework_TestCase
      */
     public function testDefaultSyncProperties($property)
     {
-        $this->assertInternalType('array', $this->ob->getStatus($property));
+        $this->assertIsArray($this->ob->getStatus($property));
         $this->assertEmpty($this->ob->getStatus($property));
     }
 

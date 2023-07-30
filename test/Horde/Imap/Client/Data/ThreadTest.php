@@ -23,7 +23,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Data_ThreadTest extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_Data_ThreadTest extends Horde_Test_Case
 {
     /**
      * @dataProvider countProvider

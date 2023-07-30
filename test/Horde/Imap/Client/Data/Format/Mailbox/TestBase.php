@@ -24,7 +24,7 @@
  * @subpackage UnitTests
  */
 abstract class Horde_Imap_Client_Data_Format_Mailbox_TestBase
-extends PHPUnit_Framework_TestCase
+extends Horde_Test_Case
 {
     protected $cname;
 
@@ -63,6 +63,8 @@ extends PHPUnit_Framework_TestCase
      */
     public function testVerify($mbox, $exception)
     {
+        $this->expectNotToPerformAssertions();
+
         $m = new $this->cname($mbox);
 
         try {

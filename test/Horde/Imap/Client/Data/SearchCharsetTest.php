@@ -24,7 +24,7 @@
  * @subpackage UnitTests
  */
 class Horde_Imap_Client_Data_SearchCharsetTest
-extends PHPUnit_Framework_TestCase
+extends Horde_Test_Case
 {
     public function testQuery()
     {
@@ -36,11 +36,10 @@ extends PHPUnit_Framework_TestCase
         $this->assertFalse($s->query('iso-8859-1', true));
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testQueryWithoutBaseOb()
     {
+        $this->expectException('RuntimeException');
+
         $s = new Horde_Imap_Client_Data_SearchCharset();
 
         $s->query('UTF-8');
@@ -74,7 +73,8 @@ extends PHPUnit_Framework_TestCase
     {
         $s = new Horde_Imap_Client_Data_SearchCharset();
 
-        $mock = $this->getMock('SplObserver');
+        $mock = $this->getMockBuilder('SplObserver')
+                     ->getMock();
         $mock->expects($this->once())
             ->method('update')
             ->with($this->equalTo($s));
@@ -87,6 +87,8 @@ extends PHPUnit_Framework_TestCase
 
     public function testSerialize()
     {
+        $this->expectNotToPerformAssertions();
+
         $s = new Horde_Imap_Client_Data_SearchCharset();
         $s->setValid('utf-8');
 

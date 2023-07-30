@@ -52,6 +52,8 @@ extends Horde_Imap_Client_Data_Format_TestBase
                 $ob->escape()
             );
         } catch (Horde_Imap_Client_Data_Format_Exception $e) {
+            $this->expectNotToPerformAssertions();
+
             if ($expected !== false) {
                 $this->fail();
             }
@@ -65,6 +67,8 @@ extends Horde_Imap_Client_Data_Format_TestBase
      */
     public function testVerify($ob, $result)
     {
+        $this->expectNotToPerformAssertions();
+
         try {
             $ob->verify();
             if (!$result) {
@@ -132,6 +136,7 @@ extends Horde_Imap_Client_Data_Format_TestBase
                 stream_get_contents($ob->escapeStream(), -1, 0)
             );
         } catch (Horde_Imap_Client_Data_Format_Exception $e) {
+            $this->expectNotToPerformAssertions();
             if ($expected !== false) {
                 $this->fail();
             }
@@ -145,6 +150,8 @@ extends Horde_Imap_Client_Data_Format_TestBase
      */
     public function testNonasciiInput($result)
     {
+        $this->expectNotToPerformAssertions();
+
         try {
             new $this->cname('Envoyé');
             if (!$result) {

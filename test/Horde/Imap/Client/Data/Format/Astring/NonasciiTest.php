@@ -30,6 +30,8 @@ extends Horde_Imap_Client_Data_Format_AstringTest
 
     public function nonasciiInputProvider()
     {
+        $this->expectNotToPerformAssertions();
+
         return array(
             array(true)
         );

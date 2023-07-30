@@ -23,7 +23,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_SearchTest extends Horde_Test_Case
 {
     /**
      * @dataProvider flagQueryProvider
@@ -636,10 +636,10 @@ class Horde_Imap_Client_SearchTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider inconsistentCharsetsInAndOrSearchesProvider
-     * @expectedException InvalidArgumentException
      */
     public function testInconsistentCharsetsInAndOrSearches($query)
     {
+        $this->expectException('InvalidArgumentException');
         $query->build(null);
     }
 

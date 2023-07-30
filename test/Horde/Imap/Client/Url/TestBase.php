@@ -24,7 +24,7 @@
  * @subpackage UnitTests
  */
 abstract class Horde_Imap_Client_Url_TestBase
-extends PHPUnit_Framework_TestCase
+extends Horde_Test_Case
 {
     protected $classname;
 

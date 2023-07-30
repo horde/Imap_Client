@@ -23,7 +23,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_IdsTest extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_IdsTest extends Horde_Test_Case
 {
     public function testBasicAddingOfIds()
     {

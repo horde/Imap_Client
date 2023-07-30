@@ -31,9 +31,11 @@ abstract class Horde_Imap_Client_Cache_TestBase extends Horde_Test_Case
 
     private $_cache;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $baseob = $this->getMock('Horde_Imap_Client_Socket', array(), array(), '', false);
+        $baseob = $this->getMockBuilder('Horde_Imap_Client_Socket')
+                       ->disableOriginalConstructor()
+                       ->getMock();
         $baseob->expects($this->any())
             ->method('getParam')
             ->will($this->returnCallback(array($this, '_baseobHandler')));
@@ -92,7 +94,7 @@ abstract class Horde_Imap_Client_Cache_TestBase extends Horde_Test_Case
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->_cache);
     }

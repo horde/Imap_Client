@@ -24,7 +24,7 @@
  * @subpackage UnitTests
  */
 class Horde_Imap_Client_Data_SearchCharsetUtf8Test
-extends PHPUnit_Framework_TestCase
+extends Horde_Test_Case
 {
     public function testQuery()
     {
@@ -64,7 +64,8 @@ extends PHPUnit_Framework_TestCase
     {
         $s = new Horde_Imap_Client_Data_SearchCharset_Utf8();
 
-        $mock = $this->getMock('SplObserver');
+        $mock = $this->getMockBuilder('SplObserver')
+                     ->getMock();
         $mock->expects($this->never())
             ->method('update')
             ->with($this->equalTo($s));
@@ -77,6 +78,8 @@ extends PHPUnit_Framework_TestCase
 
     public function testSerialize()
     {
+        $this->expectNotToPerformAssertions();
+
         $s = new Horde_Imap_Client_Data_SearchCharset_Utf8();
 
         $s_copy = unserialize(serialize($s));

@@ -23,7 +23,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Ids_Pop3Test extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_Ids_Pop3Test extends Horde_Test_Case
 {
     /**
      * @dataProvider pop3SequenceStringGenerateProvider

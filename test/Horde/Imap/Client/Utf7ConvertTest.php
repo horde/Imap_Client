@@ -23,9 +23,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
-class Horde_Imap_Client_Utf7ConvertTest extends PHPUnit_Framework_TestCase
+class Horde_Imap_Client_Utf7ConvertTest extends Horde_Test_Case
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         require_once __DIR__ . '/Stub/Utf7imap.php';
     }
