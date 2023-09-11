@@ -107,6 +107,10 @@ extends Horde_Imap_Client_Data_Format_Mailbox_TestBase
 
     public function testBadInput()
     {
+        if (version_compare(PHP_VERSION, '8.2.0') >= 0) {
+            $this->markTestSkipped('mb_convert_encoding converts null byte to &AAA-');
+        }
+
         /* @todo: Change in Horde_Imap_Client 3.0 to detect Exception, instead
          * of blank mailbox name. */
         $ob = new Horde_Imap_Client_Data_Format_Mailbox("foo\0");
