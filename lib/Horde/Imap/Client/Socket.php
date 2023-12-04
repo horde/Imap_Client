@@ -2862,7 +2862,6 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                             }
                             $pipeline->data['fetch_followup'][] = $val;
                         }
-                        $pipeline->data['fetch_followup'][] = $val;
                     } else {
                         $this->noop();
                     }
