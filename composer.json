@@ -14,42 +14,36 @@
     "version": "2.30.0",
     "time": "2019-09-29",
     "repositories": [
-        {
-            "type": "pear",
-            "url": "https://pear.horde.org"
-        }
     ],
     "require": {
         "php": "^5.3 || ^7",
-        "pear-pear.horde.org/Horde_Exception": "^2",
-        "pear-pear.horde.org/Horde_Mail": "^2",
-        "pear-pear.horde.org/Horde_Mime": "^2.5.2",
-        "pear-pear.horde.org/Horde_Socket_Client": "^2",
-        "pear-pear.horde.org/Horde_Stream": "^1.4",
-        "pear-pear.horde.org/Horde_Secret": "^2",
-        "pear-pear.horde.org/Horde_Stream_Filter": "^2",
-        "pear-pear.horde.org/Horde_Translation": "^2.2",
-        "pear-pear.horde.org/Horde_Util": "^2",
+        "horde/exception": "^2",
+        "horde/mail": "^2",
+        "horde/mime": "^2.5.2",
+        "horde/socket_client": "^2",
+        "horde/stream": "^1.4",
+        "horde/secret": "^2",
+        "horde/stream_filter": "^2",
+        "horde/translation": "^2.2",
+        "horde/util": "^2",
         "ext-hash": "*",
         "ext-json": "*"
     },
     "suggest": {
-        "pear-pear.horde.org/Horde_Cache": "^2",
-        "pear-pear.horde.org/Horde_Compress_Fast": "^1",
-        "pear-pear.horde.org/Horde_Crypt_Blowfish": "^1.1",
-        "pear-pear.horde.org/Horde_Db": "^2.2",
-        "pear-pear.horde.org/Horde_HashTable": "^1",
-        "pear-pear.horde.org/Horde_Mongo": "^1",
-        "pear-pear.horde.org/Horde_Pack": "^1",
-        "pear-pear.horde.org/Horde_Stringprep": "^1",
-        "pear-pear.horde.org/Horde_Support": "^2",
-        "pear-pear.horde.org/Horde_Test": "^2.2.7",
+        "horde/cache": "^2",
+        "horde/compress_fast": "^1",
+        "horde/crypt_blowfish": "^1.1",
+        "horde/db": "^2.2",
+        "horde/hashtable": "^1",
+        "horde/mongo": "^1",
+        "horde/pack": "^1",
+        "horde/stringprep": "^1",
+        "horde/support": "^2",
+        "horde/test": "^2.2.7",
         "ext-intl": "*",
         "ext-mbstring": "*"
     },
     "replace": {
-        "pear-pear.horde.org/Horde_Imap_Client": "2.*",
-        "pear-horde/Horde_Imap_Client": "2.*"
     },
     "autoload": {
         "psr-0": {
