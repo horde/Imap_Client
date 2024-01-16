@@ -2550,7 +2550,7 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
             switch ($val) {
             case Horde_Imap_Client::SEARCH_RESULTS_COUNT:
                 $ret['count'] = ($esearch && !$partial)
-                    ? $er['count']
+                    ? (isset($er['count']) ? $er['count'] : 0)
                     : count($sr);
                 break;
 
