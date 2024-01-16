@@ -193,6 +193,22 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
     }
 
     /**
+     * Return X-MAILBOX, real folder name of message in Dovecot virtual folder
+     */
+    public function xMailbox()
+    {
+        $this->_data[Horde_Imap_Client::FETCH_XMAILBOX] = true;
+    }
+
+    /**
+     * Return X-REAL-UID, real UID of message in Dovecot virtual folder
+     */
+    public function xRealUid()
+    {
+        $this->_data[Horde_Imap_Client::FETCH_XREALUID] = true;
+    }
+
+    /**
      * Return MIME structure information.
      */
     public function structure()

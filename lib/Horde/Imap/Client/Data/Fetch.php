@@ -533,6 +533,50 @@ class Horde_Imap_Client_Data_Fetch
     }
 
     /**
+     * Set x-mailbox.
+     *
+     * @param string $xMailbox  The x-mailbox of the message.
+     */
+    public function setXMailbox($xMailbox)
+    {
+        $this->_data[Horde_Imap_Client::FETCH_XMAILBOX] = $xMailbox;
+    }
+
+    /**
+     * Get x-mailbox.
+     *
+     * @return string  The x-mailbox of the message
+     */
+    public function getXMailbox()
+    {
+        return isset($this->_data[Horde_Imap_Client::FETCH_XMAILBOX])
+            ? $this->_data[Horde_Imap_Client::FETCH_XMAILBOX]
+            : '';
+    }
+
+    /**
+     * Set x-real-uid.
+     *
+     * @param string $xRealUid  The x-real-uid of the message.
+     */
+    public function setXRealUid($xRealUid)
+    {
+        $this->_data[Horde_Imap_Client::FETCH_XREALUID] = $xRealUid;
+    }
+
+    /**
+     * Get x-real-uid.
+     *
+     * @return string  The x-real-uid of the message
+     */
+    public function getXRealUid()
+    {
+        return isset($this->_data[Horde_Imap_Client::FETCH_XREALUID])
+            ? $this->_data[Horde_Imap_Client::FETCH_XREALUID]
+            : 0;
+    }
+
+    /**
      * Return text representation of a field.
      *
      * @param boolean $stream  Return as a stream?
