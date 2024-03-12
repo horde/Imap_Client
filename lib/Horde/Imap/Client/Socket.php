@@ -3632,14 +3632,14 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
         if (!empty($options['replace'])) {
             $cmds[] = array(
                 'FLAGS' . ($silent ? '.SILENT' : ''),
-                $options['replace']
+                new Horde_Imap_Client_Data_Format_List($options['replace'])
             );
         } else {
             foreach (array('add' => '+', 'remove' => '-') as $k => $v) {
                 if (!empty($options[$k])) {
                     $cmds[] = array(
                         $v . 'FLAGS' . ($silent ? '.SILENT' : ''),
-                        $options[$k]
+                        new Horde_Imap_Client_Data_Format_List($options[$k])
                     );
                 }
             }
