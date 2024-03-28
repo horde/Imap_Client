@@ -44,7 +44,7 @@ extends Horde_Imap_Client_Data_Format_Astring
     {
         $this->_mailbox = Horde_Imap_Client_Mailbox::get($data);
 
-        parent::__construct($this->_mailbox->{$this->_encoding});
+        parent::__construct($this->_mailbox->utf8);
     }
 
     /**
