@@ -229,31 +229,6 @@ class Horde_Imap_Client_Ids_Map implements Countable, IteratorAggregate, Seriali
     }
 
     /**
-     */
-    public function __serialize()
-    {
-        /* Sort before storing; provides more compressible representation. */
-        $this->sort();
-
-        return [
-            strval(new Horde_Imap_Client_Ids(array_keys($this->_ids))),
-            strval(new Horde_Imap_Client_Ids(array_values($this->_ids)))
-        ];
-    }
-
-    /**
-     */
-    public function __unserialize($data)
-    {
-        $keys = new Horde_Imap_Client_Ids($data[0]);
-        $vals = new Horde_Imap_Client_Ids($data[1]);
-        $this->_ids = array_combine($keys->ids, $vals->ids);
-
-        /* Guaranteed to be sorted if unserializing. */
-        $this->_sorted = true;
-    }
-
-    /**
      * @return array
      */
     public function __serialize()

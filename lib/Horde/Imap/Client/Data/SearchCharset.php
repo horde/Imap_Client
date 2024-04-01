@@ -195,17 +195,4 @@ implements Serializable, SplSubject
         $this->_charsets = $data;
     }
 
-    /**
-     * @return array
-     */
-    public function __serialize()
-    {
-        return $this->_charsets;
-    }
-
-    public function __unserialize(array $data)
-    {
-        $this->_charsets = $data;
-    }
-
 }

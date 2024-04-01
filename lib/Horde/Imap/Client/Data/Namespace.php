@@ -157,17 +157,4 @@ class Horde_Imap_Client_Data_Namespace implements Serializable
         $this->_data = $data;
     }
 
-    /**
-     * @return array
-     */
-    public function __serialize()
-    {
-        return $this->_data;
-    }
-
-    public function __unserialize(array $data)
-    {
-        $this->_data = $data;
-    }
-
 }
