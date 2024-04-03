@@ -598,7 +598,9 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                 $this->getParam('context'),
                 array(
                     'debug' => $this->_debug,
-                    'debugliteral' => $this->getParam('debug_literal')
+                    'debugliteral' => $this->getParam('debug_literal'),
+                    'timeout' => $this->getParam('timeout'),
+                    'read_timeout' => $this->getParam('read_timeout'),
                 )
             );
         } catch (Horde\Socket\Client\Exception $e) {
@@ -4310,17 +4312,34 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
 
         while ($cmd_count) {
             try {
+                if (! isset($read_start)) {
+                    $read_start = microtime(true);
+                }
+
                 if ($this->_getLine($pipeline) instanceof Horde_Imap_Client_Interaction_Server_Tagged) {
                     --$cmd_count;
                 }
+
+                $read_start = null;
             } catch (Horde_Imap_Client_Exception $e) {
                 switch ($e->getCode()) {
-                case $e::DISCONNECT:
-                    /* Guaranteed to have no more data incoming, so we can
-                     * immediately logout. */
-                    $this->_temp['logout'] = true;
-                    $this->logout();
-                    throw $e;
+                    case $e::DISCONNECT:
+                        /* Guaranteed to have no more data incoming, so we can
+                         * immediately logout. */
+                        $this->_temp['logout'] = true;
+                        $this->logout();
+                        throw $e;
+
+                    case $e::SERVER_READTIMEOUT:
+                        $read_now = microtime(true);
+                        $t_read = $read_now - $read_start;
+                        if ($t_read <= $this->_params['read_timeout']) {
+                            break;
+                        }
+
+                        $this->_temp['logout'] = true;
+                        $this->logout();
+                        throw $e;
                 }
 
                 /* For all other issues, catch and store exception; don't
