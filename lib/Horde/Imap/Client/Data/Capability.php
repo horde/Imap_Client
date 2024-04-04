@@ -215,20 +215,7 @@ implements Serializable, SplSubject
         if (!is_array($data)) {
             throw new Exception('Cache version change.');
         }
-        $this->__unserialize();
-    }
-
-    /**
-     * @return array
-     */
-    public function __serialize()
-    {
-        return $this->_data;
-    }
-
-    public function __unserialize(array $data)
-    {
-        $this->_data = $data;
+        $this->__unserialize($data);
     }
 
     /**
