@@ -80,6 +80,11 @@ class Horde_Imap_Client_Exception extends Horde_Exception_Wrapped
     const SERVER_READERROR = 12;
 
     /**
+     * Thrown if read timeout occurs.
+     */
+    const SERVER_READTIMEOUT = 28;
+
+    /**
      * Thrown if write error in server interaction.
      */
     const SERVER_WRITEERROR = 16;
