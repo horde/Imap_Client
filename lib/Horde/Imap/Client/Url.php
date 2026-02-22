@@ -174,7 +174,7 @@ class Horde_Imap_Client_Url implements Serializable
         $url .= '/';
 
         if (is_null($this->protocol) || ($this->protocol == 'imap')) {
-            $url .= rawurlencode($this->mailbox);
+            $url .= rawurlencode($this->mailbox ?? '');
 
             if (!empty($this->uidvalidity)) {
                 $url .= ';UIDVALIDITY=' . $this->uidvalidity;
