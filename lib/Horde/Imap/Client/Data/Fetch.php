@@ -325,9 +325,11 @@ class Horde_Imap_Client_Data_Fetch
      */
     public function setFlags(array $flags)
     {
+        $trimmed = array_map('trim', $flags);
+        $this->_data[Horde_Imap_Client::FETCH_FLAGS_ORIGINAL_CASE] = $trimmed;
         $this->_data[Horde_Imap_Client::FETCH_FLAGS] = array_map(
             'Horde_String::lower',
-            array_map('trim', $flags)
+            $trimmed
         );
     }
 
@@ -340,6 +342,18 @@ class Horde_Imap_Client_Data_Fetch
     {
         return isset($this->_data[Horde_Imap_Client::FETCH_FLAGS])
             ? $this->_data[Horde_Imap_Client::FETCH_FLAGS]
+            : array();
+    }
+
+    /**
+     * Get IMAP flags without changing their case.
+     *
+     * @return array An array of IMAP flags with their original case
+     */
+    public function getFlagsOriginalCase()
+    {
+        return isset($this->_data[Horde_Imap_Client::FETCH_FLAGS_ORIGINAL_CASE])
+            ? $this->_data[Horde_Imap_Client::FETCH_FLAGS_ORIGINAL_CASE]
             : array();
     }
 

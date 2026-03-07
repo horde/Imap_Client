@@ -115,6 +115,8 @@ class Horde_Imap_Client
     /* @since 2.11.0 */
     const FETCH_DOWNGRADED = 16;
 
+    const FETCH_FLAGS_ORIGINAL_CASE = 999;
+
     /* Namespace constants. @deprecated */
     const NS_PERSONAL = 1;
     const NS_OTHER = 2;
