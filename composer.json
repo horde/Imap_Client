@@ -1,8 +1,7 @@
 {
-    "minimum-stability": "dev",
     "name": "horde/imap_client",
     "description": "IMAP client library",
-    "type": "library",
+    "type": "horde-library",
     "homepage": "https://www.horde.org/libraries/Horde_Imap_Client",
     "license": "LGPL-2.1-only",
     "authors": [
@@ -12,14 +11,10 @@
             "role": "lead"
         }
     ],
-    "time": "2022-12-05",
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://horde-satis.maintaina.com"
-        }
-    ],
+    "time": "2026-03-07",
+    "repositories": [],
     "require": {
+        "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0 || ^3 || ^2",
         "php": "^7.4 || ^8",
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/mail": "^3 || dev-FRAMEWORK_6_0",
@@ -59,8 +54,11 @@
         }
     },
     "config": {
-        "allow-plugins": {
-            "horde/horde-installer-plugin": true
+        "allow-plugins": {}
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-FRAMEWORK_6_0": "3.x-dev"
         }
     }
 }

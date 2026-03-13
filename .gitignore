@@ -28,3 +28,23 @@ run-tests.log
 /test/*/*/*/*.log
 /test/*/*/*/*.out
 
+
+# Added by horde-components QC --fix-qc-issues
+# Build artifacts directory
+/build/
+# Composer dependencies directory
+/vendor/
+# PHPStorm IDE settings
+/.idea/
+# Claude Code CLI cache and state
+/.claude/
+# Cline extension data
+/.cline/
+# PHP CS Fixer cache file
+/.php-cs-fixer.cache
+# PHPUnit result cache
+/.phpunit.result.cache
+# PHPStan local configuration (if not committed)
+/phpstan.neon
+# PHPStan cache directory
+/.phpstan.cache/
