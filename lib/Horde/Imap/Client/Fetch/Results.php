@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -22,21 +23,20 @@
  *
  * @property-read integer $key_type  The key type (sequence or UID).
  */
-class Horde_Imap_Client_Fetch_Results
-implements ArrayAccess, Countable, IteratorAggregate
+class Horde_Imap_Client_Fetch_Results implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * Key type constants.
      */
-    const SEQUENCE = 1;
-    const UID = 2;
+    public const SEQUENCE = 1;
+    public const UID = 2;
 
     /**
      * Internal data array.
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * Key type.
@@ -59,9 +59,10 @@ implements ArrayAccess, Countable, IteratorAggregate
      *                           object.
      * @param integer $key_type  Key type.
      */
-    public function __construct($ob_class = 'Horde_Imap_Client_Data_Fetch',
-                                $key_type = self::UID)
-    {
+    public function __construct(
+        $ob_class = 'Horde_Imap_Client_Data_Fetch',
+        $key_type = self::UID
+    ) {
         $this->_obClass = $ob_class;
         $this->_keyType = $key_type;
     }
@@ -71,8 +72,8 @@ implements ArrayAccess, Countable, IteratorAggregate
     public function __get($name)
     {
         switch ($name) {
-        case 'key_type':
-            return $this->_keyType;
+            case 'key_type':
+                return $this->_keyType;
         }
     }
 
@@ -125,7 +126,7 @@ implements ArrayAccess, Countable, IteratorAggregate
      */
     public function clear()
     {
-        $this->_data = array();
+        $this->_data = [];
     }
 
     /* ArrayAccess methods. */
@@ -143,9 +144,8 @@ implements ArrayAccess, Countable, IteratorAggregate
     #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        return isset($this->_data[$offset])
-            ? $this->_data[$offset]
-            : null;
+        return $this->_data[$offset]
+            ?? null;
     }
 
     /**

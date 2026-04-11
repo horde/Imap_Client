@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -34,16 +35,16 @@
 class Horde_Imap_Client_Data_Namespace implements Serializable
 {
     /* Namespace type constants. */
-    const NS_PERSONAL = 1;
-    const NS_OTHER = 2;
-    const NS_SHARED = 3;
+    public const NS_PERSONAL = 1;
+    public const NS_OTHER = 2;
+    public const NS_SHARED = 3;
 
     /**
      * Data object.
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * Strips namespace information from the given mailbox name.
@@ -71,19 +72,19 @@ class Horde_Imap_Client_Data_Namespace implements Serializable
         }
 
         switch ($name) {
-        case 'base':
-            return rtrim($this->name, $this->delimiter);
+            case 'base':
+                return rtrim($this->name, $this->delimiter);
 
-        case 'delimiter':
-        case 'name':
-        case 'translation':
-            return '';
+            case 'delimiter':
+            case 'name':
+            case 'translation':
+                return '';
 
-        case 'hidden':
-            return false;
+            case 'hidden':
+                return false;
 
-        case 'type':
-            return self::NS_PERSONAL;
+            case 'type':
+                return self::NS_PERSONAL;
         }
 
         return null;
@@ -94,19 +95,19 @@ class Horde_Imap_Client_Data_Namespace implements Serializable
     public function __set($name, $value)
     {
         switch ($name) {
-        case 'delimiter':
-        case 'name':
-        case 'translation':
-            $this->_data[$name] = strval($value);
-            break;
+            case 'delimiter':
+            case 'name':
+            case 'translation':
+                $this->_data[$name] = strval($value);
+                break;
 
-        case 'hidden':
-            $this->_data[$name] = (bool)$value;
-            break;
+            case 'hidden':
+                $this->_data[$name] = (bool) $value;
+                break;
 
-        case 'type':
-            $this->_data[$name] = intval($value);
-            break;
+            case 'type':
+                $this->_data[$name] = intval($value);
+                break;
         }
     }
 

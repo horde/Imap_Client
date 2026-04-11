@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -27,7 +28,7 @@ class Horde_Imap_Client_Data_Format_List extends Horde_Imap_Client_Data_Format i
      */
     public function __construct($data = null)
     {
-        parent::__construct(array());
+        parent::__construct([]);
 
         if (!is_null($data)) {
             $this->add($data);
@@ -72,8 +73,8 @@ class Horde_Imap_Client_Data_Format_List extends Horde_Imap_Client_Data_Format i
         foreach ($this as $val) {
             if ($val instanceof $this) {
                 $out .= '(' . $val->escape() . ') ';
-            } elseif (($val instanceof Horde_Imap_Client_Data_Format_String) &&
-                      $val->literal()) {
+            } elseif (($val instanceof Horde_Imap_Client_Data_Format_String)
+                      && $val->literal()) {
                 /* ERROR: Requires literal output. */
                 return '';
             } else {

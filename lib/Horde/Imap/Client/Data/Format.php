@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -76,8 +77,6 @@ class Horde_Imap_Client_Data_Format
      *
      * @throws Horde_Imap_Client_Data_Format_Exception
      */
-    public function verify()
-    {
-    }
+    public function verify() {}
 
 }

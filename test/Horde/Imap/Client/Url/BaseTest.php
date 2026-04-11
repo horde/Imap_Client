@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,7 +12,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Url;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class BaseTest extends TestCase
 {
@@ -39,12 +43,12 @@ class BaseTest extends TestCase
 
     public function badUrlProvider()
     {
-        return array(
-            array('Horde_Imap_Client_Url'),
-            array('Horde_Imap_Client_Url_Imap'),
-            array('Horde_Imap_Client_Url_Imap_Relative'),
-            array('Horde_Imap_Client_Url_Pop3')
-        );
+        return [
+            ['Horde_Imap_Client_Url'],
+            ['Horde_Imap_Client_Url_Imap'],
+            ['Horde_Imap_Client_Url_Imap_Relative'],
+            ['Horde_Imap_Client_Url_Pop3'],
+        ];
     }
 
 }

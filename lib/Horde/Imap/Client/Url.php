@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -156,17 +157,17 @@ class Horde_Imap_Client_Url implements Serializable
 
             if (!is_null($this->port)) {
                 switch ($this->protocol) {
-                case 'imap':
-                    if ($this->port != 143) {
-                        $url .= ':' . $this->port;
-                    }
-                    break;
+                    case 'imap':
+                        if ($this->port != 143) {
+                            $url .= ':' . $this->port;
+                        }
+                        break;
 
-                case 'pop':
-                    if ($this->port != 110) {
-                        $url .= ':' . $this->port;
-                    }
-                    break;
+                    case 'pop':
+                        if ($this->port != 110) {
+                            $url .= ':' . $this->port;
+                        }
+                        break;
                 }
             }
         }
@@ -209,10 +210,10 @@ class Horde_Imap_Client_Url implements Serializable
     public function __get($name)
     {
         switch ($name) {
-        case 'relative':
-            return (is_null($this->hostspec) &&
-                is_null($this->port) &&
-                is_null($this->protocol));
+            case 'relative':
+                return (is_null($this->hostspec)
+                    && is_null($this->port)
+                    && is_null($this->protocol));
         }
     }
 
@@ -224,16 +225,15 @@ class Horde_Imap_Client_Url implements Serializable
 
         if (isset($data['scheme'])) {
             $protocol = Horde_String::lower($data['scheme']);
-            if (!in_array($protocol, array('imap', 'pop'))) {
+            if (!in_array($protocol, ['imap', 'pop'])) {
                 return;
             }
 
             if (isset($data['host'])) {
                 $this->hostspec = $data['host'];
             }
-            $this->port = isset($data['port'])
-                ? $data['port']
-                : (($protocol === 'imap') ? 143 : 110);
+            $this->port = $data['port']
+                ?? (($protocol === 'imap') ? 143 : 110);
             $this->protocol = $protocol;
         }
 
@@ -267,15 +267,15 @@ class Horde_Imap_Client_Url implements Serializable
 
                 if (isset($data['query'])) {
                     $this->search = rawurldecode($data['query']);
-                    $parts = array();
+                    $parts = [];
                 }
             } else {
-                $parts = array();
+                $parts = [];
             }
 
             if (count($parts)) {
                 foreach ($parts as $val) {
-                    list($k, $v) = explode('=', $val);
+                    [$k, $v] = explode('=', $val);
                     $property = Horde_String::lower($k);
                     $this->$property = $v;
                 }
@@ -308,9 +308,9 @@ class Horde_Imap_Client_Url implements Serializable
      */
     public function __serialize()
     {
-        return array(
-            'value' => (string)$this,
-        );
+        return [
+            'value' => (string) $this,
+        ];
     }
 
     public function __unserialize(array $data)

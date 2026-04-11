@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2005-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2005-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -48,7 +49,7 @@ class Horde_Imap_Client_Cache
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
      * Constructor.
@@ -64,19 +65,19 @@ class Horde_Imap_Client_Cache
      *              DEFAULT: No debug output
      * </pre>
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         $this->_backend = $params['backend'];
         $this->_baseob = $params['baseob'];
 
-        $this->_backend->setParams(array(
+        $this->_backend->setParams([
             'hostspec' => $this->_baseob->getParam('hostspec'),
             'port' => $this->_baseob->getParam('port'),
-            'username' => $this->_baseob->getParam('username')
-        ));
+            'username' => $this->_baseob->getParam('username'),
+        ]);
 
-        if (isset($params['debug']) &&
-            ($params['debug'] instanceof Horde_Imap_Client_Base_Debug)) {
+        if (isset($params['debug'])
+            && ($params['debug'] instanceof Horde_Imap_Client_Base_Debug)) {
             $this->_debug = $params['debug'];
             $this->_debug->info(sprintf(
                 'CACHE: Using the %s storage driver.',
@@ -101,9 +102,12 @@ class Horde_Imap_Client_Cache
      *                undefined if not found). If $uids is empty, returns the
      *                full (unsorted) list of cached UIDs.
      */
-    public function get($mailbox, array $uids = array(), $fields = array(),
-                        $uidvalid = null)
-    {
+    public function get(
+        $mailbox,
+        array $uids = [],
+        $fields = [],
+        $uidvalid = null
+    ) {
         $mailbox = strval($mailbox);
 
         if (empty($uids)) {
@@ -139,7 +143,7 @@ class Horde_Imap_Client_Cache
         $mailbox = strval($mailbox);
 
         if (empty($data)) {
-            $this->_backend->getMetaData($mailbox, $uidvalid, array('uidvalid'));
+            $this->_backend->getMetaData($mailbox, $uidvalid, ['uidvalid']);
         } else {
             $this->_backend->set($mailbox, $data, $uidvalid);
 
@@ -166,9 +170,11 @@ class Horde_Imap_Client_Cache
      *                defaults and always present:
      *   - uidvalid: (integer) The UIDVALIDITY of the mailbox.
      */
-    public function getMetaData($mailbox, $uidvalid = null,
-                                array $entries = array())
-    {
+    public function getMetaData(
+        $mailbox,
+        $uidvalid = null,
+        array $entries = []
+    ) {
         return $this->_backend->getMetaData(strval($mailbox), $uidvalid, $entries);
     }
 
@@ -182,7 +188,7 @@ class Horde_Imap_Client_Cache
      *                           data. The following labels are reserved:
      *                           'uidvalid'.
      */
-    public function setMetaData($mailbox, $uidvalid, array $data = array())
+    public function setMetaData($mailbox, $uidvalid, array $data = [])
     {
         unset($data['uidvalid']);
 

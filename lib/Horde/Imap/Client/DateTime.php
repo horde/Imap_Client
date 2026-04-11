@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -29,8 +30,8 @@ class Horde_Imap_Client_DateTime extends DateTime
     public function __construct($time = null, $tz = null)
     {
         /* See https://bugs.php.net/bug.php?id=67118 */
-        $bug_67118 = (version_compare(PHP_VERSION, '5.6', '>=')) ||
-                     in_array(PHP_VERSION, array('5.4.29', '5.5.13'));
+        $bug_67118 = (version_compare(PHP_VERSION, '5.6', '>='))
+                     || in_array(PHP_VERSION, ['5.4.29', '5.5.13']);
         $tz = new DateTimeZone('UTC');
 
         /* Bug #14381 Catch malformed offset - which doesn't cause
@@ -43,7 +44,8 @@ class Horde_Imap_Client_DateTime extends DateTime
                 }
                 parent::__construct($time, $tz);
                 return;
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
 
         try {
@@ -52,7 +54,8 @@ class Horde_Imap_Client_DateTime extends DateTime
             }
             parent::__construct($time === null ? 'now' : $time, $tz);
             return;
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         /* Check for malformed day-of-week parts, usually incorrectly
          *  localized. E.g. Fr, 15 Apr 2016 15:15:09 +0000 */
@@ -65,7 +68,8 @@ class Horde_Imap_Client_DateTime extends DateTime
                     }
                     parent::__construct($time, $tz);
                     return;
-                } catch (Exception $e) {}
+                } catch (Exception $e) {
+                }
             }
         }
 
@@ -77,7 +81,8 @@ class Horde_Imap_Client_DateTime extends DateTime
                 }
                 parent::__construct($time . 'C', $tz);
                 return;
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
 
         /* Bug #9847 - Catch paranthesized timezone information at end of date
@@ -90,7 +95,8 @@ class Horde_Imap_Client_DateTime extends DateTime
                 }
                 parent::__construct($date, $tz);
                 return;
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
 
         parent::__construct('@-1', $tz);

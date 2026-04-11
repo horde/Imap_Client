@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2015-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2015-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -95,8 +96,8 @@ class Horde_Imap_Client_Auth_Scram
         $this->_hash = $hash;
 
         try {
-            if (!class_exists('Horde_Stringprep') ||
-                !class_exists('Horde_Crypt_Blowfish_Pbkdf2')) {
+            if (!class_exists('Horde_Stringprep')
+                || !class_exists('Horde_Crypt_Blowfish_Pbkdf2')) {
                 throw new Exception();
             }
 
@@ -143,8 +144,8 @@ class Horde_Imap_Client_Auth_Scram
          * n=<user>: SASLprepped username with "," and "=" escaped,
          * r=<nonce>: Random nonce */
         $this->_authmsg = 'n=' . str_replace(
-            array(',', '='),
-            array('=2C', '=3D'),
+            [',', '='],
+            ['=2C', '=3D'],
             $this->_user
         ) . ',r=' . $this->_nonce;
 
@@ -163,28 +164,28 @@ class Horde_Imap_Client_Auth_Scram
         $i = $r = $s = false;
 
         foreach (explode(',', $msg) as $val) {
-            list($attr, $aval) = array_map('trim', explode('=', $val, 2));
+            [$attr, $aval] = array_map('trim', explode('=', $val, 2));
 
             switch ($attr) {
-            case 'i':
-                $this->_iterations = intval($aval);
-                $i = true;
-                break;
+                case 'i':
+                    $this->_iterations = intval($aval);
+                    $i = true;
+                    break;
 
-            case 'r':
-                /* Beginning of server-provided nonce MUST be the same as the
-                 * nonce we provided. */
-                if (strpos($aval, $this->_nonce) !== 0) {
-                    return false;
-                }
-                $this->_nonce = $aval;
-                $r = true;
-                break;
+                case 'r':
+                    /* Beginning of server-provided nonce MUST be the same as the
+                     * nonce we provided. */
+                    if (strpos($aval, $this->_nonce) !== 0) {
+                        return false;
+                    }
+                    $this->_nonce = $aval;
+                    $r = true;
+                    break;
 
-            case 's':
-                $this->_salt = base64_decode($aval);
-                $s = true;
-                break;
+                case 's':
+                    $this->_salt = base64_decode($aval);
+                    $s = true;
+                    break;
             }
         }
 
@@ -209,11 +210,11 @@ class Horde_Imap_Client_Auth_Scram
         $s_pass = strval(new Horde_Crypt_Blowfish_Pbkdf2(
             $this->_pass,
             strlen(hash($this->_hash, '', true)),
-            array(
+            [
                 'algo' => $this->_hash,
                 'i_count' => $this->_iterations,
-                'salt' => $this->_salt
-            )
+                'salt' => $this->_salt,
+            ]
         ));
 
         /* Client key. */
@@ -253,14 +254,14 @@ class Horde_Imap_Client_Auth_Scram
     public function parseServerFinalMessage($msg)
     {
         foreach (explode(',', $msg) as $val) {
-            list($attr, $aval) = array_map('trim', explode('=', $val, 2));
+            [$attr, $aval] = array_map('trim', explode('=', $val, 2));
 
             switch ($attr) {
-            case 'e':
-                return false;
+                case 'e':
+                    return false;
 
-            case 'v':
-                return (base64_decode($aval) === $this->_serversig);
+                case 'v':
+                    return (base64_decode($aval) === $this->_serversig);
             }
         }
 

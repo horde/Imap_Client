@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,7 +12,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data\Format;
+
 use Horde\Imap\Client\Data\Format\String\TestBase;
 
 /**
@@ -24,6 +27,7 @@ use Horde\Imap\Client\Data\Format\String\TestBase;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class AstringTest extends TestBase
 {
@@ -31,53 +35,53 @@ class AstringTest extends TestBase
 
     protected function getTestObs()
     {
-        return array(
+        return [
             new $this->cname('Foo'),
             new $this->cname('Foo('),
             /* This is an invalid atom, but valid (non-quoted) astring. */
             new $this->cname('Foo]'),
-            new $this->cname('')
-        );
+            new $this->cname(''),
+        ];
     }
 
     public function stringRepresentationProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             'Foo',
             'Foo(',
             'Foo]',
-            ''
-        ));
+            '',
+        ]);
     }
 
     public function escapeProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             'Foo',
             '"Foo("',
             'Foo]',
-            '""'
-        ));
+            '""',
+        ]);
     }
 
     public function verifyProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             true,
             true,
             true,
-            true
-        ));
+            true,
+        ]);
     }
 
     public function binaryProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             false,
             false,
             false,
-            false
-        ));
+            false,
+        ]);
     }
 
     public function literalProvider()
@@ -87,29 +91,29 @@ class AstringTest extends TestBase
 
     public function quotedProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             false,
             true,
             false,
-            true
-        ));
+            true,
+        ]);
     }
 
     public function escapeStreamProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             '"Foo"',
             '"Foo("',
             '"Foo]"',
-            '""'
-        ));
+            '""',
+        ]);
     }
 
     public function nonasciiInputProvider()
     {
-        return array(
-            array(false)
-        );
+        return [
+            [false],
+        ];
     }
 
 }

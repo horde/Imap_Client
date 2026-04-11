@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -65,8 +66,7 @@ class Horde_Imap_Client_Interaction_Command_Continuation
      */
     public function getCommands(
         Horde_Imap_Client_Interaction_Server_Continuation $ob
-    )
-    {
+    ) {
         $closure = $this->_closure;
         return $closure($ob);
     }

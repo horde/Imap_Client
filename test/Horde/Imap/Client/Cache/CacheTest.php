@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Cache;
-use \Horde_Test_Factory_Cache;
-use \Horde_Imap_Client_Cache_Backend_Cache;
+
+use Horde_Test_Factory_Cache;
+use Horde_Imap_Client_Cache_Backend_Cache;
 
 /**
  * Tests for the Horde_Cache cache driver.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Cache_Backend_Cache;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class CacheTest extends TestBase
 {
@@ -32,9 +36,9 @@ class CacheTest extends TestBase
     {
         $factory_cache = new Horde_Test_Factory_Cache();
 
-        return new Horde_Imap_Client_Cache_Backend_Cache(array(
-            'cacheob' => $factory_cache->create()
-        ));
+        return new Horde_Imap_Client_Cache_Backend_Cache([
+            'cacheob' => $factory_cache->create(),
+        ]);
     }
 
 }

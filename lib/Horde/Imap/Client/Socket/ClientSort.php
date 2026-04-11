@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -77,31 +78,31 @@ class Horde_Imap_Client_Socket_ClientSort
 
         foreach ($opts['sort'] as $val) {
             switch ($val) {
-            case Horde_Imap_Client::SORT_ARRIVAL:
-                $query->imapDate();
-                break;
+                case Horde_Imap_Client::SORT_ARRIVAL:
+                    $query->imapDate();
+                    break;
 
-            case Horde_Imap_Client::SORT_DATE:
-                $query->imapDate();
-                $query->envelope();
-                break;
+                case Horde_Imap_Client::SORT_DATE:
+                    $query->imapDate();
+                    $query->envelope();
+                    break;
 
-            case Horde_Imap_Client::SORT_CC:
-            case Horde_Imap_Client::SORT_DISPLAYFROM:
-            case Horde_Imap_Client::SORT_DISPLAYTO:
-            case Horde_Imap_Client::SORT_FROM:
-            case Horde_Imap_Client::SORT_SUBJECT:
-            case Horde_Imap_Client::SORT_TO:
-                $query->envelope();
-                break;
+                case Horde_Imap_Client::SORT_CC:
+                case Horde_Imap_Client::SORT_DISPLAYFROM:
+                case Horde_Imap_Client::SORT_DISPLAYTO:
+                case Horde_Imap_Client::SORT_FROM:
+                case Horde_Imap_Client::SORT_SUBJECT:
+                case Horde_Imap_Client::SORT_TO:
+                    $query->envelope();
+                    break;
 
-            case Horde_Imap_Client::SORT_SEQUENCE:
-                $query->seq();
-                break;
+                case Horde_Imap_Client::SORT_SEQUENCE:
+                    $query->seq();
+                    break;
 
-            case Horde_Imap_Client::SORT_SIZE:
-                $query->size();
-                break;
+                case Horde_Imap_Client::SORT_SIZE:
+                    $query->size();
+                    break;
             }
         }
 
@@ -110,9 +111,9 @@ class Horde_Imap_Client_Socket_ClientSort
         }
 
         $mbox = $this->_socket->currentMailbox();
-        $fetch_res = $this->_socket->fetch(isset($mbox['mailbox']) ? $mbox['mailbox'] : null, $query, array(
-            'ids' => $res
-        ));
+        $fetch_res = $this->_socket->fetch($mbox['mailbox'] ?? null, $query, [
+            'ids' => $res,
+        ]);
 
         return $this->_clientSortProcess($res->ids, $fetch_res, $opts['sort']);
     }
@@ -126,11 +127,12 @@ class Horde_Imap_Client_Socket_ClientSort
      *
      * @return array  The thread sort results.
      */
-    public function threadOrderedSubject(Horde_Imap_Client_Fetch_Results $data,
-                                         $uids)
-    {
+    public function threadOrderedSubject(
+        Horde_Imap_Client_Fetch_Results $data,
+        $uids
+    ) {
         $dates = $this->_getSentDates($data, $data->ids());
-        $out = $sorted = $tsort = array();
+        $out = $sorted = $tsort = [];
 
         foreach ($data as $k => $v) {
             $subject = strval(new Horde_Imap_Client_Data_BaseSubject($v->getEnvelope()->subject));
@@ -152,9 +154,9 @@ class Horde_Imap_Client_Socket_ClientSort
          * is sorted in $sorted. */
         foreach (array_keys($tsort) as $key) {
             $keys = array_keys($sorted[$key]);
-            $out[$keys[0]] = array(
-                $keys[0] => 0
-            ) + array_fill_keys(array_slice($keys, 1) , 1);
+            $out[$keys[0]] = [
+                $keys[0] => 0,
+            ] + array_fill_keys(array_slice($keys, 1), 1);
         }
 
         return new Horde_Imap_Client_Data_Thread(
@@ -168,7 +170,7 @@ class Horde_Imap_Client_Socket_ClientSort
     protected function _clientSortProcess($res, $fetch_res, $sort)
     {
         /* The initial sort is on the entire set. */
-        $slices = array(0 => $res);
+        $slices = [0 => $res];
         $reverse = false;
 
         foreach ($sort as $val) {
@@ -178,83 +180,83 @@ class Horde_Imap_Client_Socket_ClientSort
             }
 
             $slices_list = $slices;
-            $slices = array();
+            $slices = [];
 
             foreach ($slices_list as $slice_start => $slice) {
-                $sorted = array();
+                $sorted = [];
 
                 switch ($val) {
-                case Horde_Imap_Client::SORT_SEQUENCE:
-                    /* There is no requirement that IDs be returned in
-                     * sequence order (see RFC 4549 [4.3.1]). So we must sort
-                     * ourselves. */
-                    $sorted = array_flip($slice);
-                    ksort($sorted, SORT_NUMERIC);
-                    break;
+                    case Horde_Imap_Client::SORT_SEQUENCE:
+                        /* There is no requirement that IDs be returned in
+                         * sequence order (see RFC 4549 [4.3.1]). So we must sort
+                         * ourselves. */
+                        $sorted = array_flip($slice);
+                        ksort($sorted, SORT_NUMERIC);
+                        break;
 
-                case Horde_Imap_Client::SORT_SIZE:
-                    foreach ($slice as $num) {
-                        $sorted[$num] = $fetch_res[$num]->getSize();
-                    }
-                    asort($sorted, SORT_NUMERIC);
-                    break;
+                    case Horde_Imap_Client::SORT_SIZE:
+                        foreach ($slice as $num) {
+                            $sorted[$num] = $fetch_res[$num]->getSize();
+                        }
+                        asort($sorted, SORT_NUMERIC);
+                        break;
 
-                case Horde_Imap_Client::SORT_DISPLAYFROM:
-                case Horde_Imap_Client::SORT_DISPLAYTO:
-                    $field = ($val == Horde_Imap_Client::SORT_DISPLAYFROM)
-                        ? 'from'
-                        : 'to';
+                    case Horde_Imap_Client::SORT_DISPLAYFROM:
+                    case Horde_Imap_Client::SORT_DISPLAYTO:
+                        $field = ($val == Horde_Imap_Client::SORT_DISPLAYFROM)
+                            ? 'from'
+                            : 'to';
 
-                    foreach ($slice as $num) {
-                        $ob = $fetch_res[$num]->getEnvelope()->$field;
-                        $sorted[$num] = ($addr_ob = $ob[0])
-                            ? $addr_ob->personal ?: $addr_ob->mailbox
-                            : null;
-                    }
+                        foreach ($slice as $num) {
+                            $ob = $fetch_res[$num]->getEnvelope()->$field;
+                            $sorted[$num] = ($addr_ob = $ob[0])
+                                ? $addr_ob->personal ?: $addr_ob->mailbox
+                                : null;
+                        }
 
-                    $this->_sortString($sorted);
-                    break;
+                        $this->_sortString($sorted);
+                        break;
 
-                case Horde_Imap_Client::SORT_CC:
-                case Horde_Imap_Client::SORT_FROM:
-                case Horde_Imap_Client::SORT_TO:
-                    if ($val == Horde_Imap_Client::SORT_CC) {
-                        $field = 'cc';
-                    } elseif ($val == Horde_Imap_Client::SORT_FROM) {
-                        $field = 'from';
-                    } else {
-                        $field = 'to';
-                    }
+                    case Horde_Imap_Client::SORT_CC:
+                    case Horde_Imap_Client::SORT_FROM:
+                    case Horde_Imap_Client::SORT_TO:
+                        if ($val == Horde_Imap_Client::SORT_CC) {
+                            $field = 'cc';
+                        } elseif ($val == Horde_Imap_Client::SORT_FROM) {
+                            $field = 'from';
+                        } else {
+                            $field = 'to';
+                        }
 
-                    foreach ($slice as $num) {
-                        $tmp = $fetch_res[$num]->getEnvelope()->$field;
-                        $sorted[$num] = count($tmp)
-                            ? $tmp[0]->mailbox
-                            : null;
-                    }
+                        foreach ($slice as $num) {
+                            $tmp = $fetch_res[$num]->getEnvelope()->$field;
+                            $sorted[$num] = count($tmp)
+                                ? $tmp[0]->mailbox
+                                : null;
+                        }
 
-                    $this->_sortString($sorted);
-                    break;
+                        $this->_sortString($sorted);
+                        break;
 
-                case Horde_Imap_Client::SORT_ARRIVAL:
-                    $sorted = $this->_getSentDates($fetch_res, $slice, true);
-                    asort($sorted, SORT_NUMERIC);
-                    break;
+                    case Horde_Imap_Client::SORT_ARRIVAL:
+                        $sorted = $this->_getSentDates($fetch_res, $slice, true);
+                        asort($sorted, SORT_NUMERIC);
+                        break;
 
-                case Horde_Imap_Client::SORT_DATE:
-                    // Date sorting rules in RFC 5256 [2.2]
-                    $sorted = $this->_getSentDates($fetch_res, $slice);
-                    asort($sorted, SORT_NUMERIC);
-                    break;
+                    case Horde_Imap_Client::SORT_DATE:
+                        // Date sorting rules in RFC 5256 [2.2]
+                        $sorted = $this->_getSentDates($fetch_res, $slice);
+                        asort($sorted, SORT_NUMERIC);
+                        break;
 
-                case Horde_Imap_Client::SORT_SUBJECT:
-                    // Subject sorting rules in RFC 5256 [2.1]
-                    foreach ($slice as $num) {
-                        $sorted[$num] = strval(new Horde_Imap_Client_Data_BaseSubject($fetch_res[$num]->getEnvelope()->subject));
-                    }
+                    case Horde_Imap_Client::SORT_SUBJECT:
+                        // Subject sorting rules in RFC 5256 [2.1]
+                        foreach ($slice as $num) {
+                            $sorted[$num] = strval(new Horde_Imap_Client_Data_BaseSubject($fetch_res[$num]->getEnvelope()->subject));
+                        }
 
-                    $this->_sortString($sorted);
-                    break;
+                        $this->_sortString($sorted);
+                        break;
                 }
 
                 // At this point, keys of $sorted are sequence/UID and values
@@ -273,12 +275,12 @@ class Horde_Imap_Client_Socket_ClientSort
                     // Check for ties.
                     $last = $start = null;
                     $i = 0;
-                    $todo = array();
+                    $todo = [];
 
                     foreach ($sorted as $k => $v) {
                         if (is_null($last) || ($last != $v)) {
                             if ($i) {
-                                $todo[] = array($start, $i);
+                                $todo[] = [$start, $i];
                                 $i = 0;
                             }
                             $last = $v;
@@ -288,7 +290,7 @@ class Horde_Imap_Client_Socket_ClientSort
                         }
                     }
                     if ($i) {
-                        $todo[] = array($start, $i);
+                        $todo[] = [$start, $i];
                     }
 
                     foreach ($todo as $v) {
@@ -323,10 +325,12 @@ class Horde_Imap_Client_Socket_ClientSort
      *
      * @return array  A mapping of IDs -> UNIX timestamps.
      */
-    protected function _getSentDates(Horde_Imap_Client_Fetch_Results $data,
-                                     $ids, $internal = false)
-    {
-        $dates = array();
+    protected function _getSentDates(
+        Horde_Imap_Client_Fetch_Results $data,
+        $ids,
+        $internal = false
+    ) {
+        $dates = [];
 
         foreach ($ids as $num) {
             $dt = ($internal || !isset($data[$num]->getEnvelope()->date))
@@ -351,9 +355,13 @@ class Horde_Imap_Client_Socket_ClientSort
      */
     protected function _stableAsort(&$a)
     {
-        array_walk($a, function(&$v, $k) { $v = array($v, $k); });
+        array_walk($a, function (&$v, $k) {
+            $v = [$v, $k];
+        });
         asort($a);
-        array_walk($a, function(&$v, $k) { $v = $v[0]; });
+        array_walk($a, function (&$v, $k) {
+            $v = $v[0];
+        });
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,10 +12,12 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Stub;
+
 use Horde_Imap_Client_Socket_ClientSort;
 use Horde_Imap_Client_Socket;
-use \Collator;
+use Collator;
 
 /**
  * Stub for testing the IMAP Socket client sorting library.

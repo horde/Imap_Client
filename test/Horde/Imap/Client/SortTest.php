@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Mailbox_List;
+use Horde_Imap_Client_Mailbox_List;
 
 /**
  * Tests for IMAP mailbox sorting.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Mailbox_List;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class SortTest extends TestCase
 {
@@ -34,9 +38,9 @@ class SortTest extends TestCase
     public function testNumericComponentSorting($mboxes, $expected)
     {
         $list_ob = new Horde_Imap_Client_Mailbox_List($mboxes);
-        $list_ob->sort(array(
-            'delimiter' => '.'
-        ));
+        $list_ob->sort([
+            'delimiter' => '.',
+        ]);
 
         $this->assertEquals(
             $expected,
@@ -46,36 +50,36 @@ class SortTest extends TestCase
 
     public function numericComponentSortingProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     '100',
                     '1',
                     '10000',
                     '10',
-                    '1000'
-                ),
-                array(
+                    '1000',
+                ],
+                [
                     '1',
                     '10',
                     '100',
                     '1000',
-                    '10000'
-                )
-            ),
-            array(
-                array(
+                    '10000',
+                ],
+            ],
+            [
+                [
                     'Foo.002',
                     'Foo.00002',
-                    'Foo.0002'
-                ),
-                array(
+                    'Foo.0002',
+                ],
+                [
                     'Foo.002',
                     'Foo.0002',
-                    'Foo.00002'
-                )
-            )
-        );
+                    'Foo.00002',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -84,9 +88,9 @@ class SortTest extends TestCase
     public function testInboxSort($mboxes, $expected)
     {
         $list_ob = new Horde_Imap_Client_Mailbox_List($mboxes);
-        $sorted = $list_ob->sort(array(
+        $sorted = $list_ob->sort([
             'inbox' => true,
-        ));
+        ]);
 
         $this->assertEquals(
             $expected,
@@ -94,9 +98,9 @@ class SortTest extends TestCase
         );
 
         $list_ob = new Horde_Imap_Client_Mailbox_List($mboxes);
-        $sorted = $list_ob->sort(array(
+        $sorted = $list_ob->sort([
             'inbox' => false,
-        ));
+        ]);
 
         $this->assertEquals(
             $mboxes,
@@ -106,22 +110,22 @@ class SortTest extends TestCase
 
     public function inboxSortProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'A',
                     'Z',
                     'INBOX',
-                    'C'
-                ),
-                array(
+                    'C',
+                ],
+                [
                     'INBOX',
                     'A',
                     'C',
-                    'Z'
-                )
-            )
-        );
+                    'Z',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -145,18 +149,18 @@ class SortTest extends TestCase
 
     public function indexAssociationProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'Z' => 'Z',
-                    'A' => 'A'
-                ),
-                array(
+                    'A' => 'A',
+                ],
+                [
                     'A',
-                    'Z'
-                )
-            )
-        );
+                    'Z',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -165,9 +169,9 @@ class SortTest extends TestCase
     public function testNoUpdateOfListObject($mboxes, $expected)
     {
         $list_ob = new Horde_Imap_Client_Mailbox_List($mboxes);
-        $sorted = $list_ob->sort(array(
-            'noupdate' => true
-        ));
+        $sorted = $list_ob->sort([
+            'noupdate' => true,
+        ]);
 
         $this->assertEquals(
             $expected,
@@ -193,18 +197,18 @@ class SortTest extends TestCase
 
     public function noUpdateOfListObjectProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'Z',
-                    'A'
-                ),
-                array(
                     'A',
-                    'Z'
-                )
-            )
-        );
+                ],
+                [
+                    'A',
+                    'Z',
+                ],
+            ],
+        ];
     }
 
 }

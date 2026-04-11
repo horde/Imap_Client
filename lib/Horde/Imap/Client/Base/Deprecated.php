@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -46,9 +47,12 @@ class Horde_Imap_Client_Base_Deprecated
      *
      * @throws Horde_Imap_Client_Exception
      */
-    public static function getCacheId($base_ob, $mailbox, $condstore,
-                                      array $addl = array())
-    {
+    public static function getCacheId(
+        $base_ob,
+        $mailbox,
+        $condstore,
+        array $addl = []
+    ) {
         $query = Horde_Imap_Client::STATUS_UIDVALIDITY | Horde_Imap_Client::STATUS_MESSAGES | Horde_Imap_Client::STATUS_UIDNEXT;
 
         /* Use MODSEQ as cache ID if CONDSTORE extension is available. */
@@ -61,16 +65,16 @@ class Horde_Imap_Client_Base_Deprecated
         $status = $base_ob->status($mailbox, $query);
 
         if (empty($status['highestmodseq'])) {
-            $parts = array(
+            $parts = [
                 'V' . $status['uidvalidity'],
                 'U' . $status['uidnext'],
-                'M' . $status['messages']
-            );
+                'M' . $status['messages'],
+            ];
         } else {
-            $parts = array(
+            $parts = [
                 'V' . $status['uidvalidity'],
-                'H' . $status['highestmodseq']
-            );
+                'H' . $status['highestmodseq'],
+            ];
         }
 
         return implode('|', array_merge($parts, $addl));
@@ -89,13 +93,13 @@ class Horde_Imap_Client_Base_Deprecated
      */
     public static function parseCacheId($id)
     {
-        $data = array(
+        $data = [
             'H' => 'highestmodseq',
             'M' => 'messages',
             'U' => 'uidnext',
-            'V' => 'uidvalidity'
-        );
-        $info = array();
+            'V' => 'uidvalidity',
+        ];
+        $info = [];
 
         foreach (explode('|', $id) as $part) {
             if (isset($data[$part[0]])) {

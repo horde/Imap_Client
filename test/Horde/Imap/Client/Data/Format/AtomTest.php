@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,8 +12,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data\Format;
-use \Horde_Imap_Client_Data_Format_Atom;
+
+use Horde_Imap_Client_Data_Format_Atom;
 
 /**
  * Tests for the Atom data format object.
@@ -24,19 +27,20 @@ use \Horde_Imap_Client_Data_Format_Atom;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class AtomTest extends TestBase
 {
     protected function getTestObs()
     {
-        return array(
+        return [
             new Horde_Imap_Client_Data_Format_Atom('Foo'),
             /* Illegal atom character. */
             new Horde_Imap_Client_Data_Format_Atom('Foo('),
             /* This is an invalid atom, but valid (non-quoted) astring. */
             new Horde_Imap_Client_Data_Format_Atom('Foo]'),
-            new Horde_Imap_Client_Data_Format_Atom('')
-        );
+            new Horde_Imap_Client_Data_Format_Atom(''),
+        ];
     }
 
     /**
@@ -52,12 +56,12 @@ class AtomTest extends TestBase
 
     public function stringRepresentationProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             'Foo',
             'Foo(',
             'Foo]',
             '',
-        ));
+        ]);
     }
 
     /**
@@ -73,12 +77,12 @@ class AtomTest extends TestBase
 
     public function escapeProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             'Foo',
             'Foo(',
             'Foo]',
             '""',
-        ));
+        ]);
     }
 
     /**
@@ -88,21 +92,21 @@ class AtomTest extends TestBase
     {
         if ($expected) {
             $this->expectException('Horde_Imap_Client_Data_Format_Exception');
-        }    
+        }
 
         $ob->verify();
-     
+
         $this->markTestSkipped('Horde\Imap\Client\Data\Format\AtomTest::testVerify - No Exception should be thrown here. ');
     }
 
     public function verifyProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             false,
             true,
             true,
-            false
-        ));
+            false,
+        ]);
     }
 
     /**
@@ -119,10 +123,10 @@ class AtomTest extends TestBase
 
     public function stripNonAtomCharactersProvider()
     {
-        return array(
-            array('ABC123abc', 'ABC123abc'),
-            array('A[{À*"A', 'A[A')
-        );
+        return [
+            ['ABC123abc', 'ABC123abc'],
+            ['A[{À*"A', 'A[A'],
+        ];
     }
 
 }

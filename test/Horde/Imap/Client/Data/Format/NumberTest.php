@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,8 +12,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data\Format;
-use \Horde_Imap_Client_Data_Format_Number;
+
+use Horde_Imap_Client_Data_Format_Number;
 
 /**
  * Tests for the Number data format object.
@@ -24,17 +27,18 @@ use \Horde_Imap_Client_Data_Format_Number;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class NumberTest extends TestBase
 {
     protected function getTestObs()
     {
-        return array(
+        return [
             new Horde_Imap_Client_Data_Format_Number(1),
             new Horde_Imap_Client_Data_Format_Number('1'),
             /* Invalid number. */
-            new Horde_Imap_Client_Data_Format_Number('Foo')
-        );
+            new Horde_Imap_Client_Data_Format_Number('Foo'),
+        ];
     }
 
     /**
@@ -50,11 +54,11 @@ class NumberTest extends TestBase
 
     public function stringRepresentationProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             '1',
             '1',
-            '0'
-        ));
+            '0',
+        ]);
     }
 
     /**
@@ -84,11 +88,11 @@ class NumberTest extends TestBase
 
     public function verifyProvider()
     {
-        return $this->createProviderArray(array(
+        return $this->createProviderArray([
             false,
             false,
-            true
-        ));
+            true,
+        ]);
     }
 
 }

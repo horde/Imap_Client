@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -25,8 +26,7 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Imap_Client
  */
-class Horde_Imap_Client_Socket_Connection_Socket
-extends Horde_Imap_Client_Socket_Connection_Base
+class Horde_Imap_Client_Socket_Connection_Socket extends Horde_Imap_Client_Socket_Connection_Base
 {
     /**
      * If false, does not outpt the current line of client output to debug.
@@ -96,8 +96,8 @@ extends Horde_Imap_Client_Socket_Connection_Base
         if (rewind($data)) {
             $success = true;
             while (!feof($data)) {
-                if ((($read_data = fread($data, 8192)) === false) ||
-                    (fwrite($this->_stream, $read_data) === false)) {
+                if ((($read_data = fread($data, 8192)) === false)
+                    || (fwrite($this->_stream, $read_data) === false)) {
                     $success = false;
                     break;
                 }

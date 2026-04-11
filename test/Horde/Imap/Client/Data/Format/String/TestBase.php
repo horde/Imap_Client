@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,7 +12,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data\Format\String;
+
 use Horde\Imap\Client\Data\Format\TestBase as ExtTestBase;
 
 /**
@@ -50,12 +53,12 @@ abstract class TestBase extends ExtTestBase
         if (!$expected) {
             $this->expectException('Horde_Imap_Client_Data_Format_Exception');
         }
-            
+
         $this->assertEquals(
             $expected,
             $ob->escape()
         );
-        
+
     }
 
     abstract public function escapeProvider();
@@ -140,8 +143,9 @@ abstract class TestBase extends ExtTestBase
      */
     public function testNonasciiInput($result)
     {
-        if (!$result)
+        if (!$result) {
             $this->expectException('Horde_Imap_Client_Data_Format_Exception');
+        }
 
         new $this->cname('Envoyé');
 

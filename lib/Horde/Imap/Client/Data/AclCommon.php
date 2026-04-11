@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -23,28 +24,28 @@
 class Horde_Imap_Client_Data_AclCommon
 {
     /** Constants for getString(). */
-    const RFC_2086 = 1;
-    const RFC_4314 = 2;
+    public const RFC_2086 = 1;
+    public const RFC_4314 = 2;
 
     /**
      * List of virtual rights (RFC 4314 [2.1.1]).
      *
      * @var array
      */
-    protected $_virtual = array(
-        Horde_Imap_Client::ACL_CREATE => array(
+    protected $_virtual = [
+        Horde_Imap_Client::ACL_CREATE => [
             Horde_Imap_Client::ACL_CREATEMBOX,
-            Horde_Imap_Client::ACL_DELETEMBOX
-        ),
-        Horde_Imap_Client::ACL_DELETE => array(
+            Horde_Imap_Client::ACL_DELETEMBOX,
+        ],
+        Horde_Imap_Client::ACL_DELETE => [
             Horde_Imap_Client::ACL_DELETEMSGS,
             // Don't put this first - we do checks on the existence of the
             // first element in this array to determine the RFC type, and this
             // is duplicate of right contained in ACL_CREATE.
             Horde_Imap_Client::ACL_DELETEMBOX,
-            Horde_Imap_Client::ACL_EXPUNGE
-        )
-    );
+            Horde_Imap_Client::ACL_EXPUNGE,
+        ],
+    ];
 
     /**
      * Returns the raw string to use in IMAP server calls.

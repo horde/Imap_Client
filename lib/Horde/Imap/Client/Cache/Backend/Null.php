@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -20,60 +21,49 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Imap_Client
  */
-class Horde_Imap_Client_Cache_Backend_Null
-extends Horde_Imap_Client_Cache_Backend
+class Horde_Imap_Client_Cache_Backend_Null extends Horde_Imap_Client_Cache_Backend
 {
     /**
      */
     public function get($mailbox, $uids, $fields, $uidvalid)
     {
-        return array();
+        return [];
     }
 
     /**
      */
     public function getCachedUids($mailbox, $uidvalid)
     {
-        return array();
+        return [];
     }
 
     /**
      */
-    public function set($mailbox, $data, $uidvalid)
-    {
-    }
+    public function set($mailbox, $data, $uidvalid) {}
 
     /**
      */
     public function getMetaData($mailbox, $uidvalid, $entries)
     {
-        return array(
-            'uidvalid' => 0
-        );
+        return [
+            'uidvalid' => 0,
+        ];
     }
 
     /**
      */
-    public function setMetaData($mailbox, $data)
-    {
-    }
+    public function setMetaData($mailbox, $data) {}
 
     /**
      */
-    public function deleteMsgs($mailbox, $uids)
-    {
-    }
+    public function deleteMsgs($mailbox, $uids) {}
 
     /**
      */
-    public function deleteMailbox($mailbox)
-    {
-    }
+    public function deleteMailbox($mailbox) {}
 
     /**
      */
-    public function clear($lifetime)
-    {
-    }
+    public function clear($lifetime) {}
 
 }

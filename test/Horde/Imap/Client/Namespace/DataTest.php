@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Data_Namespace;
+use Horde_Imap_Client_Data_Namespace;
 
 /**
  * Tests for the Namespace data object.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Data_Namespace;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class DataTest extends TestCase
 {
@@ -139,52 +143,52 @@ class DataTest extends TestCase
      */
     public function defaultProvider()
     {
-        return array(
-            array('base', ''),
-            array('delimiter', ''),
-            array('hidden', false),
-            array('name', ''),
-            array('translation', ''),
-            array('type', Horde_Imap_Client_Data_Namespace::NS_PERSONAL),
+        return [
+            ['base', ''],
+            ['delimiter', ''],
+            ['hidden', false],
+            ['name', ''],
+            ['translation', ''],
+            ['type', Horde_Imap_Client_Data_Namespace::NS_PERSONAL],
             // Bogus value
-            array('foo', null)
-        );
+            ['foo', null],
+        ];
     }
 
     /**
      */
     public function settingProvider()
     {
-        return array(
-            array('delimiter', '.'),
-            array('delimiter', '/'),
-            array('delimiter', 1, '1'),
-            array('hidden', false),
-            array('hidden', 0, false),
-            array('hidden', true),
-            array('hidden', 1, true),
-            array('name', 'foo'),
-            array('name', 123, '123'),
-            array('translation', 'foo'),
-            array('translation', 123, '123'),
-            array('type', Horde_Imap_Client_Data_Namespace::NS_PERSONAL),
-            array('type', Horde_Imap_Client_Data_Namespace::NS_OTHER),
-            array('type', Horde_Imap_Client_Data_Namespace::NS_SHARED),
+        return [
+            ['delimiter', '.'],
+            ['delimiter', '/'],
+            ['delimiter', 1, '1'],
+            ['hidden', false],
+            ['hidden', 0, false],
+            ['hidden', true],
+            ['hidden', 1, true],
+            ['name', 'foo'],
+            ['name', 123, '123'],
+            ['translation', 'foo'],
+            ['translation', 123, '123'],
+            ['type', Horde_Imap_Client_Data_Namespace::NS_PERSONAL],
+            ['type', Horde_Imap_Client_Data_Namespace::NS_OTHER],
+            ['type', Horde_Imap_Client_Data_Namespace::NS_SHARED],
             // Bogus value
-            array('foo', null)
-        );
+            ['foo', null],
+        ];
     }
 
     /**
      */
     public function stripProvider()
     {
-        return array(
-            array('foo.', '.', 'foo.bar', 'bar'),
-            array('foo.', '.', 'foo2.bar', 'foo2.bar'),
-            array('foo.bar.', '.', 'foo.bar.baz', 'baz'),
-            array('', '.', 'foo.bar', 'foo.bar')
-        );
+        return [
+            ['foo.', '.', 'foo.bar', 'bar'],
+            ['foo.', '.', 'foo2.bar', 'foo2.bar'],
+            ['foo.bar.', '.', 'foo.bar.baz', 'baz'],
+            ['', '.', 'foo.bar', 'foo.bar'],
+        ];
     }
 
 }

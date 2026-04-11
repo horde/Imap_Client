@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Cache;
-use \Horde_Test_Factory_Db;
-use \Horde_Imap_Client_Cache_Backend_Db;
+
+use Horde_Test_Factory_Db;
+use Horde_Imap_Client_Cache_Backend_Db;
 
 /**
  * Tests for the Db cache driver.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Cache_Backend_Db;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class DbTest extends TestBase
 {
@@ -33,21 +37,21 @@ class DbTest extends TestBase
         $factory_db = new Horde_Test_Factory_Db();
 
         try {
-            $db = $factory_db->create(array(
-                'migrations' => array(
-                    'migrationsPath' => __DIR__ . '/../../../../../migration/Horde/Imap/Client'
-                )
-            ));
+            $db = $factory_db->create([
+                'migrations' => [
+                    'migrationsPath' => __DIR__ . '/../../../../../migration/Horde/Imap/Client',
+                ],
+            ]);
         } catch (Horde_Test_Exception $e) {
             $this->markTestSkipped('Sqlite not available.');
         }
 
-        return new Horde_Imap_Client_Cache_Backend_Db(array(
+        return new Horde_Imap_Client_Cache_Backend_Db([
             'db' => $db,
             'hostspec' => self::HOSTSPEC,
             'port' => self::PORT,
-            'username' => self::USERNAME
-        ));
+            'username' => self::USERNAME,
+        ]);
     }
 
 }

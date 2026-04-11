@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -29,7 +30,7 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
      *
      * @var array
      */
-    protected $_thread = array();
+    protected $_thread = [];
 
     /**
      * The index type.
@@ -88,11 +89,11 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
             if (isset($v[$index])) {
                 reset($v);
 
-                $ob = new stdClass;
+                $ob = new stdClass();
                 $ob->base = (count($v) > 1) ? key($v) : null;
                 $ob->last = false;
 
-                $levels = $out = array();
+                $levels = $out = [];
                 $last = 0;
 
                 while (($v2 = current($v)) !== false) {
@@ -117,7 +118,7 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
             }
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -132,15 +133,15 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
      */
     public function getThreads()
     {
-        $data = array();
+        $data = [];
         foreach ($this->_thread as $v) {
             reset($v);
 
-            $ob = new stdClass;
+            $ob = new stdClass();
             $ob->base = (count($v) > 1) ? key($v) : null;
             $ob->last = false;
 
-            $levels = $out = array();
+            $levels = $out = [];
             $last = 0;
 
             while (($v2 = current($v)) !== false) {
@@ -202,10 +203,10 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
      */
     public function __serialize()
     {
-        return array(
+        return [
             'thread' => $this->_thread,
             'type' => $this->_type,
-        );
+        ];
     }
 
     public function __unserialize(array $data)
@@ -223,7 +224,7 @@ class Horde_Imap_Client_Data_Thread implements Countable, Serializable
      */
     protected function _getAllIndices()
     {
-        $out = array();
+        $out = [];
 
         foreach ($this->_thread as $val) {
             $out += $val;

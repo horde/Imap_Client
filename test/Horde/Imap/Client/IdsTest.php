@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,10 +12,12 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Ids;
-use \stdClass;
+use Horde_Imap_Client_Ids;
+use stdClass;
 
 /**
  * Tests for the Ids object.
@@ -26,12 +29,13 @@ use \stdClass;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class IdsTest extends TestCase
 {
     public function testBasicAddingOfIds()
     {
-        $ids = new Horde_Imap_Client_Ids(array(1, 3, 5));
+        $ids = new Horde_Imap_Client_Ids([1, 3, 5]);
 
         $this->assertEquals(
             3,
@@ -67,15 +71,15 @@ class IdsTest extends TestCase
 
     public function ignoreInvalidAddsProvider()
     {
-        return array(
-            array(null),
-            array(new stdClass)
-        );
+        return [
+            [null],
+            [new stdClass()],
+        ];
     }
 
     public function testEmptyIdsArray()
     {
-        $ids = new Horde_Imap_Client_Ids(array());
+        $ids = new Horde_Imap_Client_Ids([]);
 
         $this->assertEquals(
             0,
@@ -110,12 +114,12 @@ class IdsTest extends TestCase
 
     public function sequenceParsingProvider()
     {
-        return array(
-            array('12:10', array(10, 11, 12)),
-            array('12,11,10', array(12, 11, 10)),
-            array('10:12,10,11,12,10:12', array(10, 11, 12)),
-            array('10', array(10))
-        );
+        return [
+            ['12:10', [10, 11, 12]],
+            ['12,11,10', [12, 11, 10]],
+            ['10:12,10,11,12,10:12', [10, 11, 12]],
+            ['10', [10]],
+        ];
     }
 
     /**
@@ -133,11 +137,11 @@ class IdsTest extends TestCase
 
     public function rangeGenerationProvider()
     {
-        return array(
-            array('100,300,200', '100:300'),
-            array(Horde_Imap_Client_Ids::ALL, ''),
-            array('50', '50')
-        );
+        return [
+            ['100,300,200', '100:300'],
+            [Horde_Imap_Client_Ids::ALL, ''],
+            ['50', '50'],
+        ];
     }
 
     public function testSorting()
@@ -169,11 +173,11 @@ class IdsTest extends TestCase
 
     public function specialIdValueStringRepresentationsProvider()
     {
-        return array(
-            array(Horde_Imap_Client_Ids::ALL, '1:*'),
-            array(Horde_Imap_Client_Ids::SEARCH_RES, '$'),
-            array(Horde_Imap_Client_Ids::LARGEST, '*')
-        );
+        return [
+            [Horde_Imap_Client_Ids::ALL, '1:*'],
+            [Horde_Imap_Client_Ids::SEARCH_RES, '$'],
+            [Horde_Imap_Client_Ids::LARGEST, '*'],
+        ];
     }
 
     public function testDuplicatesAllowed()
@@ -231,9 +235,9 @@ class IdsTest extends TestCase
         $ids = new Horde_Imap_Client_Ids(Horde_Imap_Client_Ids::ALL);
 
         $this->assertEquals(
-            array(
-                '1:*'
-            ),
+            [
+                '1:*',
+            ],
             $ids->split(2000)
         );
     }
@@ -294,20 +298,20 @@ class IdsTest extends TestCase
 
     public function minAndMaxProvider()
     {
-        return array(
-            array(array(1), 1, 1),
-            array(array(1, 2), 1, 2),
-            array(array(1, 5, 3), 1, 5)
-        );
+        return [
+            [[1], 1, 1],
+            [[1, 2], 1, 2],
+            [[1, 5, 3], 1, 5],
+        ];
     }
 
     public function testReverse()
     {
-        $ids = new Horde_Imap_Client_Ids(array(1, 3, 5));
+        $ids = new Horde_Imap_Client_Ids([1, 3, 5]);
         $ids->reverse();
 
         $this->assertEquals(
-            array(5, 3, 1),
+            [5, 3, 1],
             $ids->ids
         );
     }
@@ -327,38 +331,38 @@ class IdsTest extends TestCase
 
     public function sequenceStringGenerationProvider()
     {
-        return array(
-            array(array(1, 2, 3), '1:3'),
-            array(array(3, 2, 1), '3,2,1'),
-            array(array(1, 2, 3, 5), '1:3,5')
-        );
+        return [
+            [[1, 2, 3], '1:3'],
+            [[3, 2, 1], '3,2,1'],
+            [[1, 2, 3, 5], '1:3,5'],
+        ];
     }
 
     public function testClone()
     {
-        $ids = new Horde_Imap_Client_Ids(array(1, 3));
+        $ids = new Horde_Imap_Client_Ids([1, 3]);
 
         $ids2 = clone $ids;
         $ids2->add(5);
 
         $this->assertEquals(
-            array(1, 3),
+            [1, 3],
             iterator_to_array($ids)
         );
         $this->assertEquals(
-            array(1, 3, 5),
+            [1, 3, 5],
             iterator_to_array($ids2)
         );
     }
 
     public function testSerialize()
     {
-        $ids = new Horde_Imap_Client_Ids(array(1, 3, 5));
+        $ids = new Horde_Imap_Client_Ids([1, 3, 5]);
 
         $ids2 = unserialize(serialize($ids));
 
         $this->assertEquals(
-            array(1, 3, 5),
+            [1, 3, 5],
             iterator_to_array($ids2)
         );
     }

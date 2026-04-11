@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,10 +12,12 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Base;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Base_Mailbox;
-use \Horde_Imap_Client;
+use Horde_Imap_Client_Base_Mailbox;
+use Horde_Imap_Client;
 
 /**
  * Tests for the Horde_Imap_Client_Base_Mailbox object.
@@ -26,6 +29,7 @@ use \Horde_Imap_Client;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class MailboxTest extends TestCase
 {
@@ -70,12 +74,12 @@ class MailboxTest extends TestCase
 
     public function basicIntegerStatusPropertiesProvider()
     {
-        return array(
-            array(Horde_Imap_Client::STATUS_HIGHESTMODSEQ),
-            array(Horde_Imap_Client::STATUS_MESSAGES),
-            array(Horde_Imap_Client::STATUS_UIDNEXT),
-            array(Horde_Imap_Client::STATUS_UIDVALIDITY)
-        );
+        return [
+            [Horde_Imap_Client::STATUS_HIGHESTMODSEQ],
+            [Horde_Imap_Client::STATUS_MESSAGES],
+            [Horde_Imap_Client::STATUS_UIDNEXT],
+            [Horde_Imap_Client::STATUS_UIDVALIDITY],
+        ];
     }
 
     /**
@@ -89,10 +93,10 @@ class MailboxTest extends TestCase
 
     public function defaultSyncPropertiesProvider()
     {
-        return array(
-            array(Horde_Imap_Client::STATUS_SYNCFLAGUIDS),
-            array(Horde_Imap_Client::STATUS_SYNCVANISHED)
-        );
+        return [
+            [Horde_Imap_Client::STATUS_SYNCFLAGUIDS],
+            [Horde_Imap_Client::STATUS_SYNCVANISHED],
+        ];
     }
 
     public function testFirstUnseen()
@@ -192,26 +196,26 @@ class MailboxTest extends TestCase
      */
     public function testStatusEntriesAreAdditive($val)
     {
-        $this->ob->setStatus($val, array(1));
-        $this->ob->setStatus($val, array(2));
+        $this->ob->setStatus($val, [1]);
+        $this->ob->setStatus($val, [2]);
 
         $this->assertEquals(
-            array(1, 2),
+            [1, 2],
             $this->ob->getStatus($val)
         );
     }
 
     public function statusEntriesAreAdditiveProvider()
     {
-        return array(
-            array(Horde_Imap_Client::STATUS_SYNCFLAGUIDS),
-            array(Horde_Imap_Client::STATUS_SYNCVANISHED)
-        );
+        return [
+            [Horde_Imap_Client::STATUS_SYNCFLAGUIDS],
+            [Horde_Imap_Client::STATUS_SYNCVANISHED],
+        ];
     }
 
     public function testReset()
     {
-        $this->ob->map->update((array(1 => 2)));
+        $this->ob->map->update(([1 => 2]));
         $this->ob->setStatus(Horde_Imap_Client::STATUS_SYNCMODSEQ, 1);
         $this->ob->setStatus(Horde_Imap_Client::STATUS_RECENT_TOTAL, 1);
 

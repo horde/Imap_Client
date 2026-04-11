@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -61,13 +62,13 @@ class Horde_Imap_Client_Socket_Catenate
         // BODY[]
         if (is_null($url->section)) {
             $query = new Horde_Imap_Client_Fetch_Query();
-            $query->fullText(array(
-                'peek' => true
-            ));
+            $query->fullText([
+                'peek' => true,
+            ]);
 
-            $fetch = $this->_socket->fetch($url->mailbox, $query, array(
-                'ids' => $ids_ob
-            ));
+            $fetch = $this->_socket->fetch($url->mailbox, $query, [
+                'ids' => $ids_ob,
+            ]);
             return $fetch[$url->uid]->getFullMsg(true);
         }
 
@@ -82,29 +83,29 @@ class Horde_Imap_Client_Socket_Catenate
             $query->headers(
                 'section',
                 explode(' ', substr($section, $hdr_pos + 1, strrpos($section, ')') - $hdr_pos)),
-                array(
+                [
                     'id' => ($pos ? substr($section, 0, $pos - 1) : 0),
                     'notsearch' => (stripos($cmd, '.NOT') !== false),
-                    'peek' => true
-                )
+                    'peek' => true,
+                ]
             );
 
-            $fetch = $this->_socket->fetch($url->mailbox, $query, array(
-                'ids' => $ids_ob
-            ));
+            $fetch = $this->_socket->fetch($url->mailbox, $query, [
+                'ids' => $ids_ob,
+            ]);
             return $fetch[$url->uid]->getHeaders('section', Horde_Imap_Client_Data_Fetch::HEADER_STREAM);
         }
 
         // BODY[#]
         if (is_numeric(substr($section, -1))) {
             $query = new Horde_Imap_Client_Fetch_Query();
-            $query->bodyPart($section, array(
-                'peek' => true
-            ));
+            $query->bodyPart($section, [
+                'peek' => true,
+            ]);
 
-            $fetch = $this->_socket->fetch($url->mailbox, $query, array(
-                'ids' => $ids_ob
-            ));
+            $fetch = $this->_socket->fetch($url->mailbox, $query, [
+                'ids' => $ids_ob,
+            ]);
             return $fetch[$url->uid]->getBodyPart($section, true);
         }
 
@@ -115,14 +116,14 @@ class Horde_Imap_Client_Socket_Catenate
                 : 0;
 
             $query = new Horde_Imap_Client_Fetch_Query();
-            $query->headerText(array(
+            $query->headerText([
                 'id' => $id,
-                'peek' => true
-            ));
+                'peek' => true,
+            ]);
 
-            $fetch = $this->_socket->fetch($url->mailbox, $query, array(
-                'ids' => $ids_ob
-            ));
+            $fetch = $this->_socket->fetch($url->mailbox, $query, [
+                'ids' => $ids_ob,
+            ]);
             return $fetch[$url->uid]->getHeaderText($id, Horde_Imap_Client_Data_Fetch::HEADER_STREAM);
         }
 
@@ -133,14 +134,14 @@ class Horde_Imap_Client_Socket_Catenate
                 : 0;
 
             $query = new Horde_Imap_Client_Fetch_Query();
-            $query->bodyText(array(
+            $query->bodyText([
                 'id' => $id,
-                'peek' => true
-            ));
+                'peek' => true,
+            ]);
 
-            $fetch = $this->_socket->fetch($url->mailbox, $query, array(
-                'ids' => $ids_ob
-            ));
+            $fetch = $this->_socket->fetch($url->mailbox, $query, [
+                'ids' => $ids_ob,
+            ]);
             return $fetch[$url->uid]->getBodyText($id, true);
         }
 
@@ -151,13 +152,13 @@ class Horde_Imap_Client_Socket_Catenate
                 : 0;
 
             $query = new Horde_Imap_Client_Fetch_Query();
-            $query->mimeHeader($id, array(
-                'peek' => true
-            ));
+            $query->mimeHeader($id, [
+                'peek' => true,
+            ]);
 
-            $fetch = $this->_socket->fetch($url->mailbox, $query, array(
-                'ids' => $ids_ob
-            ));
+            $fetch = $this->_socket->fetch($url->mailbox, $query, [
+                'ids' => $ids_ob,
+            ]);
             return $fetch[$url->uid]->getMimeHeader($id, Horde_Imap_Client_Data_Fetch::HEADER_STREAM);
         }
 

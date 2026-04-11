@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Originally based on code:
  *
@@ -10,7 +11,7 @@
  *    SVN revision 1757
  *  The RoundCube project is released under the GPL (version 2)
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -39,7 +40,7 @@ class Horde_Imap_Client_Utf7imap
      *
      * @var array
      */
-    private static $_index64 = array(
+    private static $_index64 = [
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
         -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, 63, -1, -1, -1,
@@ -47,21 +48,21 @@ class Horde_Imap_Client_Utf7imap
         -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
         15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
         -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1
-    );
+        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1,
+    ];
 
     /**
      * Lookup table for conversion.
      *
      * @var array
      */
-    private static $_base64 = array(
+    private static $_base64 = [
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
         'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b',
         'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
         'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3',
-        '4', '5', '6', '7', '8', '9', '+', ','
-    );
+        '4', '5', '6', '7', '8', '9', '+', ',',
+    ];
 
     /**
      * Is mbstring extension available?
@@ -130,13 +131,13 @@ class Horde_Imap_Client_Utf7imap
                                 );
                             }
                             $p .= chr($ch);
-                        } else if ($ch < 0x800) {
-                            $p .= chr(0xc0 | ($ch >> 6)) .
-                                  chr(0x80 | ($ch & 0x3f));
+                        } elseif ($ch < 0x800) {
+                            $p .= chr(0xc0 | ($ch >> 6))
+                                  . chr(0x80 | ($ch & 0x3f));
                         } else {
-                            $p .= chr(0xe0 | ($ch >> 12)) .
-                                  chr(0x80 | (($ch >> 6) & 0x3f)) .
-                                  chr(0x80 | ($ch & 0x3f));
+                            $p .= chr(0xe0 | ($ch >> 12))
+                                  . chr(0x80 | (($ch >> 6) & 0x3f))
+                                  . chr(0x80 | ($ch & 0x3f));
                         }
 
                         $ch = ($b << (16 + $k)) & 0xffff;
@@ -147,11 +148,11 @@ class Horde_Imap_Client_Utf7imap
                 /* Non-zero or too many extra bits -OR-
                  * Base64 not properly terminated -OR-
                  * Adjacent Base64 sections. */
-                if (($ch || ($k < 6)) ||
-                    (!$u7len || $u7 !== '-') ||
-                    (($u7len > 2) &&
-                     ($str[$i + 1] === '&') &&
-                     ($str[$i + 2] !== '-'))) {
+                if (($ch || ($k < 6))
+                    || (!$u7len || $u7 !== '-')
+                    || (($u7len > 2)
+                     && ($str[$i + 1] === '&')
+                     && ($str[$i + 2] !== '-'))) {
                     throw new Horde_Imap_Client_Exception(
                         Horde_Imap_Client_Translation::r("Error converting UTF7-IMAP string."),
                         Horde_Imap_Client_Exception::UTF7IMAP_CONVERSION
@@ -193,8 +194,8 @@ class Horde_Imap_Client_Utf7imap
         /* No need to do conversion if all chars are in US-ASCII range or if
          * no ampersand is present. But will assume that an already encoded
          * ampersand means string is in UTF7-IMAP already. */
-        if (!$force &&
-            !preg_match('/[\x80-\xff]|&$|&(?![,+A-Za-z0-9]*-)/', $str)) {
+        if (!$force
+            && !preg_match('/[\x80-\xff]|&$|&(?![,+A-Za-z0-9]*-)/', $str)) {
             return $str;
         }
 

@@ -1,7 +1,8 @@
 <?php
+
 /**
  * Copyright (c) 2002-2003 Richard Heyes
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * This code is based on the original code contained in the PEAR Auth_SASL
  * package (v0.5.1):
@@ -88,7 +89,7 @@ class Horde_Imap_Client_Auth_DigestMD5
         $A2 = 'AUTHENTICATE:' . $digest_uri;
         $response_value = hash('md5', sprintf('%s:%s:00000001:%s:auth:%s', hash('md5', $A1), $challenge['nonce'], $cnonce, hash('md5', $A2)));
 
-        $this->_response = array(
+        $this->_response = [
             'cnonce' => '"' . $cnonce . '"',
             'digest-uri' => '"' . $digest_uri . '"',
             'maxbuf' => $challenge['maxbuf'],
@@ -96,8 +97,8 @@ class Horde_Imap_Client_Auth_DigestMD5
             'nonce' => '"' . $challenge['nonce'] . '"',
             'qop' => 'auth',
             'response' => $response_value,
-            'username' => '"' . $id . '"'
-        );
+            'username' => '"' . $id . '"',
+        ];
 
         if (strlen($challenge['realm'])) {
             $this->_response['realm'] = '"' . $challenge['realm'] . '"';
@@ -111,7 +112,7 @@ class Horde_Imap_Client_Auth_DigestMD5
      */
     public function __toString()
     {
-        $out = array();
+        $out = [];
         foreach ($this->_response as $key => $val) {
             $out[] = $key . '=' . $val;
         }
@@ -125,9 +126,8 @@ class Horde_Imap_Client_Auth_DigestMD5
      */
     public function __get($name)
     {
-        return isset($this->_response[$name])
-            ? $this->_response[$name]
-            : null;
+        return $this->_response[$name]
+            ?? null;
     }
 
     /**
@@ -141,10 +141,10 @@ class Horde_Imap_Client_Auth_DigestMD5
     */
     protected function _parseChallenge($challenge)
     {
-        $tokens = array(
+        $tokens = [
             'maxbuf' => 65536,
-            'realm' => ''
-        );
+            'realm' => '',
+        ];
 
         preg_match_all('/([a-z-]+)=("[^"]+(?<!\\\)"|[^,]+)/i', $challenge, $matches, PREG_SET_ORDER);
 
@@ -170,10 +170,10 @@ class Horde_Imap_Client_Auth_DigestMD5
      */
     protected function _getCnonce()
     {
-        if ((@is_readable('/dev/urandom') &&
-             ($fd = @fopen('/dev/urandom', 'r'))) ||
-            (@is_readable('/dev/random') &&
-             ($fd = @fopen('/dev/random', 'r')))) {
+        if ((@is_readable('/dev/urandom')
+             && ($fd = @fopen('/dev/urandom', 'r')))
+            || (@is_readable('/dev/random')
+             && ($fd = @fopen('/dev/random', 'r')))) {
             $str = fread($fd, 32);
             fclose($fd);
         } else {

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -21,22 +22,21 @@
  * @package   Imap_Client
  * @since     2.24.0
  */
-class Horde_Imap_Client_Data_Capability
-implements Serializable, SplSubject
+class Horde_Imap_Client_Data_Capability implements Serializable, SplSubject
 {
     /**
      * Capability data.
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * Observers.
      *
      * @var array
      */
-    protected $_observers = array();
+    protected $_observers = [];
 
     /**
      * Add a capability (and optional parameters).
@@ -55,12 +55,12 @@ implements Serializable, SplSubject
             $params = true;
         } else {
             if (!is_array($params)) {
-                $params = array($params);
+                $params = [$params];
             }
             $params = array_map('Horde_String::upper', $params);
 
-            if (isset($this->_data[$capability]) &&
-                is_array($this->_data[$capability])) {
+            if (isset($this->_data[$capability])
+                && is_array($this->_data[$capability])) {
                 $params = array_merge($this->_data[$capability], $params);
             }
         }
@@ -84,13 +84,13 @@ implements Serializable, SplSubject
             unset($this->_data[$capability]);
         } elseif (isset($this->_data[$capability])) {
             if (!is_array($params)) {
-                $params = array($params);
+                $params = [$params];
             }
             $params = array_map('Horde_String::upper', $params);
 
             $this->_data[$capability] = is_array($this->_data[$capability])
                 ? array_diff($this->_data[$capability], $params)
-                : array();
+                : [];
 
             if (empty($this->_data[$capability])) {
                 unset($this->_data[$capability]);
@@ -116,9 +116,9 @@ implements Serializable, SplSubject
             return false;
         }
 
-        return is_null($parameter) ?:
-               (is_array($this->_data[$capability]) &&
-                in_array(Horde_String::upper($parameter), $this->_data[$capability]));
+        return is_null($parameter)
+               ?: (is_array($this->_data[$capability])
+                && in_array(Horde_String::upper($parameter), $this->_data[$capability]));
     }
 
     /**
@@ -133,7 +133,7 @@ implements Serializable, SplSubject
     {
         return ($this->query($capability) && is_array($out = $this->_data[Horde_String::upper($capability)]))
             ? $out
-            : array();
+            : [];
     }
 
     /**
@@ -149,7 +149,7 @@ implements Serializable, SplSubject
     public function isEnabled($capability = null)
     {
         return is_null($capability)
-            ? array()
+            ? []
             : false;
     }
 

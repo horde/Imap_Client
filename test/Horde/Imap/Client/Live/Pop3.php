@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,6 +12,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Live;
 
 /**
@@ -33,13 +35,14 @@ class Pop3 extends Base
         $c = array_shift(self::$config);
 
         try {
-            $c['client_config']['cache'] = array(
+            $c['client_config']['cache'] = [
                 'cacheob' => new Horde_Cache(
                     new Horde_Cache_Storage_Mock(),
-                    array('compress' => true)
-                )
-            );
-        } catch (Exception $e) {}
+                    ['compress' => true]
+                ),
+            ];
+        } catch (Exception $e) {
+        }
 
         self::$live = new Horde_Imap_Client_Socket_Pop3(
             $c['client_config']
@@ -96,7 +99,7 @@ class Pop3 extends Base
         $l = self::$live->listMailboxes(
             '*',
             Horde_Imap_Client::MBOX_ALL,
-            array('flat' => true)
+            ['flat' => true]
         );
 
         $this->assertEquals(1, count($l));

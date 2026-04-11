@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,10 +12,12 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Namespace_List;
-use \Horde_Imap_Client_Data_Namespace;
+use Horde_Imap_Client_Namespace_List;
+use Horde_Imap_Client_Data_Namespace;
 
 /**
  * Tests for the Namespace list object.
@@ -26,6 +29,7 @@ use \Horde_Imap_Client_Data_Namespace;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class ListTest extends TestCase
 {
@@ -117,25 +121,25 @@ class ListTest extends TestCase
      */
     public function arrayProvider()
     {
-        return array(
-            array(''),
-            array('foo'),
-            array('bar', false)
-        );
+        return [
+            [''],
+            ['foo'],
+            ['bar', false],
+        ];
     }
 
     /**
      */
     public function getNamespaceProvider()
     {
-        return array(
-            array('baz', false, ''),
-            array('baz', true, null),
-            array('foo.bar', false, 'foo'),
-            array('foo.bar', true, 'foo'),
-            array('baz.bar', false, ''),
-            array('baz.bar', true, null)
-        );
+        return [
+            ['baz', false, ''],
+            ['baz', true, null],
+            ['foo.bar', false, 'foo'],
+            ['foo.bar', true, 'foo'],
+            ['baz.bar', false, ''],
+            ['baz.bar', true, null],
+        ];
     }
 
 }

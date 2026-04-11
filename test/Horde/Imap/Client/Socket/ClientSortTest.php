@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,16 +12,18 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Socket;
+
 use PHPUnit\Framework\TestCase;
 use Horde\Imap\Client\Stub\Socket;
 use Horde\Imap\Client\Stub\ClientSort;
-use \Horde_Imap_Client;
-use \Horde_Imap_Client_Fetch_Results;
-use \Horde_Imap_Client_Ids;
-use \Horde_Imap_Client_Data_Fetch;
-use \Horde_Imap_Client_Tokenize;
-use \Horde_Imap_Client_Data_Envelope;
+use Horde_Imap_Client;
+use Horde_Imap_Client_Fetch_Results;
+use Horde_Imap_Client_Ids;
+use Horde_Imap_Client_Data_Fetch;
+use Horde_Imap_Client_Tokenize;
+use Horde_Imap_Client_Data_Envelope;
 
 /**
  * Tests for the IMAP Socket driver.
@@ -32,6 +35,7 @@ use \Horde_Imap_Client_Data_Envelope;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class ClientSortTest extends TestCase
 {
@@ -43,10 +47,10 @@ class ClientSortTest extends TestCase
         require_once __DIR__ . '/../Stub/ClientSort.php';
         require_once __DIR__ . '/../Stub/Socket.php';
 
-        $this->socket_ob = new Socket(array(
+        $this->socket_ob = new Socket([
             'password' => 'foo',
-            'username' => 'bar'
-        ));
+            'username' => 'bar',
+        ]);
         $this->sort_ob = new ClientSort(
             $this->socket_ob
         );
@@ -55,9 +59,12 @@ class ClientSortTest extends TestCase
     /**
      * @dataProvider clientSortProvider
      */
-    public function testClientSortProvider($sort, $expected, $locale,
-                                           $fetch_data)
-    {
+    public function testClientSortProvider(
+        $sort,
+        $expected,
+        $locale,
+        $fetch_data
+    ) {
         $ids = new Horde_Imap_Client_Ids();
         $pipeline = $this->socket_ob->pipeline();
 
@@ -74,9 +81,9 @@ class ClientSortTest extends TestCase
 
         $sorted = $this->sort_ob->clientSort(
             $ids,
-            array(
-                'sort' => $sort
-            )
+            [
+                'sort' => $sort,
+            ]
         );
 
         $this->assertEquals(
@@ -102,25 +109,25 @@ class ClientSortTest extends TestCase
             file_get_contents(__DIR__ . '/../fixtures/clientsort2.txt')
         )));
 
-        return array(
-            array(
-                array(Horde_Imap_Client::SORT_SEQUENCE),
+        return [
+            [
+                [Horde_Imap_Client::SORT_SEQUENCE],
                 range(1, 9),
                 false,
-                $fetch_data
-            ),
-            array(
-                array(
+                $fetch_data,
+            ],
+            [
+                [
                     Horde_Imap_Client::SORT_REVERSE,
-                    Horde_Imap_Client::SORT_SEQUENCE
-                ),
+                    Horde_Imap_Client::SORT_SEQUENCE,
+                ],
                 range(9, 1),
                 false,
-                $fetch_data
-            ),
-            array(
-                array(Horde_Imap_Client::SORT_ARRIVAL),
-                array(
+                $fetch_data,
+            ],
+            [
+                [Horde_Imap_Client::SORT_ARRIVAL],
+                [
                     5, // 02:30
                     6, // 03:30
                     7, // 04:30
@@ -129,19 +136,19 @@ class ClientSortTest extends TestCase
                     1, // 07:30
                     2, // 08:30
                     3, // 09:30
-                    4  // 10:30
-                ),
+                    4,  // 10:30
+                ],
                 false,
-                $fetch_data
-            ),
-            array(
-                array(
+                $fetch_data,
+            ],
+            [
+                [
                     Horde_Imap_Client::SORT_REVERSE,
-                    Horde_Imap_Client::SORT_ARRIVAL
-                ),
-                array(
+                    Horde_Imap_Client::SORT_ARRIVAL,
+                ],
+                [
                     4, // See SORT_ARRIVAL example above for non-reverse
-                       // results
+                    // results
                     3,
                     2,
                     1,
@@ -149,14 +156,14 @@ class ClientSortTest extends TestCase
                     8,
                     7,
                     6,
-                    5
-                ),
+                    5,
+                ],
                 false,
-                $fetch_data
-            ),
-            array(
-                array(Horde_Imap_Client::SORT_DATE),
-                array(
+                $fetch_data,
+            ],
+            [
+                [Horde_Imap_Client::SORT_DATE],
+                [
                     6, // Mon, 6 Feb 1993 02:53:47 -0800 (PST)
                     9, // Wed, 08 Sep 1999 14:23:47 +0200
                     8, // Tue, 20 Jun 2000 21:21:30 -0400
@@ -165,14 +172,14 @@ class ClientSortTest extends TestCase
                     3, // 24 May 2002 13:29:00 +0200
                     5, // Sun, 26 May 2002 15:15:02 -0300
                     4, // Mon, 3 Jun 2002 13:32:31 -0400
-                    7  // Sun, 9 Jun 2002 19:43:35 -0400
-                ),
+                    7,  // Sun, 9 Jun 2002 19:43:35 -0400
+                ],
                 false,
-                $fetch_data
-            ),
-            array(
-                array(Horde_Imap_Client::SORT_FROM),
-                array(
+                $fetch_data,
+            ],
+            [
+                [Horde_Imap_Client::SORT_FROM],
+                [
                     8, // chuck
                     7, // hagendaz
                     6, // mrc
@@ -182,13 +189,13 @@ class ClientSortTest extends TestCase
                     5, // publicidade
                     2, // quelatio
                     3, // Timo.Tervo
-                ),
+                ],
                 true,
-                $fetch_data
-            ),
-            array(
-                array(Horde_Imap_Client::SORT_TO),
-                array(
+                $fetch_data,
+            ],
+            [
+                [Horde_Imap_Client::SORT_TO],
+                [
                     8, // chagenbu
                     7, // chuck
                     6, // MRC
@@ -198,13 +205,13 @@ class ClientSortTest extends TestCase
                     4, // slusarz2
                     9, // steeman
                     3, // timo.tervo
-                ),
+                ],
                 true,
-                $fetch_data
-            ),
-            array(
-                array(Horde_Imap_Client::SORT_DISPLAYFROM),
-                array(
+                $fetch_data,
+            ],
+            [
+                [Horde_Imap_Client::SORT_DISPLAYFROM],
+                [
                     8, // Chuck
                     2, // Jesus
                     6, // Mark
@@ -213,14 +220,14 @@ class ClientSortTest extends TestCase
                     9, // Philip
                     5, // publicidade
                     3, // Tervo
-                    7  // Walt
-                ),
+                    7,  // Walt
+                ],
                 true,
-                $fetch_data
-            ),
-            array(
-                array(Horde_Imap_Client::SORT_DISPLAYTO),
-                array(
+                $fetch_data,
+            ],
+            [
+                [Horde_Imap_Client::SORT_DISPLAYTO],
+                [
                     4, // '
                     8, // chagenbu
                     7, // Charles Hagenbuch
@@ -230,14 +237,14 @@ class ClientSortTest extends TestCase
                     5, // slusarz
                     9, // steeman
                     3, // Timo
-                ),
+                ],
                 true,
-                $fetch_data
-            ),
+                $fetch_data,
+            ],
             /* Bug #10503 */
-            array(
-                array(Horde_Imap_Client::SORT_SUBJECT),
-                array(
+            [
+                [Horde_Imap_Client::SORT_SUBJECT],
+                [
                     9, // excel
                     5, // Hello
                     2, // Interesante
@@ -246,14 +253,14 @@ class ClientSortTest extends TestCase
                     4, // Norton
                     8, // pdf
                     1, // pear,
-                    7 // Photo
-                ),
+                    7, // Photo
+                ],
                 true,
-                $fetch_data
-            ),
-            array(
-                array(Horde_Imap_Client::SORT_SIZE),
-                array(
+                $fetch_data,
+            ],
+            [
+                [Horde_Imap_Client::SORT_SIZE],
+                [
                     4, // 1762
                     5, // 3259
                     2, // 4967
@@ -262,66 +269,66 @@ class ClientSortTest extends TestCase
                     1, // 38751
                     3, // 134123
                     7, // 475569
-                    6  // 1845271
-                ),
+                    6,  // 1845271
+                ],
                 false,
-                $fetch_data
-            ),
+                $fetch_data,
+            ],
             /* Test "ties" in data. */
-            array(
-                array(
+            [
+                [
                     Horde_Imap_Client::SORT_SIZE,
-                    Horde_Imap_Client::SORT_DATE
-                ),
-                array(
+                    Horde_Imap_Client::SORT_DATE,
+                ],
+                [
                     1,
-                    2
-                ),
+                    2,
+                ],
                 false,
-                $fetch_data2
-            )
-        );
+                $fetch_data2,
+            ],
+        ];
     }
 
     public function testClientSideThreadOrderedSubject()
     {
-        $data = array(
-            array(
+        $data = [
+            [
                 'Sat, 26 Jul 2008 21:10:00 -0500 (CDT)',
-                'Test e-mail 1'
-            ),
-            array(
+                'Test e-mail 1',
+            ],
+            [
                 'Sat, 26 Jul 2008 21:10:00 -0500 (CDT)',
-                'Test e-mail 2'
-            ),
-            array(
+                'Test e-mail 2',
+            ],
+            [
                 'Sat, 26 Jul 2008 22:29:20 -0500 (CDT)',
-                'Re: Test e-mail 2'
-            ),
-            array(
+                'Re: Test e-mail 2',
+            ],
+            [
                 'Sat, 26 Jul 2008 21:10:00 -0500 (CDT)',
-                'Test e-mail 1'
-            ),
-        );
+                'Test e-mail 1',
+            ],
+        ];
         $results = new Horde_Imap_Client_Fetch_Results();
 
         foreach ($data as $key => $val) {
             $data = new Horde_Imap_Client_Data_Fetch();
             $data->setEnvelope(
-                new Horde_Imap_Client_Data_Envelope(array(
+                new Horde_Imap_Client_Data_Envelope([
                     'date' => $val[0],
-                    'subject' => $val[1]
-                ))
+                    'subject' => $val[1],
+                ])
             );
             $results[++$key] = $data;
         }
 
         $thread = $this->sort_ob->threadOrderedSubject($results, true);
 
-        foreach (array(1, 4) as $val) {
+        foreach ([1, 4] as $val) {
             $t = $thread->getThread($val);
             $this->assertEquals(
-                array(1, 4),
+                [1, 4],
                 array_keys($t)
             );
             $this->assertEquals(
@@ -350,10 +357,10 @@ class ClientSortTest extends TestCase
             );
         }
 
-        foreach (array(2, 3) as $val) {
+        foreach ([2, 3] as $val) {
             $t = $thread->getThread($val);
             $this->assertEquals(
-                array(2, 3),
+                [2, 3],
                 array_keys($t)
             );
             $this->assertEquals(

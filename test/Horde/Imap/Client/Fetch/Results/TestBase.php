@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2015-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2015-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,10 +12,12 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Fetch\Results;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Fetch_Results;
-use \ReflectionClass;
+use Horde_Imap_Client_Fetch_Results;
+use ReflectionClass;
 
 /**
  * Tests for the Horde_Imap_Client_Fetch_Results object.
@@ -52,10 +55,10 @@ abstract class TestBase extends TestCase
     public function testKeyType($ob_key_type, $key_type)
     {
         $reflection = new ReflectionClass($this->ob);
-        $ob = $reflection->newInstanceArgs(array_filter(array(
+        $ob = $reflection->newInstanceArgs(array_filter([
             $this->ob_class,
-            $ob_key_type
-        )));
+            $ob_key_type,
+        ]));
 
         $this->assertEquals(
             $key_type,
@@ -65,20 +68,20 @@ abstract class TestBase extends TestCase
 
     public function keyTypeProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 Horde_Imap_Client_Fetch_Results::SEQUENCE,
-                Horde_Imap_Client_Fetch_Results::SEQUENCE
-            ),
-            array(
+                Horde_Imap_Client_Fetch_Results::SEQUENCE,
+            ],
+            [
                 Horde_Imap_Client_Fetch_Results::UID,
-                Horde_Imap_Client_Fetch_Results::UID
-            ),
-            array(
+                Horde_Imap_Client_Fetch_Results::UID,
+            ],
+            [
                 null,
-                Horde_Imap_Client_Fetch_Results::UID
-            )
-        );
+                Horde_Imap_Client_Fetch_Results::UID,
+            ],
+        ];
     }
 
     public function testGet()
@@ -86,7 +89,7 @@ abstract class TestBase extends TestCase
         $ids = array_merge(
             $this->ob_ids,
             /* Create non-existent object. */
-            array('1000', 'Z')
+            ['1000', 'Z']
         );
 
         foreach ($ids as $id) {
@@ -123,7 +126,7 @@ abstract class TestBase extends TestCase
         $this->ob->clear();
 
         $this->assertEquals(
-            array(),
+            [],
             $this->ob->ids()
         );
     }

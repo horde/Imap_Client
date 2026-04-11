@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * getBaseSubject() code adapted from imap-base-subject.c (Dovecot 1.2)
  *   Original code released under the LGPL-2.1
@@ -46,7 +47,7 @@ class Horde_Imap_Client_Data_BaseSubject
      *
      * @return string  The cleaned up subject string.
      */
-    public function __construct($str, array $opts = array())
+    public function __construct($str, array $opts = [])
     {
         // Rule 1a: MIME decode.
         $str = Horde_Mime::decode($str);
@@ -200,10 +201,10 @@ class Horde_Imap_Client_Data_BaseSubject
      */
     protected function _removeBlobWhenNonempty(&$str)
     {
-        if ($str &&
-            ($str[0] === '[') &&
-            (($i = $this->_removeBlob($str, 0)) !== false) &&
-            ($i !== strlen($str))) {
+        if ($str
+            && ($str[0] === '[')
+            && (($i = $this->_removeBlob($str, 0)) !== false)
+            && ($i !== strlen($str))) {
             $str = substr($str, $i);
             return true;
         }

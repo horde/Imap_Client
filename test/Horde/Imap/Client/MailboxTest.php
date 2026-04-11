@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,11 +12,13 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Mailbox;
-use \Horde_Imap_Client_Data_Format_Mailbox;
-use \Horde_Imap_Client_Data_Format_Mailbox_Utf8;
+use Horde_Imap_Client_Mailbox;
+use Horde_Imap_Client_Data_Format_Mailbox;
+use Horde_Imap_Client_Data_Format_Mailbox_Utf8;
 
 /**
  * Tests for the mailbox object.
@@ -27,6 +30,7 @@ use \Horde_Imap_Client_Data_Format_Mailbox_Utf8;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class MailboxTest extends TestCase
 {
@@ -40,7 +44,7 @@ class MailboxTest extends TestCase
             'Envoyé',
             $ob2->utf8
         );
-     }
+    }
 
     public function testMailboxSerialize()
     {
@@ -107,10 +111,10 @@ class MailboxTest extends TestCase
 
     public function listEscapeProvider()
     {
-        return array(
-            array('***Foo***', '%Foo%'),
-            array('IN.***Foo**.Bar.Test**', 'IN.%Foo%.Bar.Test%')
-        );
+        return [
+            ['***Foo***', '%Foo%'],
+            ['IN.***Foo**.Bar.Test**', 'IN.%Foo%.Bar.Test%'],
+        ];
     }
 
     public function testInboxCaseInsensitive()

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Live;
+
 use Horde_Test_Case as TestCase;
-use \PHPUnit\Framework\TestSuite;
+use PHPUnit\Framework\TestSuite;
 
 /**
  * Package testing on a real (live) IMAP server.
@@ -25,6 +28,7 @@ use \PHPUnit\Framework\TestSuite;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class ImapTest extends TestCase
 {
@@ -33,16 +37,16 @@ class ImapTest extends TestCase
      */
     public static function suite()
     {
-        $suite = new TestSuite;
+        $suite = new TestSuite();
 
         $c = self::getConfig('IMAPCLIENT_TEST_CONFIG', __DIR__ . '/../');
         if (!is_null($c) && !empty($c['imapclient'])) {
             $key = 0;
 
             foreach ($c['imapclient'] as $val) {
-                if (!empty($val['enabled']) &&
-                    !empty($val['client_config']['username']) &&
-                    !empty($val['client_config']['password'])) {
+                if (!empty($val['enabled'])
+                    && !empty($val['client_config']['username'])
+                    && !empty($val['client_config']['password'])) {
                     /* Create a temp class for each instance to ensure that
                      * no @depends mixing between servers occurs. */
                     $temp_class = 'Horde_Imap_Client_Live_Imap_' . ++$key;

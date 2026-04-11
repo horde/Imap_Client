@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,7 +12,9 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client;
+
 use PHPUnit\Framework\TestCase;
 use Horde\Imap\Client\Stub\DigestMD5;
 use Horde\Imap\Client\Stub\Scram;
@@ -27,6 +30,7 @@ use Horde\Imap\Client\Stub\Scram;
  * @package    Imap_Client
  * @subpackage UnitTests
 
+ * @coversNothing
  */
 class AuthTest extends TestCase
 {
@@ -58,20 +62,20 @@ class AuthTest extends TestCase
 
     public function digestMd5Provider()
     {
-        return array(
-            array(
+        return [
+            [
                 // IMAP example from RFC 2831 [4]
-                array(
+                [
                     'user' => 'chris',
                     'pass' => 'secret',
                     'challenge' => base64_decode('cmVhbG09ImVsd29vZC5pbm5vc29mdC5jb20iLG5vbmNlPSJPQTZNRzl0RVFHbTJoaCIscW9wPSJhdXRoIixhbGdvcml0aG09bWQ1LXNlc3MsY2hhcnNldD11dGYtOA=='),
                     'hostname' => 'elwood.innosoft.com',
                     'service' => 'imap',
                     'cnonce' => 'OA6MHXh6VqTrRk',
-                    'expected' => 'd388dad90d4bbd760a152321f2143af7'
-                )
-            )
-        );
+                    'expected' => 'd388dad90d4bbd760a152321f2143af7',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -105,10 +109,10 @@ class AuthTest extends TestCase
 
     public function scramProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 // Example from RFC 5802 [5]
-                array(
+                [
                     'user' => 'user',
                     'pass' => 'pencil',
                     'hash' => 'SHA1',
@@ -116,10 +120,10 @@ class AuthTest extends TestCase
                     'c1' => 'n,,n=user,r=fyko+d2lbbFgONRv9qkxdawL',
                     's1' => 'r=fyko+d2lbbFgONRv9qkxdawL3rfcNHYJY1ZVvWVs7j,s=QSXCR+Q6sek8bf92,i=4096',
                     'c2' => 'c=biws,r=fyko+d2lbbFgONRv9qkxdawL3rfcNHYJY1ZVvWVs7j,p=v0X8v3Bz2T0CJGbJQyF0X+HI4Ts=',
-                    's2' => 'v=rmF9pqV8S7suAoZWja4dJRkFsKQ='
-                )
-            )
-        );
+                    's2' => 'v=rmF9pqV8S7suAoZWja4dJRkFsKQ=',
+                ],
+            ],
+        ];
     }
 
 }

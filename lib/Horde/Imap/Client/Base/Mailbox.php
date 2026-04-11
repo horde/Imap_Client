@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -54,7 +55,7 @@ class Horde_Imap_Client_Base_Mailbox
      *
      * @var array
      */
-    protected $_status = array();
+    protected $_status = [];
 
     /**
      * Constructor.
@@ -78,45 +79,44 @@ class Horde_Imap_Client_Base_Mailbox
         }
 
         switch ($entry) {
-        case Horde_Imap_Client::STATUS_FLAGS:
-        case Horde_Imap_Client::STATUS_SYNCFLAGUIDS:
-        case Horde_Imap_Client::STATUS_SYNCVANISHED:
-            return array();
+            case Horde_Imap_Client::STATUS_FLAGS:
+            case Horde_Imap_Client::STATUS_SYNCFLAGUIDS:
+            case Horde_Imap_Client::STATUS_SYNCVANISHED:
+                return [];
 
-        case Horde_Imap_Client::STATUS_FIRSTUNSEEN:
-            /* If we know there are no messages in the current mailbox, we
-             * know there are no unseen messages. */
-            return empty($this->_status[Horde_Imap_Client::STATUS_MESSAGES])
-                ? false
-                : null;
+            case Horde_Imap_Client::STATUS_FIRSTUNSEEN:
+                /* If we know there are no messages in the current mailbox, we
+                 * know there are no unseen messages. */
+                return empty($this->_status[Horde_Imap_Client::STATUS_MESSAGES])
+                    ? false
+                    : null;
 
-        case Horde_Imap_Client::STATUS_RECENT_TOTAL:
-        case Horde_Imap_Client::STATUS_SYNCMODSEQ:
-            return 0;
+            case Horde_Imap_Client::STATUS_RECENT_TOTAL:
+            case Horde_Imap_Client::STATUS_SYNCMODSEQ:
+                return 0;
 
-        case Horde_Imap_Client::STATUS_PERMFLAGS:
-            /* If PERMFLAGS is not returned by server, must assume that all
-             * flags can be changed permanently (RFC 3501 [6.3.1]). */
-            $flags = isset($this->_status[Horde_Imap_Client::STATUS_FLAGS])
-                ? $this->_status[Horde_Imap_Client::STATUS_FLAGS]
-                : array();
-            $flags[] = "\\*";
-            return $flags;
+            case Horde_Imap_Client::STATUS_PERMFLAGS:
+                /* If PERMFLAGS is not returned by server, must assume that all
+                 * flags can be changed permanently (RFC 3501 [6.3.1]). */
+                $flags = $this->_status[Horde_Imap_Client::STATUS_FLAGS]
+                    ?? [];
+                $flags[] = "\\*";
+                return $flags;
 
-        case Horde_Imap_Client::STATUS_UIDNOTSTICKY:
-            /* In the absence of explicit uidnotsticky identification, assume
-             * that UIDs are sticky. */
-            return false;
+            case Horde_Imap_Client::STATUS_UIDNOTSTICKY:
+                /* In the absence of explicit uidnotsticky identification, assume
+                 * that UIDs are sticky. */
+                return false;
 
-        case Horde_Imap_Client::STATUS_UNSEEN:
-            /* If we know there are no messages in the current mailbox, we
-             * know there are no unseen messages . */
-            return empty($this->_status[Horde_Imap_Client::STATUS_MESSAGES])
-                ? 0
-                : null;
+            case Horde_Imap_Client::STATUS_UNSEEN:
+                /* If we know there are no messages in the current mailbox, we
+                 * know there are no unseen messages . */
+                return empty($this->_status[Horde_Imap_Client::STATUS_MESSAGES])
+                    ? 0
+                    : null;
 
-        default:
-            return null;
+            default:
+                return null;
         }
     }
 
@@ -129,37 +129,37 @@ class Horde_Imap_Client_Base_Mailbox
     public function setStatus($entry, $value)
     {
         switch ($entry) {
-        case Horde_Imap_Client::STATUS_FIRSTUNSEEN:
-        case Horde_Imap_Client::STATUS_HIGHESTMODSEQ:
-        case Horde_Imap_Client::STATUS_MESSAGES:
-        case Horde_Imap_Client::STATUS_UNSEEN:
-        case Horde_Imap_Client::STATUS_UIDNEXT:
-        case Horde_Imap_Client::STATUS_UIDVALIDITY:
-            $value = intval($value);
-            break;
+            case Horde_Imap_Client::STATUS_FIRSTUNSEEN:
+            case Horde_Imap_Client::STATUS_HIGHESTMODSEQ:
+            case Horde_Imap_Client::STATUS_MESSAGES:
+            case Horde_Imap_Client::STATUS_UNSEEN:
+            case Horde_Imap_Client::STATUS_UIDNEXT:
+            case Horde_Imap_Client::STATUS_UIDVALIDITY:
+                $value = intval($value);
+                break;
 
-        case Horde_Imap_Client::STATUS_RECENT:
-            /* Keep track of RECENT_TOTAL information. */
-            $this->_status[Horde_Imap_Client::STATUS_RECENT_TOTAL] = isset($this->_status[Horde_Imap_Client::STATUS_RECENT_TOTAL])
-                ? ($this->_status[Horde_Imap_Client::STATUS_RECENT_TOTAL] + $value)
-                : intval($value);
-            break;
+            case Horde_Imap_Client::STATUS_RECENT:
+                /* Keep track of RECENT_TOTAL information. */
+                $this->_status[Horde_Imap_Client::STATUS_RECENT_TOTAL] = isset($this->_status[Horde_Imap_Client::STATUS_RECENT_TOTAL])
+                    ? ($this->_status[Horde_Imap_Client::STATUS_RECENT_TOTAL] + $value)
+                    : intval($value);
+                break;
 
-        case Horde_Imap_Client::STATUS_SYNCMODSEQ:
-            /* This is only set once per access. */
-            if (isset($this->_status[$entry])) {
+            case Horde_Imap_Client::STATUS_SYNCMODSEQ:
+                /* This is only set once per access. */
+                if (isset($this->_status[$entry])) {
+                    return;
+                }
+                $value = intval($value);
+                break;
+
+            case Horde_Imap_Client::STATUS_SYNCFLAGUIDS:
+            case Horde_Imap_Client::STATUS_SYNCVANISHED:
+                if (!isset($this->_status[$entry])) {
+                    $this->_status[$entry] = [];
+                }
+                $this->_status[$entry] = array_merge($this->_status[$entry], $value);
                 return;
-            }
-            $value = intval($value);
-            break;
-
-        case Horde_Imap_Client::STATUS_SYNCFLAGUIDS:
-        case Horde_Imap_Client::STATUS_SYNCVANISHED:
-            if (!isset($this->_status[$entry])) {
-                $this->_status[$entry] = array();
-            }
-            $this->_status[$entry] = array_merge($this->_status[$entry], $value);
-            return;
         }
 
         $this->_status[$entry] = $value;
@@ -170,11 +170,11 @@ class Horde_Imap_Client_Base_Mailbox
      */
     public function reset()
     {
-        $keep = array(
+        $keep = [
             Horde_Imap_Client::STATUS_SYNCFLAGUIDS,
             Horde_Imap_Client::STATUS_SYNCMODSEQ,
-            Horde_Imap_Client::STATUS_SYNCVANISHED
-        );
+            Horde_Imap_Client::STATUS_SYNCVANISHED,
+        ];
 
         foreach (array_diff(array_keys($this->_status), $keep) as $val) {
             unset($this->_status[$val]);

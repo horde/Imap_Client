@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -22,6 +23,4 @@
  * @package   Imap_Client
  * @since     2.25.0
  */
-interface Horde_Imap_Client_Data_Format_String_Support_Nonascii
-{
-}
+interface Horde_Imap_Client_Data_Format_String_Support_Nonascii {}

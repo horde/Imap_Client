@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Data_BaseSubject;
+use Horde_Imap_Client_Data_BaseSubject;
 
 /**
  * Tests for Subject parsing.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Data_BaseSubject;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class SubjectParseTest extends TestCase
 {
@@ -42,29 +46,29 @@ class SubjectParseTest extends TestCase
     public function subjectParseProvider()
     {
         // Format: Test string, Expected parse result
-        return array(
-            array('Test', 'Test'),
-            array('Re: Test', 'Test'),
-            array('re: Test', 'Test'),
-            array('Fwd: Test', 'Test'),
-            array('fwd: Test', 'Test'),
-            array(' Fw: Test', 'Test'),
-            array('fw:  Test', 'Test'),
-            array('fwd [foo] :  Test', 'Test'),
-            array('Fwd: Re: Test', 'Test'),
-            array('Fwd: Re: Test (fwd)', 'Test'),
-            array('  re    :   Test  (fwd)', 'Test'),
-            array('  re :   [foo]Test(Fwd)', 'Test'),
-            array("re \t: \tTest", 'Test'),
-            array('Re:', ''),
-            array(' RE :  ', ''),
-            array('Fwd:', ''),
-            array('  FWD  :   ', ''),
+        return [
+            ['Test', 'Test'],
+            ['Re: Test', 'Test'],
+            ['re: Test', 'Test'],
+            ['Fwd: Test', 'Test'],
+            ['fwd: Test', 'Test'],
+            [' Fw: Test', 'Test'],
+            ['fw:  Test', 'Test'],
+            ['fwd [foo] :  Test', 'Test'],
+            ['Fwd: Re: Test', 'Test'],
+            ['Fwd: Re: Test (fwd)', 'Test'],
+            ['  re    :   Test  (fwd)', 'Test'],
+            ['  re :   [foo]Test(Fwd)', 'Test'],
+            ["re \t: \tTest", 'Test'],
+            ['Re:', ''],
+            [' RE :  ', ''],
+            ['Fwd:', ''],
+            ['  FWD  :   ', ''],
             // This used to throw an undefined index error.
-            array('fwd', 'fwd'),
+            ['fwd', 'fwd'],
             // Tabs
-            array("Re: re:re: fwd:[fwd: \t  Test]  (fwd)  (fwd)(fwd) ", 'Test')
-        );
+            ["Re: re:re: fwd:[fwd: \t  Test]  (fwd)  (fwd)(fwd) ", 'Test'],
+        ];
     }
 
 }

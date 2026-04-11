@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -55,7 +56,7 @@ class Horde_Imap_Client_Tokenize implements Iterator
      *
      * @var array
      */
-    protected $_literals = array();
+    protected $_literals = [];
 
     /**
      * Return Horde_Stream object for literal tokens?
@@ -69,7 +70,7 @@ class Horde_Imap_Client_Tokenize implements Iterator
      *
      * @var array
      */
-    protected $_nextModify = array();
+    protected $_nextModify = [];
 
     /**
      * Data stream.
@@ -105,8 +106,8 @@ class Horde_Imap_Client_Tokenize implements Iterator
     public function __get($name)
     {
         switch ($name) {
-        case 'eos':
-            return $this->_stream->eof();
+            case 'eos':
+                return $this->_stream->eof();
         }
     }
 
@@ -164,22 +165,22 @@ class Horde_Imap_Client_Tokenize implements Iterator
      */
     public function flushIterator($return = true, $sublevel = true)
     {
-        $out = array();
+        $out = [];
 
         if ($return) {
-            $this->_nextModify = array(
+            $this->_nextModify = [
                 'level' => $sublevel ? $this->_level : 0,
-                'out' => array()
-            );
+                'out' => [],
+            ];
             $this->next();
             $out = $this->_nextModify['out'];
-            $this->_nextModify = array();
+            $this->_nextModify = [];
         } elseif ($sublevel && $this->_level) {
-            $this->_nextModify = array(
-                'level' => $this->_level
-            );
+            $this->_nextModify = [
+                'level' => $this->_level,
+            ];
             $this->next();
-            $this->_nextModify = array();
+            $this->_nextModify = [];
         } else {
             $this->_stream->end();
             $this->_stream->getChar();
@@ -206,10 +207,10 @@ class Horde_Imap_Client_Tokenize implements Iterator
             $literal_len = substr($literal_data, 2, -1);
 
             if (is_numeric($literal_len)) {
-                return array(
+                return [
                     'binary' => ($literal_data[0] === '~'),
-                    'length' => intval($literal_len)
-                );
+                    'length' => intval($literal_len),
+                ];
             }
         }
 
@@ -241,9 +242,8 @@ class Horde_Imap_Client_Tokenize implements Iterator
     #[ReturnTypeWillChange]
     public function next()
     {
-        $level = isset($this->_nextModify['level'])
-            ? $this->_nextModify['level']
-            : null;
+        $level = $this->_nextModify['level']
+            ?? null;
         /* Directly access stream here to drastically reduce the number of
          * getChar() calls we would have to make. */
         $stream = $this->_stream->stream;
@@ -254,105 +254,105 @@ class Horde_Imap_Client_Tokenize implements Iterator
 
             while (($c = fgetc($stream)) !== false) {
                 switch ($c) {
-                case '\\':
-                    $text .= $in_quote
-                        ? fgetc($stream)
-                        : $c;
-                    break;
-
-                case '"':
-                    if ($in_quote) {
-                        $check_len = false;
-                        break 2;
-                    }
-                    $in_quote = true;
-                    /* Set $text to non-false (could be empty string). */
-                    $text = '';
-                    break;
-
-                default:
-                    if ($in_quote) {
-                        $text .= $c;
+                    case '\\':
+                        $text .= $in_quote
+                            ? fgetc($stream)
+                            : $c;
                         break;
-                    }
 
-                    switch ($c) {
-                    case '(':
-                        ++$this->_level;
-                        $check_len = false;
-                        $text = true;
-                        break 3;
-
-                    case ')':
-                        if ($text === false) {
-                            --$this->_level;
-                            $check_len = $text = false;
-                        } else {
-                            $this->_stream->seek(-1);
+                    case '"':
+                        if ($in_quote) {
+                            $check_len = false;
+                            break 2;
                         }
-                        break 3;
-
-                    case '~':
-                        // Ignore binary string identifier. PHP strings are
-                        // binary-safe. But keep it if it is not used as string
-                        // identifier.
-                        $binary = true;
-                        $text .= $c;
-                        continue 3;
-
-                    case '{':
-                        if ($binary) {
-                            $text = substr($text, 0, -1);
-                        }
-                        $literal_len = intval($this->_stream->getToChar('}'));
-                        $pos = $this->_stream->pos();
-                        if (isset($this->_literals[$pos])) {
-                            $text = $this->_literals[$pos];
-                            if (!$this->_literalStream) {
-                                $text = strval($text);
-                            }
-                        } elseif ($this->_literalStream) {
-                            $text = new Horde_Stream_Temp();
-                            while (($literal_len > 0) && !feof($stream)) {
-                                $part = $this->_stream->substring(
-                                    0,
-                                    min($literal_len, 8192)
-                                );
-                                $text->add($part);
-                                $literal_len -= strlen($part);
-                            }
-                        } else {
-                            $text = $this->_stream->substring(0, $literal_len);
-                        }
-                        $check_len = false;
-                        break 3;
-
-                    case ' ':
-                        if ($text !== false) {
-                            break 3;
-                        }
+                        $in_quote = true;
+                        /* Set $text to non-false (could be empty string). */
+                        $text = '';
                         break;
 
                     default:
-                        $text .= $c;
+                        if ($in_quote) {
+                            $text .= $c;
+                            break;
+                        }
+
+                        switch ($c) {
+                            case '(':
+                                ++$this->_level;
+                                $check_len = false;
+                                $text = true;
+                                break 3;
+
+                            case ')':
+                                if ($text === false) {
+                                    --$this->_level;
+                                    $check_len = $text = false;
+                                } else {
+                                    $this->_stream->seek(-1);
+                                }
+                                break 3;
+
+                            case '~':
+                                // Ignore binary string identifier. PHP strings are
+                                // binary-safe. But keep it if it is not used as string
+                                // identifier.
+                                $binary = true;
+                                $text .= $c;
+                                continue 3;
+
+                            case '{':
+                                if ($binary) {
+                                    $text = substr($text, 0, -1);
+                                }
+                                $literal_len = intval($this->_stream->getToChar('}'));
+                                $pos = $this->_stream->pos();
+                                if (isset($this->_literals[$pos])) {
+                                    $text = $this->_literals[$pos];
+                                    if (!$this->_literalStream) {
+                                        $text = strval($text);
+                                    }
+                                } elseif ($this->_literalStream) {
+                                    $text = new Horde_Stream_Temp();
+                                    while (($literal_len > 0) && !feof($stream)) {
+                                        $part = $this->_stream->substring(
+                                            0,
+                                            min($literal_len, 8192)
+                                        );
+                                        $text->add($part);
+                                        $literal_len -= strlen($part);
+                                    }
+                                } else {
+                                    $text = $this->_stream->substring(0, $literal_len);
+                                }
+                                $check_len = false;
+                                break 3;
+
+                            case ' ':
+                                if ($text !== false) {
+                                    break 3;
+                                }
+                                break;
+
+                            default:
+                                $text .= $c;
+                                break;
+                        }
                         break;
-                    }
-                    break;
                 }
                 $binary = false;
             }
 
             if ($check_len) {
                 switch (strlen($text)) {
-                case 0:
-                    $text = false;
-                    break;
+                    case 0:
+                        $text = false;
+                        break;
 
-                case 3:
-                    if (strcasecmp($text, 'NIL') === 0) {
-                        $text = null;
-                    }
-                    break;
+                    case 3:
+                        if (strcasecmp($text, 'NIL') === 0) {
+                            $text = null;
+                        }
+                        break;
                 }
             }
 

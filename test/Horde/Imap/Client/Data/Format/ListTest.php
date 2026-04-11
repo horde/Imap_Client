@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,11 +12,13 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data\Format;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Data_Format_List;
-use \Horde_Imap_Client_Data_Format_String;
-use \Horde_Imap_Client_Data_Format_Atom;
+use Horde_Imap_Client_Data_Format_List;
+use Horde_Imap_Client_Data_Format_String;
+use Horde_Imap_Client_Data_Format_Atom;
 
 /**
  * Tests for the List data format object.
@@ -27,6 +30,7 @@ use \Horde_Imap_Client_Data_Format_Atom;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class ListTest extends TestCase
 {
@@ -60,20 +64,20 @@ class ListTest extends TestCase
 
         foreach ($ob as $key => $val) {
             switch ($key) {
-            case 0:
-            case 1:
-                $this->assertEquals(
-                    'Horde_Imap_Client_Data_Format_Atom',
-                    get_class($val)
-                );
-                break;
+                case 0:
+                case 1:
+                    $this->assertEquals(
+                        'Horde_Imap_Client_Data_Format_Atom',
+                        get_class($val)
+                    );
+                    break;
 
-            case 2:
-                $this->assertEquals(
-                    'Horde_Imap_Client_Data_Format_String',
-                    get_class($val)
-                );
-                break;
+                case 2:
+                    $this->assertEquals(
+                        'Horde_Imap_Client_Data_Format_String',
+                        get_class($val)
+                    );
+                    break;
             }
         }
 
@@ -94,10 +98,10 @@ class ListTest extends TestCase
             get_class(reset($ob_array))
         );
 
-        $ob->add(array(
+        $ob->add([
             'Foo',
-            new Horde_Imap_Client_Data_Format_List(array('Bar'))
-        ));
+            new Horde_Imap_Client_Data_Format_List(['Bar']),
+        ]);
 
         $this->assertEquals(
             3,
@@ -109,19 +113,19 @@ class ListTest extends TestCase
             $ob->escape()
         );
 
-        $ob = new Horde_Imap_Client_Data_Format_List(array(
+        $ob = new Horde_Imap_Client_Data_Format_List([
             'Foo',
-            new Horde_Imap_Client_Data_Format_List(array(
-                'Foo1'
-            )),
+            new Horde_Imap_Client_Data_Format_List([
+                'Foo1',
+            ]),
             'Bar',
-            new Horde_Imap_Client_Data_Format_List(array(
+            new Horde_Imap_Client_Data_Format_List([
                 new Horde_Imap_Client_Data_Format_String('Bar1'),
-                new Horde_Imap_Client_Data_Format_List(array(
-                    'Baz'
-                ))
-            ))
-        ));
+                new Horde_Imap_Client_Data_Format_List([
+                    'Baz',
+                ]),
+            ]),
+        ]);
 
         $this->assertEquals(
             4,

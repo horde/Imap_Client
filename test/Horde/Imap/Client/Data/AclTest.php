@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Data_Acl;
+use Horde_Imap_Client_Data_Acl;
 
 /**
  * Tests for the Imap Client ACL data object.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Data_Acl;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class AclTest extends TestCase
 {
@@ -58,12 +62,12 @@ class AclTest extends TestCase
 
     public function bug10079Provider()
     {
-        return array(
+        return [
             // RFC 2086 rights string
-            array('lrswipcda', 'lrswipakxte'),
+            ['lrswipcda', 'lrswipakxte'],
             // RFC 4314 rights string
-            array('lrswipakte', 'lrswipakte')
-        );
+            ['lrswipakte', 'lrswipakte'],
+        ];
     }
 
 }

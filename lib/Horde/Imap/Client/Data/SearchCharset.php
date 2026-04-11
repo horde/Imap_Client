@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -24,8 +25,7 @@
  * @property-read array $charsets  The list of valid charsets that have been
  *                                 discovered on the server.
  */
-class Horde_Imap_Client_Data_SearchCharset
-implements Serializable, SplSubject
+class Horde_Imap_Client_Data_SearchCharset implements Serializable, SplSubject
 {
     /**
      * Base client object.
@@ -39,24 +39,24 @@ implements Serializable, SplSubject
      *
      * @var array
      */
-    protected $_charsets = array(
-        'US-ASCII' => true
-    );
+    protected $_charsets = [
+        'US-ASCII' => true,
+    ];
 
     /**
      * Observers.
      *
      * @var array
      */
-    protected $_observers = array();
+    protected $_observers = [];
 
     /**
      */
     public function __get($name)
     {
         switch ($name) {
-        case 'charsets':
-            return array_keys(array_filter($this->_charsets));
+            case 'charsets':
+                return array_keys(array_filter($this->_charsets));
         }
     }
 
@@ -97,10 +97,10 @@ implements Serializable, SplSubject
         $query->ids($this->_baseob->getIdsOb(1, true));
         $query->text('a');
         try {
-            $this->_baseob->search('INBOX', $query, array(
+            $this->_baseob->search('INBOX', $query, [
                 'nocache' => true,
-                'sequence' => true
-            ));
+                'sequence' => true,
+            ]);
             $this->_charsets[$charset] = true;
         } catch (Horde_Imap_Client_Exception $e) {
             $this->_charsets[$charset] = ($e->getCode() !== Horde_Imap_Client_Exception::BADCHARSET);
@@ -120,10 +120,10 @@ implements Serializable, SplSubject
     public function setValid($charset, $valid = true)
     {
         $charset = Horde_String::upper($charset);
-        $valid = (bool)$valid;
+        $valid = (bool) $valid;
 
-        if (!isset($this->_charsets[$charset]) ||
-            ($this->_charsets[$charset] !== $valid)) {
+        if (!isset($this->_charsets[$charset])
+            || ($this->_charsets[$charset] !== $valid)) {
             $this->_charsets[$charset] = $valid;
             $this->notify();
         }

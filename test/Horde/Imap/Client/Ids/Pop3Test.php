@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Ids;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Ids_Pop3;
+use Horde_Imap_Client_Ids_Pop3;
 
 /**
  * POP3 specific tests for the Ids object.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Ids_Pop3;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class Pop3Test extends TestCase
 {
@@ -41,10 +45,10 @@ class Pop3Test extends TestCase
 
     public function pop3SequenceStringGenerateProvider()
     {
-        return array(
-            array(array('ABCDEFGHIJ', 'ABCDE'), 'ABCDEFGHIJ ABCDE'),
-            array('ABCDEFGHIJ', 'ABCDEFGHIJ')
-        );
+        return [
+            [['ABCDEFGHIJ', 'ABCDE'], 'ABCDEFGHIJ ABCDE'],
+            ['ABCDEFGHIJ', 'ABCDEFGHIJ'],
+        ];
     }
 
     /**
@@ -61,23 +65,23 @@ class Pop3Test extends TestCase
 
     public function pop3SequenceStringParseProvider()
     {
-        return array(
-            array('ABCDEFGHIJ ABCDE', array('ABCDEFGHIJ', 'ABCDE')),
-            array('ABCDEFGHIJ ABC ABCDE', array('ABCDEFGHIJ', 'ABC', 'ABCDE')),
-            array('ABCDEFGHIJ', array('ABCDEFGHIJ')),
+        return [
+            ['ABCDEFGHIJ ABCDE', ['ABCDEFGHIJ', 'ABCDE']],
+            ['ABCDEFGHIJ ABC ABCDE', ['ABCDEFGHIJ', 'ABC', 'ABCDE']],
+            ['ABCDEFGHIJ', ['ABCDEFGHIJ']],
             // This is not a range in POP3 IDs
-            array('10:12', array('10:12'))
-        );
+            ['10:12', ['10:12']],
+        ];
     }
 
     public function testPop3Sort()
     {
-        $ids = new Horde_Imap_Client_Ids_Pop3(array(
+        $ids = new Horde_Imap_Client_Ids_Pop3([
             'ABC',
             'A',
             'AC',
-            'AB'
-        ));
+            'AB',
+        ]);
 
         $this->assertEquals(
             'ABC A AC AB',

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -22,11 +23,10 @@
  * @package   Imap_Client
  * @since     2.17.0
  */
-class Horde_Imap_Client_Cache_Backend_Hashtable
-extends Horde_Imap_Client_Cache_Backend
+class Horde_Imap_Client_Cache_Backend_Hashtable extends Horde_Imap_Client_Cache_Backend
 {
     /** Separator for CID between mailbox and UID. */
-    const CID_SEPARATOR = '|';
+    public const CID_SEPARATOR = '|';
 
     /**
      * The working data for the current pageload. All changes take place to
@@ -34,7 +34,7 @@ extends Horde_Imap_Client_Cache_Backend
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * HashTable object.
@@ -48,7 +48,7 @@ extends Horde_Imap_Client_Cache_Backend
      *
      * @var array
      */
-    protected $_mbox = array();
+    protected $_mbox = [];
 
     /**
      * Horde_Pack singleton object.
@@ -68,7 +68,7 @@ extends Horde_Imap_Client_Cache_Backend
      *
      * @var array
      */
-    protected $_update = array();
+    protected $_update = [];
 
     /**
      * Constructor.
@@ -83,15 +83,15 @@ extends Horde_Imap_Client_Cache_Backend
      *                 DEFAULT: 604800 seconds (1 week) [@since 2.19.0]
      * </pre>
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         if (!isset($params['hashtable'])) {
             throw new InvalidArgumentException('Missing hashtable parameter.');
         }
 
-        parent::__construct(array_merge(array(
-            'lifetime' => 604800
-        ), $params));
+        parent::__construct(array_merge([
+            'lifetime' => 604800,
+        ], $params));
     }
 
     /**
@@ -100,14 +100,14 @@ extends Horde_Imap_Client_Cache_Backend
     {
         $this->_hash = $this->_params['hashtable'];
         $this->_pack = new Horde_Pack();
-        register_shutdown_function(array($this, 'save'));
+        register_shutdown_function([$this, 'save']);
     }
 
     /**
      */
     public function get($mailbox, $uids, $fields, $uidvalid)
     {
-        $ret = array();
+        $ret = [];
 
         if (empty($uids)) {
             return $ret;
@@ -123,7 +123,7 @@ extends Horde_Imap_Client_Cache_Backend
             $fields = array_flip($fields);
         }
         $ptr = &$this->_data[$mailbox];
-        $to_delete = array();
+        $to_delete = [];
 
         foreach ($uids as $val) {
             if (isset($ptr[$val])) {
@@ -164,7 +164,7 @@ extends Horde_Imap_Client_Cache_Backend
         $this->_loadUids($mailbox, array_keys($data), $uidvalid);
 
         $d = &$this->_data[$mailbox];
-        $to_add = array();
+        $to_add = [];
 
         foreach ($data as $k => $v) {
             if (isset($d[$k]) && is_string($d[$k])) {
@@ -204,7 +204,7 @@ extends Horde_Imap_Client_Cache_Backend
      */
     public function setMetaData($mailbox, $data)
     {
-        $this->_loadMailbox($mailbox, isset($data['uidvalid']) ? $data['uidvalid'] : null);
+        $this->_loadMailbox($mailbox, $data['uidvalid'] ?? null);
 
         $this->_mbox[$mailbox]['d'] = array_merge(
             $this->_mbox[$mailbox]['d'],
@@ -244,7 +244,7 @@ extends Horde_Imap_Client_Cache_Backend
         $this->_loadMailbox($mailbox);
 
         $this->_hash->delete(array_merge(
-            array($this->_getCid($mailbox)),
+            [$this->_getCid($mailbox)],
             array_values($this->_getMsgCids($mailbox, $this->_mbox[$mailbox]['u']))
         ));
 
@@ -264,7 +264,7 @@ extends Horde_Imap_Client_Cache_Backend
             $this->deleteMailbox($val);
         }
 
-        $this->_data = $this->_mbox = $this->_update = array();
+        $this->_data = $this->_mbox = $this->_update = [];
     }
 
     /**
@@ -275,41 +275,42 @@ extends Horde_Imap_Client_Cache_Backend
         foreach ($this->_update as $mbox => $val) {
             try {
                 if (!empty($val['u'])) {
-                     $ptr = &$this->_data[$mbox];
-                     foreach ($this->_getMsgCids($mbox, array_keys($val['u'])) as $k2 => $v2) {
-                         try {
-                             $this->_hash->set(
-                                 $v2,
-                                 $this->_pack->pack($ptr[$k2]),
-                                 array('expire' => $this->_params['lifetime'])
-                             );
-                         } catch (Horde_Pack_Exception $e) {
-                             $this->deleteMsgs($mbox, array($v2));
-                             $val['d'][] = $v2;
-                         }
-                     }
-                 }
+                    $ptr = &$this->_data[$mbox];
+                    foreach ($this->_getMsgCids($mbox, array_keys($val['u'])) as $k2 => $v2) {
+                        try {
+                            $this->_hash->set(
+                                $v2,
+                                $this->_pack->pack($ptr[$k2]),
+                                ['expire' => $this->_params['lifetime']]
+                            );
+                        } catch (Horde_Pack_Exception $e) {
+                            $this->deleteMsgs($mbox, [$v2]);
+                            $val['d'][] = $v2;
+                        }
+                    }
+                }
 
-                 if (!empty($val['d'])) {
-                     $this->_hash->delete(array_values(
-                         $this->_getMsgCids($mbox, $val['d'])
-                     ));
-                 }
+                if (!empty($val['d'])) {
+                    $this->_hash->delete(array_values(
+                        $this->_getMsgCids($mbox, $val['d'])
+                    ));
+                }
 
-                 if (!empty($val['m'])) {
-                     try {
-                         $this->_hash->set(
-                             $this->_getCid($mbox),
-                             $this->_pack->pack($this->_mbox[$mbox]),
-                             array('expire' => $this->_params['lifetime'])
-                         );
-                     } catch (Horde_Pack_Exception $e) {}
-                 }
+                if (!empty($val['m'])) {
+                    try {
+                        $this->_hash->set(
+                            $this->_getCid($mbox),
+                            $this->_pack->pack($this->_mbox[$mbox]),
+                            ['expire' => $this->_params['lifetime']]
+                        );
+                    } catch (Horde_Pack_Exception $e) {
+                    }
+                }
             } catch (Horde_Exception $e) {
             }
         }
 
-        $this->_update = array();
+        $this->_update = [];
     }
 
     /**
@@ -320,28 +321,29 @@ extends Horde_Imap_Client_Cache_Backend
      */
     protected function _loadMailbox($mailbox, $uidvalid = null)
     {
-        if (!isset($this->_mbox[$mailbox]) &&
-            ($ob = $this->_hash->get($this->_getCid($mailbox)))) {
+        if (!isset($this->_mbox[$mailbox])
+            && ($ob = $this->_hash->get($this->_getCid($mailbox)))) {
             try {
                 $this->_mbox[$mailbox] = $this->_pack->unpack($ob);
-            } catch (Horde_Pack_Exception $e) {}
+            } catch (Horde_Pack_Exception $e) {
+            }
         }
 
         if (isset($this->_mbox[$mailbox])) {
-            if (is_null($uidvalid) ||
-                ($uidvalid == $this->_mbox[$mailbox]['d']['uidvalid'])) {
+            if (is_null($uidvalid)
+                || ($uidvalid == $this->_mbox[$mailbox]['d']['uidvalid'])) {
                 return;
             }
             $this->deleteMailbox($mailbox);
         }
 
-        $this->_mbox[$mailbox] = array(
+        $this->_mbox[$mailbox] = [
             // Metadata storage
             // By default includes UIDVALIDITY of mailbox.
-            'd' => array('uidvalid' => $uidvalid),
+            'd' => ['uidvalid' => $uidvalid],
             // List of UIDs
-            'u' => new Horde_Imap_Client_Ids()
-        );
+            'u' => new Horde_Imap_Client_Ids(),
+        ];
     }
 
     /**
@@ -354,7 +356,7 @@ extends Horde_Imap_Client_Cache_Backend
     protected function _loadUids($mailbox, $uids, $uidvalid = null)
     {
         if (!isset($this->_data[$mailbox])) {
-            $this->_data[$mailbox] = array();
+            $this->_data[$mailbox] = [];
         }
 
         $this->_loadMailbox($mailbox, $uidvalid);
@@ -389,13 +391,13 @@ extends Horde_Imap_Client_Cache_Backend
      */
     protected function _getCid($mailbox)
     {
-        return implode(self::CID_SEPARATOR, array(
+        return implode(self::CID_SEPARATOR, [
             'horde_imap_client',
             $this->_params['username'],
             $mailbox,
             $this->_params['hostspec'],
-            $this->_params['port']
-        ));
+            $this->_params['port'],
+        ]);
     }
 
     /**
@@ -409,7 +411,7 @@ extends Horde_Imap_Client_Cache_Backend
     protected function _getMsgCids($mailbox, $ids)
     {
         $cid = $this->_getCid($mailbox);
-        $out = array();
+        $out = [];
 
         foreach ($ids as $val) {
             $out[$val] = $cid . self::CID_SEPARATOR . $val;

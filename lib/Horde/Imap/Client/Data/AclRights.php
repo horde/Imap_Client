@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -27,14 +28,14 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
      *
      * @var array
      */
-    protected $_optional = array();
+    protected $_optional = [];
 
     /**
      * ACL required rights.
      *
      * @var array
      */
-    protected $_required = array();
+    protected $_required = [];
 
     /**
      * Constructor.
@@ -42,9 +43,10 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
      * @param array $required  The required rights (see RFC 4314 [2.1]).
      * @param array $optional  The optional rights (see RFC 4314 [2.1]).
      */
-    public function __construct(array $required = array(),
-                                array $optional = array())
-    {
+    public function __construct(
+        array $required = [],
+        array $optional = []
+    ) {
         $this->_required = $required;
 
         foreach ($optional as $val) {
@@ -97,7 +99,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
     #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
-        return (bool)$this[$offset];
+        return (bool) $this[$offset];
     }
 
     /**
@@ -131,7 +133,7 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
     public function offsetUnset($offset)
     {
         unset($this->_optional[$offset]);
-        $this->_required = array_values(array_diff($this->_required, array($offset)));
+        $this->_required = array_values(array_diff($this->_required, [$offset]));
 
         if (isset($this->_virtual[$offset])) {
             foreach ($this->_virtual[$offset] as $val) {
@@ -190,8 +192,8 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
     #[ReturnTypeWillChange]
     public function valid()
     {
-        return ((key($this->_required) !== null) ||
-                (key($this->_optional) !== null));
+        return ((key($this->_required) !== null)
+                || (key($this->_optional) !== null));
 
     }
 
@@ -220,10 +222,10 @@ class Horde_Imap_Client_Data_AclRights extends Horde_Imap_Client_Data_AclCommon 
      */
     public function __serialize()
     {
-        return array(
+        return [
             'required' => $this->_required,
             'optional' => $this->_optional,
-        );
+        ];
     }
 
     public function __unserialize(array $data)

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Data_Capability;
+use Horde_Imap_Client_Data_Capability;
 
 /**
  * Tests for the Capability object.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Data_Capability;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class CapabilityTest extends TestCase
 {
@@ -48,7 +52,7 @@ class CapabilityTest extends TestCase
     public function testQueryParameters()
     {
         $c = new Horde_Imap_Client_Data_Capability();
-        $c->add('FOO', array('A', 'B'));
+        $c->add('FOO', ['A', 'B']);
 
         $this->assertTrue($c->query('FOO'));
         $this->assertTrue($c->query('foo'));
@@ -84,7 +88,7 @@ class CapabilityTest extends TestCase
         $this->assertTrue($c->query('FOO', 'A'));
         $this->assertTrue($c->query('FOO', 'B'));
 
-        $c->add('FOO', array('C', 'D'));
+        $c->add('FOO', ['C', 'D']);
 
         $this->assertTrue($c->query('FOO', 'A'));
         $this->assertTrue($c->query('FOO', 'B'));
@@ -103,8 +107,8 @@ class CapabilityTest extends TestCase
 
         $this->assertFalse($c->query('FOO'));
 
-        $c->add('BAR', array('A', 'B', 'C'));
-        $c->remove('BAR', array('A', 'C'));
+        $c->add('BAR', ['A', 'B', 'C']);
+        $c->remove('BAR', ['A', 'C']);
 
         $this->assertTrue($c->query('BAR'));
         $this->assertFalse($c->query('BAR', 'A'));
@@ -128,7 +132,7 @@ class CapabilityTest extends TestCase
 
         $this->assertNotEmpty($c->getParams('FOO'));
         $this->assertEquals(
-            array('A', 'B'),
+            ['A', 'B'],
             $c->getParams('FOO')
         );
         $this->assertEmpty($c->getParams('BAR'));

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,6 +12,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Live;
 
 /**
@@ -26,9 +28,9 @@ namespace Horde\Imap\Client\Live;
  */
 class Imap extends Base
 {
-    const DEFAULT_MBOX = '_____TestMailboxTest';
-    const DEFAULT_MBOX_UTF8 = '_____TestMailboxTest1è';
-    const DEFAULT_SPAM_MBOX = '____TestMailboxSpam';
+    public const DEFAULT_MBOX = '_____TestMailboxTest';
+    public const DEFAULT_MBOX_UTF8 = '_____TestMailboxTest1è';
+    public const DEFAULT_SPAM_MBOX = '____TestMailboxSpam';
 
     public static $config;
 
@@ -42,23 +44,21 @@ class Imap extends Base
         $c = array_shift(self::$config);
 
         self::$created = false;
-        self::$test_mbox = isset($c['test_mbox'])
-            ? $c['test_mbox']
-            : self::DEFAULT_MBOX;
-        self::$test_mbox_utf8 = isset($c['test_mbox_utf8'])
-            ? $c['test_mbox_utf8']
-            : self::DEFAULT_MBOX_UTF8;
-        self::$test_spam_mailbox = isset($c['test_spam_mailbox'])
-            ? $c['test_spam_mailbox']
-            : self::DEFAULT_SPAM_MBOX;
+        self::$test_mbox = $c['test_mbox']
+            ?? self::DEFAULT_MBOX;
+        self::$test_mbox_utf8 = $c['test_mbox_utf8']
+            ?? self::DEFAULT_MBOX_UTF8;
+        self::$test_spam_mailbox = $c['test_spam_mailbox']
+            ?? self::DEFAULT_SPAM_MBOX;
         try {
-            $c['client_config']['cache'] = array(
+            $c['client_config']['cache'] = [
                 'cacheob' => new Horde_Cache(
                     new Horde_Cache_Storage_Mock(),
-                    array('compress' => true)
-                )
-            );
-        } catch (Exception $e) {}
+                    ['compress' => true]
+                ),
+            ];
+        } catch (Exception $e) {
+        }
 
         self::$live = new Horde_Imap_Client_Socket(
             $c['client_config']
@@ -68,10 +68,11 @@ class Imap extends Base
     public static function tearDownAfterClass()
     {
         if (self::$created) {
-            foreach (array(self::$test_mbox, self::$test_mbox_utf8) as $val) {
+            foreach ([self::$test_mbox, self::$test_mbox_utf8] as $val) {
                 try {
                     self::$live->deleteMailbox($val);
-                } catch (Horde_Imap_Client_Exception $e) {}
+                } catch (Horde_Imap_Client_Exception $e) {
+                }
             }
         }
 
@@ -86,9 +87,9 @@ class Imap extends Base
             $c = self::$live->capability;
         } catch (Horde_Imap_Client_Exception $e) {
             switch ($e->getCode()) {
-            case $e::SERVER_CONNECT:
-                $this->markTestSkipped('Could not connect to server');
-                break;
+                case $e::SERVER_CONNECT:
+                    $this->markTestSkipped('Could not connect to server');
+                    break;
             }
 
             throw $e;
@@ -164,7 +165,7 @@ class Imap extends Base
      */
     public function testNamespaces()
     {
-        $ns = self::$live->getNamespaces(array(), array('ob_return' => true));
+        $ns = self::$live->getNamespaces([], ['ob_return' => true]);
 
         $this->assertInstanceOf(
             'Horde_Imap_Client_Namespace_List',
@@ -189,11 +190,12 @@ class Imap extends Base
         // Delete if it exists
         try {
             self::$live->deleteMailbox(self::$test_spam_mailbox);
-        } catch (Horde_Imap_Client_Exception $e) {}
+        } catch (Horde_Imap_Client_Exception $e) {
+        }
         // @todo check rfc support
         self::$live->createMailbox(
             self::$test_spam_mailbox,
-            array('special_use' => '\Junk')
+            ['special_use' => '\Junk']
         );
     }
 
@@ -205,7 +207,8 @@ class Imap extends Base
         // Delete test mailbox, if it exists.
         try {
             self::$live->deleteMailbox(self::$test_mbox);
-        } catch (Horde_Imap_Client_Exception $e) {}
+        } catch (Horde_Imap_Client_Exception $e) {
+        }
 
         self::$live->createMailbox(self::$test_mbox);
     }
@@ -247,7 +250,8 @@ class Imap extends Base
         // Delete test mailbox, if it exists.
         try {
             self::$live->deleteMailbox(self::$test_mbox_utf8);
-        } catch (Horde_Imap_Client_Exception $e) {}
+        } catch (Horde_Imap_Client_Exception $e) {
+        }
 
         self::$live->renameMailbox(
             self::$test_mbox,
@@ -265,7 +269,8 @@ class Imap extends Base
         // Delete non-existent mailbox.
         try {
             self::$live->deleteMailbox(self::$test_mbox_utf8);
-        } catch (Horde_Imap_Client_Exception $e) {}
+        } catch (Horde_Imap_Client_Exception $e) {
+        }
     }
 
     /**
@@ -277,7 +282,7 @@ class Imap extends Base
         $l = self::$live->listMailboxes(
             '%',
             Horde_Imap_Client::MBOX_ALL,
-            array('flat' => true)
+            ['flat' => true]
         );
         $this->assertInternalType('array', $l);
 
@@ -285,7 +290,7 @@ class Imap extends Base
         $l = self::$live->listMailboxes(
             '*',
             Horde_Imap_Client::MBOX_ALL,
-            array('flat' => true)
+            ['flat' => true]
         );
         $this->assertInternalType('array', $l);
 
@@ -293,7 +298,7 @@ class Imap extends Base
         $l = self::$live->listMailboxes(
             '*',
             Horde_Imap_Client::MBOX_SUBSCRIBED,
-            array('flat' => true)
+            ['flat' => true]
         );
         $this->assertInternalType('array', $l);
 
@@ -302,7 +307,7 @@ class Imap extends Base
         $l = self::$live->listMailboxes(
             '%',
             Horde_Imap_Client::MBOX_UNSUBSCRIBED,
-            array('attributes' => true)
+            ['attributes' => true]
         );
         $this->assertInternalType('array', $l);
     }
@@ -366,23 +371,23 @@ class Imap extends Base
         // 3 via a stream (with internaldate), and 4 via a string:
         $handle = fopen(__DIR__ . '/../fixtures/remote2.txt', 'r');
         $handle2 = fopen(__DIR__ . '/../fixtures/remote3.txt', 'r');
-        $uid = self::$live->append(self::$test_mbox, array(
-            array(
+        $uid = self::$live->append(self::$test_mbox, [
+            [
                 'data' => file_get_contents(__DIR__ . '/../fixtures/remote1.txt'),
-                'flags' => array(Horde_Imap_Client::FLAG_FLAGGED)
-            ),
-            array(
+                'flags' => [Horde_Imap_Client::FLAG_FLAGGED],
+            ],
+            [
                 'data' => $handle,
-                'flags' => array(Horde_Imap_Client::FLAG_SEEN)
-            ),
-            array(
+                'flags' => [Horde_Imap_Client::FLAG_SEEN],
+            ],
+            [
                 'data' => $handle2,
-                'internaldate' => new DateTime('17 August 2003')
-            ),
-            array(
-                'data' => file_get_contents(__DIR__ . '/../fixtures/remote4.txt')
-            )
-        ));
+                'internaldate' => new DateTime('17 August 2003'),
+            ],
+            [
+                'data' => file_get_contents(__DIR__ . '/../fixtures/remote4.txt'),
+            ],
+        ]);
 
         if (!($uid instanceof Horde_Imap_Client_Ids)) {
             $this->fail('Append successful but UIDs not properly returned.');
@@ -400,10 +405,10 @@ class Imap extends Base
         $copy_uid = self::$live->copy(
             self::$test_mbox,
             self::$test_mbox_utf8,
-            array(
+            [
                 'force_map' => true,
-                'ids' => new Horde_Imap_Client_Ids(1, true)
-            )
+                'ids' => new Horde_Imap_Client_Ids(1, true),
+            ]
         );
 
         $this->assertEquals(
@@ -420,11 +425,11 @@ class Imap extends Base
         /* Use a different message than any currently living in test_mbox
          * since some servers (Gmail) will de-duplicate and ignore the later
          * move to that mailbox. */
-        $uid = self::$live->append(self::$test_mbox_utf8, array(
-            array(
-                'data' => file_get_contents(__DIR__ . '/../fixtures/remote5.txt')
-            )
-        ));
+        $uid = self::$live->append(self::$test_mbox_utf8, [
+            [
+                'data' => file_get_contents(__DIR__ . '/../fixtures/remote5.txt'),
+            ],
+        ]);
 
         if (!($uid instanceof Horde_Imap_Client_Ids)) {
             $this->fail('Append successful but UIDs not properly returned.');
@@ -449,15 +454,15 @@ class Imap extends Base
         );
 
         // Flagging test e-mail 2 with the Deleted flag.
-        self::$live->store(self::$test_mbox, array(
-            'add' => array(Horde_Imap_Client::FLAG_DELETED),
-            'ids' => new Horde_Imap_Client_Ids(2, true)
-        ));
+        self::$live->store(self::$test_mbox, [
+            'add' => [Horde_Imap_Client::FLAG_DELETED],
+            'ids' => new Horde_Imap_Client_Ids(2, true),
+        ]);
 
         // Expunging mailbox by specifying non-deleted UID.
         self::$live->expunge(
             self::$test_mbox,
-            array('ids' => new Horde_Imap_Client_Ids(1, true))
+            ['ids' => new Horde_Imap_Client_Ids(1, true)]
         );
 
         // Expunging mailbox (should remove test e-mail 2)
@@ -484,10 +489,10 @@ class Imap extends Base
         self::$live->copy(
             self::$test_mbox_utf8,
             self::$test_mbox,
-            array(
+            [
                 'ids' => new Horde_Imap_Client_Ids(2, true),
-                'move' => true
-            )
+                'move' => true,
+            ]
         );
     }
 
@@ -501,9 +506,9 @@ class Imap extends Base
         $res = self::$live->search(
             self::$test_mbox,
             new Horde_Imap_Client_Search_Query(),
-            array(
-                'results' => array(Horde_Imap_Client::SEARCH_RESULTS_COUNT)
-            )
+            [
+                'results' => [Horde_Imap_Client::SEARCH_RESULTS_COUNT],
+            ]
         );
 
         $this->assertEquals(
@@ -517,9 +522,9 @@ class Imap extends Base
         $res = self::$live->search(
             self::$test_mbox,
             $query2,
-            array(
-                'results' => array(Horde_Imap_Client::SEARCH_RESULTS_COUNT)
-            )
+            [
+                'results' => [Horde_Imap_Client::SEARCH_RESULTS_COUNT],
+            ]
         );
 
         $this->assertEquals(
@@ -556,15 +561,15 @@ class Imap extends Base
         $res = self::$live->search(
             self::$test_mbox,
             new Horde_Imap_Client_Search_Query(),
-            array(
-                'results' => array(
+            [
+                'results' => [
                     Horde_Imap_Client::SEARCH_RESULTS_COUNT,
                     Horde_Imap_Client::SEARCH_RESULTS_MATCH,
                     Horde_Imap_Client::SEARCH_RESULTS_MAX,
-                    Horde_Imap_Client::SEARCH_RESULTS_MIN
-                ),
-                'sequence' => true
-            )
+                    Horde_Imap_Client::SEARCH_RESULTS_MIN,
+                ],
+                'sequence' => true,
+            ]
         );
 
         $this->assertEquals(
@@ -582,19 +587,19 @@ class Imap extends Base
         $res = self::$live->search(
             self::$test_mbox,
             new Horde_Imap_Client_Search_Query(),
-            array(
+            [
                 'sequence' => true,
-                'sort' => array(
+                'sort' => [
                     Horde_Imap_Client::SORT_FROM,
                     Horde_Imap_Client::SORT_REVERSE,
-                    Horde_Imap_Client::SORT_DATE
-                )
-            )
+                    Horde_Imap_Client::SORT_DATE,
+                ],
+            ]
         );
 
         try {
             $this->assertEquals(
-                array(3, 4, 1, 2),
+                [3, 4, 1, 2],
                 $res['match']->ids
             );
         } catch (Exception $e) {
@@ -613,10 +618,10 @@ class Imap extends Base
 
         $res = self::$live->thread(
             self::$test_mbox,
-            array(
+            [
                 'criteria' => Horde_Imap_Client::THREAD_REFERENCES,
-                'sequence' => true
-            )
+                'sequence' => true,
+            ]
         );
 
         $this->assertInstanceOf(
@@ -646,10 +651,10 @@ class Imap extends Base
         $ten_query->ids(new Horde_Imap_Client_Ids('1:2', true));
         $res = self::$live->thread(
             self::$test_mbox,
-            array(
+            [
                 'criteria' => Horde_Imap_Client::THREAD_REFERENCES,
-                'search' => $ten_query
-            )
+                'search' => $ten_query,
+            ]
         );
 
         $this->assertInstanceOf(
@@ -672,10 +677,10 @@ class Imap extends Base
         // numbers).
         $res = self::$live->thread(
             self::$test_mbox,
-            array(
+            [
                 'criteria' => Horde_Imap_Client::THREAD_ORDEREDSUBJECT,
-                'sequence' => true
-            )
+                'sequence' => true,
+            ]
         );
 
         $this->assertInstanceOf(
@@ -720,9 +725,9 @@ class Imap extends Base
         $res = self::$live->fetch(
             self::$test_mbox,
             $simple_fetch,
-            array(
-                'ids' => new Horde_Imap_Client_Ids(1, true)
-            )
+            [
+                'ids' => new Horde_Imap_Client_Ids(1, true),
+            ]
         );
 
         $this->assertInstanceOf(
@@ -748,68 +753,68 @@ class Imap extends Base
     {
         // Fetching message information from complex MIME message.
         $complex_fetch = new Horde_Imap_Client_Fetch_Query();
-        $complex_fetch->fullText(array(
+        $complex_fetch->fullText([
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // Header of entire message
-        $complex_fetch->headerText(array(
+        $complex_fetch->headerText([
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // Header of message/rfc822 part
-        $complex_fetch->headerText(array(
+        $complex_fetch->headerText([
             'id' => 2,
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // Body text of entire message
-        $complex_fetch->bodyText(array(
+        $complex_fetch->bodyText([
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // Body text of message/rfc822 part
-        $complex_fetch->bodyText(array(
+        $complex_fetch->bodyText([
             'id' => 2,
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // MIME Header of multipart/alternative part
-        $complex_fetch->mimeHeader('1', array(
+        $complex_fetch->mimeHeader('1', [
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // MIME Header of text/plain part embedded in message/rfc822 part
-        $complex_fetch->mimeHeader('2.1', array(
+        $complex_fetch->mimeHeader('2.1', [
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // Body text of multipart/alternative part
-        $complex_fetch->bodyPart('1', array(
+        $complex_fetch->bodyPart('1', [
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // Body text of image/png part embedded in message/rfc822 part
         // Try to do server-side decoding, if available
-        $complex_fetch->mimeHeader('2.2', array(
+        $complex_fetch->mimeHeader('2.2', [
             'decode' => true,
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // If supported, return decoded body part size
         $complex_fetch->bodyPartSize('2.2');
         // Select message-id header from base message header
-        $complex_fetch->headers('headersearch1', array('message-id'), array(
+        $complex_fetch->headers('headersearch1', ['message-id'], [
             'length' => 100,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         // Select everything but message-id header from message/rfc822 header
-        $complex_fetch->headers('headersearch2', array('message-id'), array(
+        $complex_fetch->headers('headersearch2', ['message-id'], [
             'id' => '2',
             'length' => 100,
             'notsearch' => true,
-            'peek' => true
-        ));
+            'peek' => true,
+        ]);
         $complex_fetch->structure();
         $complex_fetch->flags();
         $complex_fetch->imapDate();
@@ -824,9 +829,9 @@ class Imap extends Base
             $res = self::$live->fetch(
                 self::$test_mbox,
                 $complex_fetch,
-                array(
-                    'ids' => new Horde_Imap_Client_Ids(3, true)
-                )
+                [
+                    'ids' => new Horde_Imap_Client_Ids(3, true),
+                ]
             );
         } catch (Horde_Imap_Client_Exception $e) {
             if ($e->getCode() === $e::MBOXNOMODSEQ) {
@@ -867,7 +872,7 @@ class Imap extends Base
         try {
             self::$live->setMetadata(
                 self::$test_mbox,
-                array('/shared/comment' => 'test')
+                ['/shared/comment' => 'test']
             );
         } catch (Horde_Imap_Client_Exception_NoSupportExtension $e) {
             $this->markTestSkipped('Server does not support METADATA.');
@@ -898,10 +903,10 @@ class Imap extends Base
         // Flagging test e-mail 3 with the Deleted flag.
         self::$live->store(
             self::$test_mbox,
-            array(
-                'add' => array(Horde_Imap_Client::FLAG_DELETED),
-                'ids' => new Horde_Imap_Client_Ids(3, true)
-            )
+            [
+                'add' => [Horde_Imap_Client::FLAG_DELETED],
+                'ids' => new Horde_Imap_Client_Ids(3, true),
+            ]
         );
 
         // Get status of test mailbox (should have 4 messages).
@@ -942,7 +947,7 @@ class Imap extends Base
         );
 
         // Closing test mailbox while expunging.
-        self::$live->close(array('expunge' => true));
+        self::$live->close(['expunge' => true]);
 
         // Get status of test mailbox (should have 3 messages).
         $status = self::$live->status(
@@ -963,12 +968,12 @@ class Imap extends Base
         // 3501 [6.3.11]).
         self::$live->append(
             self::$test_mbox . 'ABC',
-            array(
-                array(
+            [
+                [
                     'data' => file_get_contents(__DIR__ . '/../fixtures/remote1.txt'),
-                    'flags' => array(Horde_Imap_Client::FLAG_FLAGGED)
-                )
-            )
+                    'flags' => [Horde_Imap_Client::FLAG_FLAGGED],
+                ],
+            ]
         );
     }
 

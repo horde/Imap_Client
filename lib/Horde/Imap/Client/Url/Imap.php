@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -90,24 +91,23 @@ class Horde_Imap_Client_Url_Imap extends Horde_Imap_Client_Url_Base
     public function __get($name)
     {
         switch ($name) {
-        case 'mailbox':
-            return $this->_mailbox;
+            case 'mailbox':
+                return $this->_mailbox;
 
-        case 'partial':
-        case 'search':
-        case 'section':
-        case 'uid':
-        case 'uidvalidity':
-        case 'urlauth':
-            return isset($this->{'_' . $name})
-                ? $this->{'_' . $name}
-                : null;
+            case 'partial':
+            case 'search':
+            case 'section':
+            case 'uid':
+            case 'uidvalidity':
+            case 'urlauth':
+                return $this->{'_' . $name}
+                    ?? null;
 
-        case 'port':
-            return parent::__get($name) ?: 143;
+            case 'port':
+                return parent::__get($name) ?: 143;
 
-        default:
-            return parent::__get($name);
+            default:
+                return parent::__get($name);
         }
     }
 
@@ -116,22 +116,22 @@ class Horde_Imap_Client_Url_Imap extends Horde_Imap_Client_Url_Base
     public function __set($name, $value)
     {
         switch ($name) {
-        case 'mailbox':
-            $this->_mailbox = Horde_Imap_Client_Mailbox::get($value);
-            break;
+            case 'mailbox':
+                $this->_mailbox = Horde_Imap_Client_Mailbox::get($value);
+                break;
 
-        case 'partial':
-        case 'search':
-        case 'section':
-        case 'uid':
-        case 'uidvalidity':
-        case 'urlauth':
-            $this->{'_' . $name} = $value;
-            break;
+            case 'partial':
+            case 'search':
+            case 'section':
+            case 'uid':
+            case 'uidvalidity':
+            case 'urlauth':
+                $this->{'_' . $name} = $value;
+                break;
 
-        default:
-            parent::__set($name, $value);
-            break;
+            default:
+                parent::__set($name, $value);
+                break;
         }
     }
 
@@ -192,8 +192,8 @@ class Horde_Imap_Client_Url_Imap extends Horde_Imap_Client_Url_Base
      */
     protected function _parseUrl(array $data)
     {
-        if (isset($data['path']) &&
-            strlen($path = ltrim($data['path'], '/'))) {
+        if (isset($data['path'])
+            && strlen($path = ltrim($data['path'], '/'))) {
             $parts = explode('/;', $path);
 
             $mbox = array_shift($parts);
@@ -213,15 +213,15 @@ class Horde_Imap_Client_Url_Imap extends Horde_Imap_Client_Url_Base
 
             if (isset($data['query'])) {
                 $this->search = rawurldecode($data['query']);
-                $parts = array();
+                $parts = [];
             }
         } else {
-            $parts = array();
+            $parts = [];
         }
 
-       if (count($parts)) {
+        if (count($parts)) {
             foreach ($parts as $val) {
-                list($k, $v) = explode('=', $val);
+                [$k, $v] = explode('=', $val);
                 $this->{Horde_String::lower($k)} = $v;
             }
         }

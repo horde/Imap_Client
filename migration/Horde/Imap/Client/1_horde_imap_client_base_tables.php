@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -29,64 +30,64 @@ class HordeImapClientBaseTables extends Horde_Db_Migration_Base
             return;
         }
 
-        $t = $this->createTable('horde_imap_client_data', array(
-            'autoincrementKey' => 'messageid'
-        ));
-        $t->column('hostspec', 'string', array(
+        $t = $this->createTable('horde_imap_client_data', [
+            'autoincrementKey' => 'messageid',
+        ]);
+        $t->column('hostspec', 'string', [
             'limit' => 255,
-            'null' => false
-        ));
-        $t->column('mailbox', 'string', array(
+            'null' => false,
+        ]);
+        $t->column('mailbox', 'string', [
             'limit' => 255,
-            'null' => false
-        ));
+            'null' => false,
+        ]);
         $t->column('modified', 'bigint');
-        $t->column('port', 'integer', array(
-            'null' => false
-        ));
-        $t->column('username', 'string', array(
+        $t->column('port', 'integer', [
+            'null' => false,
+        ]);
+        $t->column('username', 'string', [
             'limit' => 255,
-            'null' => false
-        ));
+            'null' => false,
+        ]);
         $t->end();
 
         $this->addIndex(
             'horde_imap_client_data',
-            array('hostspec', 'mailbox', 'port', 'username')
+            ['hostspec', 'mailbox', 'port', 'username']
         );
 
-        $t = $this->createTable('horde_imap_client_message', array(
-            'autoincrementKey' => false
-        ));
+        $t = $this->createTable('horde_imap_client_message', [
+            'autoincrementKey' => false,
+        ]);
         $t->column('data', 'binary');
-        $t->column('msguid', 'string', array(
-            'null' => false
-        ));
-        $t->column('messageid', 'bigint', array(
-            'null' => false
-        ));
+        $t->column('msguid', 'string', [
+            'null' => false,
+        ]);
+        $t->column('messageid', 'bigint', [
+            'null' => false,
+        ]);
         $t->end();
 
         $this->addIndex(
             'horde_imap_client_message',
-            array('msguid', 'messageid')
+            ['msguid', 'messageid']
         );
 
-        $t = $this->createTable('horde_imap_client_metadata', array(
-            'autoincrementKey' => false
-        ));
+        $t = $this->createTable('horde_imap_client_metadata', [
+            'autoincrementKey' => false,
+        ]);
         $t->column('data', 'binary');
-        $t->column('field', 'string', array(
-            'null' => false
-        ));
-        $t->column('messageid', 'bigint', array(
-            'null' => false
-        ));
+        $t->column('field', 'string', [
+            'null' => false,
+        ]);
+        $t->column('messageid', 'bigint', [
+            'null' => false,
+        ]);
         $t->end();
 
         $this->addIndex(
             'horde_imap_client_metadata',
-            array('messageid')
+            ['messageid']
         );
     }
 

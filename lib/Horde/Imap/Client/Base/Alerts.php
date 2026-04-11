@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -21,8 +22,7 @@
  * @package   Imap_Client
  * @since     2.24.0
  */
-class Horde_Imap_Client_Base_Alerts
-implements SplSubject
+class Horde_Imap_Client_Base_Alerts implements SplSubject
 {
     /**
      * Alert data.
@@ -36,7 +36,7 @@ implements SplSubject
      *
      * @var array
      */
-    protected $_observers = array();
+    protected $_observers = [];
 
     /**
      * Add an alert.
@@ -46,7 +46,7 @@ implements SplSubject
      */
     public function add($alert, $type = null)
     {
-        $this->_alert = new stdClass;
+        $this->_alert = new stdClass();
         $this->_alert->alert = $alert;
         if (!is_null($type)) {
             $this->_alert->type = $type;

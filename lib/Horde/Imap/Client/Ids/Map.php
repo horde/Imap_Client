@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -32,7 +33,7 @@ class Horde_Imap_Client_Ids_Map implements Countable, IteratorAggregate, Seriali
      *
      * @var array
      */
-    protected $_ids = array();
+    protected $_ids = [];
 
     /**
      * Is the array sorted?
@@ -46,7 +47,7 @@ class Horde_Imap_Client_Ids_Map implements Countable, IteratorAggregate, Seriali
      *
      * @param array $ids  Array of sequence -> UID mapping.
      */
-    public function __construct(array $ids = array())
+    public function __construct(array $ids = [])
     {
         $this->update($ids);
     }
@@ -56,16 +57,16 @@ class Horde_Imap_Client_Ids_Map implements Countable, IteratorAggregate, Seriali
     public function __get($name)
     {
         switch ($name) {
-        case 'map':
-            return $this->_ids;
+            case 'map':
+                return $this->_ids;
 
-        case 'seq':
-            $this->sort();
-            return new Horde_Imap_Client_Ids(array_keys($this->_ids), true);
+            case 'seq':
+                $this->sort();
+                return new Horde_Imap_Client_Ids(array_keys($this->_ids), true);
 
-        case 'uids':
-            $this->sort();
-            return new Horde_Imap_Client_Ids($this->_ids);
+            case 'uids':
+                $this->sort();
+                return new Horde_Imap_Client_Ids($this->_ids);
         }
     }
 
@@ -141,16 +142,16 @@ class Horde_Imap_Client_Ids_Map implements Countable, IteratorAggregate, Seriali
 
         $this->sort();
 
-        if (count($remove) == count($this->_ids) &&
-            !array_diff($remove, array_keys($this->_ids))) {
-            $this->_ids = array();
+        if (count($remove) == count($this->_ids)
+            && !array_diff($remove, array_keys($this->_ids))) {
+            $this->_ids = [];
             return;
         }
 
         /* Find the minimum sequence number to remove. We know entries before
          * this are untouched so no need to process them multiple times. */
         $first = min($remove);
-        $edit = $newids = array();
+        $edit = $newids = [];
         foreach (array_keys($this->_ids) as $i => $seq) {
             if ($seq >= $first) {
                 $i += (($seq == $first) ? 0 : 1);
@@ -163,7 +164,7 @@ class Horde_Imap_Client_Ids_Map implements Countable, IteratorAggregate, Seriali
         if (!empty($edit)) {
             foreach ($remove as $val) {
                 $found = false;
-                $tmp = array();
+                $tmp = [];
 
                 foreach (array_keys($edit) as $i => $seq) {
                     if ($found) {
@@ -236,10 +237,10 @@ class Horde_Imap_Client_Ids_Map implements Countable, IteratorAggregate, Seriali
         /* Sort before storing; provides more compressible representation. */
         $this->sort();
 
-        return array(
-            'keys' => (string)new Horde_Imap_Client_Ids(array_keys($this->_ids)),
-            'values' => (string)new Horde_Imap_Client_Ids(array_values($this->_ids)),
-        );
+        return [
+            'keys' => (string) new Horde_Imap_Client_Ids(array_keys($this->_ids)),
+            'values' => (string) new Horde_Imap_Client_Ids(array_values($this->_ids)),
+        ];
     }
 
     public function __unserialize(array $data)

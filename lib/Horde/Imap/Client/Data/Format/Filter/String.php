@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -62,48 +63,48 @@ class Horde_Imap_Client_Data_Format_Filter_String extends php_user_filter
                     $chr = ord($str[$i]);
 
                     switch ($chr) {
-                    case 0: // null
-                        $p->binary = true;
-                        $p->literal = true;
-
-                        // No need to scan input anymore.
-                        $this->_skip = true;
-                        break 2;
-
-                    case 10: // LF
-                    case 13: // CR
-                        $p->literal = true;
-                        break;
-
-                    case 32: // SPACE
-                    case 34: // "
-                    case 40: // (
-                    case 41: // )
-                    case 92: // \
-                    case 123: // {
-                    case 127: // DEL
-                        // These are all invalid ATOM characters.
-                        $p->quoted = true;
-                        break;
-
-                    case 37: // %
-                    case 42: // *
-                        // These are not quoted if being used as wildcards.
-                        if (empty($p->no_quote_list)) {
-                            $p->quoted = true;
-                        }
-                        break;
-
-                    default:
-                        if ($chr < 32) {
-                            // CTL characters must be, at a minimum, quoted.
-                            $p->quoted = true;
-                        } elseif ($chr > 127) {
-                            $p->nonascii = true;
-                            // 8-bit chars must be in a literal.
+                        case 0: // null
+                            $p->binary = true;
                             $p->literal = true;
-                        }
-                        break;
+
+                            // No need to scan input anymore.
+                            $this->_skip = true;
+                            break 2;
+
+                        case 10: // LF
+                        case 13: // CR
+                            $p->literal = true;
+                            break;
+
+                        case 32: // SPACE
+                        case 34: // "
+                        case 40: // (
+                        case 41: // )
+                        case 92: // \
+                        case 123: // {
+                        case 127: // DEL
+                            // These are all invalid ATOM characters.
+                            $p->quoted = true;
+                            break;
+
+                        case 37: // %
+                        case 42: // *
+                            // These are not quoted if being used as wildcards.
+                            if (empty($p->no_quote_list)) {
+                                $p->quoted = true;
+                            }
+                            break;
+
+                        default:
+                            if ($chr < 32) {
+                                // CTL characters must be, at a minimum, quoted.
+                                $p->quoted = true;
+                            } elseif ($chr > 127) {
+                                $p->nonascii = true;
+                                // 8-bit chars must be in a literal.
+                                $p->literal = true;
+                            }
+                            break;
                     }
                 }
             }

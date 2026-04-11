@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,11 +12,13 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Stub;
+
 use Horde_Imap_Client_Socket;
-use \Horde_Imap_Client_Interaction_Server;
-use \Horde_Imap_Client_Tokenize;
-use \Horde_Imap_Client_Data_Thread;
+use Horde_Imap_Client_Interaction_Server;
+use Horde_Imap_Client_Tokenize;
+use Horde_Imap_Client_Data_Thread;
 
 /**
  * Stub for testing the IMAP Socket library.
@@ -62,13 +65,13 @@ class Socket extends Horde_Imap_Client_Socket
      * @param array $data  Options:
      *   - results: (Horde_Imap_Client_Fetch_Results)
      */
-    public function parseFetch($data, array $opts = array())
+    public function parseFetch($data, array $opts = [])
     {
         $pipeline = $this->_pipeline();
         if (isset($opts['results'])) {
             $pipeline->fetch = $opts['results'];
         }
-        $pipeline->data['modseqs_nouid'] = array();
+        $pipeline->data['modseqs_nouid'] = [];
 
         return $this->doServerResponse($pipeline, $data);
     }
@@ -95,7 +98,7 @@ class Socket extends Horde_Imap_Client_Socket
         return $this->_pipeline($cmd);
     }
 
-    public function fetch($mailbox, $query, array $options = array())
+    public function fetch($mailbox, $query, array $options = [])
     {
         return $this->fetch_results;
     }

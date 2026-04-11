@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -29,7 +30,7 @@
 class Horde_Imap_Client_Base_Debug
 {
     /** Time, in seconds, to be labeled a slow command. */
-    const SLOW_CMD = 5;
+    public const SLOW_CMD = 5;
 
     /**
      * Is debugging active?
@@ -62,7 +63,7 @@ class Horde_Imap_Client_Base_Debug
         $this->_stream = is_resource($debug)
             ? $debug
             : @fopen($debug, 'a');
-        register_shutdown_function(array($this, 'shutdown'));
+        register_shutdown_function([$this, 'shutdown']);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -30,141 +31,141 @@ class Horde_Imap_Client_Exception extends Horde_Exception_Wrapped
     /**
      * Unspecified error (DEFAULT).
      */
-    const UNSPECIFIED = 0;
+    public const UNSPECIFIED = 0;
 
     /**
      * There was an unrecoverable error in UTF7IMAP -> UTF8 conversion.
      */
-    const UTF7IMAP_CONVERSION = 3;
+    public const UTF7IMAP_CONVERSION = 3;
 
     /**
      * The server ended the connection.
      */
-    const DISCONNECT = 4;
+    public const DISCONNECT = 4;
 
     /**
      * The charset used in the search query is not supported on the
      * server. */
-    const BADCHARSET = 5;
+    public const BADCHARSET = 5;
 
     /**
      * There were errors parsing the MIME/RFC 2822 header of the part.
      */
-    const PARSEERROR = 6;
+    public const PARSEERROR = 6;
 
     /**
      * The server could not decode the MIME part (see RFC 3516).
      */
-    const UNKNOWNCTE = 7;
+    public const UNKNOWNCTE = 7;
 
     /**
      * The comparator specified by setComparator() was not recognized by the
      * IMAP server
      */
-    const BADCOMPARATOR = 9;
+    public const BADCOMPARATOR = 9;
 
     /**
      * RFC 7162 [3.1.2.2] - All mailboxes are not required to support
      * mod-sequences.
      */
-    const MBOXNOMODSEQ = 10;
+    public const MBOXNOMODSEQ = 10;
 
     /**
      * Thrown if server denies the network connection.
      */
-    const SERVER_CONNECT = 11;
+    public const SERVER_CONNECT = 11;
 
     /**
      * Thrown if read error for server response.
      */
-    const SERVER_READERROR = 12;
+    public const SERVER_READERROR = 12;
 
     /**
      * Thrown if read timeout occurs.
      */
-    const SERVER_READTIMEOUT = 28;
+    public const SERVER_READTIMEOUT = 28;
 
     /**
      * Thrown if write error in server interaction.
      */
-    const SERVER_WRITEERROR = 16;
+    public const SERVER_WRITEERROR = 16;
 
     /**
      * Thrown on CATENATE if the URL is invalid.
      */
-    const CATENATE_BADURL = 13;
+    public const CATENATE_BADURL = 13;
 
     /**
      * Thrown on CATENATE if the message was too big.
      */
-    const CATENATE_TOOBIG = 14;
+    public const CATENATE_TOOBIG = 14;
 
     /**
      * Thrown on CREATE if special-use attribute is not supported.
      */
-    const USEATTR = 15;
+    public const USEATTR = 15;
 
     /**
      * The user did not have permissions to carry out the operation.
      */
-    const NOPERM = 17;
+    public const NOPERM = 17;
 
     /**
      * The operation was not successful because another user is holding
      * a necessary resource. The operation may succeed if attempted later.
      */
-    const INUSE = 18;
+    public const INUSE = 18;
 
     /**
      * The operation failed because data on the server was corrupt.
      */
-    const CORRUPTION = 19;
+    public const CORRUPTION = 19;
 
     /**
      * The operation failed because it exceeded some limit on the server.
      */
-    const LIMIT = 20;
+    public const LIMIT = 20;
 
     /**
      * The operation failed because the user is over their quota.
      */
-    const OVERQUOTA = 21;
+    public const OVERQUOTA = 21;
 
     /**
      * The operation failed because the requested creation object already
      * exists.
      */
-    const ALREADYEXISTS = 22;
+    public const ALREADYEXISTS = 22;
 
     /**
      * The operation failed because the requested deletion object did not
      * exist.
      */
-    const NONEXISTENT = 23;
+    public const NONEXISTENT = 23;
 
     /**
      * Setting metadata failed because the size of its value is too large.
      * The maximum octet count the server is willing to accept will be
      * in the exception message string.
      */
-    const METADATA_MAXSIZE = 24;
+    public const METADATA_MAXSIZE = 24;
 
     /**
      * Setting metadata failed because the maximum number of allowed
      * annotations has already been reached.
      */
-    const METADATA_TOOMANY = 25;
+    public const METADATA_TOOMANY = 25;
 
     /**
      * Setting metadata failed because the server does not support private
      * annotations on one of the specified mailboxes.
      */
-    const METADATA_NOPRIVATE = 26;
+    public const METADATA_NOPRIVATE = 26;
 
     /**
      * Invalid metadata entry.
      */
-    const METADATA_INVALID = 27;
+    public const METADATA_INVALID = 27;
 
 
     // Login failures
@@ -172,42 +173,42 @@ class Horde_Imap_Client_Exception extends Horde_Exception_Wrapped
     /**
      * Could not start mandatory TLS connection.
      */
-    const LOGIN_TLSFAILURE = 100;
+    public const LOGIN_TLSFAILURE = 100;
 
     /**
      * Could not find an available authentication method.
      */
-    const LOGIN_NOAUTHMETHOD = 101;
+    public const LOGIN_NOAUTHMETHOD = 101;
 
     /**
      * Generic authentication failure.
      */
-    const LOGIN_AUTHENTICATIONFAILED = 102;
+    public const LOGIN_AUTHENTICATIONFAILED = 102;
 
     /**
      * Remote server is unavailable.
      */
-    const LOGIN_UNAVAILABLE = 103;
+    public const LOGIN_UNAVAILABLE = 103;
 
     /**
      * Authentication succeeded, but authorization failed.
      */
-    const LOGIN_AUTHORIZATIONFAILED = 104;
+    public const LOGIN_AUTHORIZATIONFAILED = 104;
 
     /**
      * Authentication is no longer permitted with this passphrase.
      */
-    const LOGIN_EXPIRED = 105;
+    public const LOGIN_EXPIRED = 105;
 
     /**
      * Login requires privacy.
      */
-    const LOGIN_PRIVACYREQUIRED = 106;
+    public const LOGIN_PRIVACYREQUIRED = 106;
 
     /**
      * Server verification failed (SCRAM authentication).
      */
-    const LOGIN_SERVER_VERIFICATION_FAILED = 107;
+    public const LOGIN_SERVER_VERIFICATION_FAILED = 107;
 
 
     // Mailbox access failures
@@ -215,12 +216,12 @@ class Horde_Imap_Client_Exception extends Horde_Exception_Wrapped
     /**
      * Could not open/access mailbox
      */
-    const MAILBOX_NOOPEN = 200;
+    public const MAILBOX_NOOPEN = 200;
 
     /**
      * Could not complete the command because the mailbox is read-only
      */
-    const MAILBOX_READONLY = 201;
+    public const MAILBOX_READONLY = 201;
 
 
     // POP3 specific error codes
@@ -229,12 +230,12 @@ class Horde_Imap_Client_Exception extends Horde_Exception_Wrapped
      * Temporary issue. Generally, there is no need to alarm the user for
      * errors of this type.
      */
-    const POP3_TEMP_ERROR = 300;
+    public const POP3_TEMP_ERROR = 300;
 
     /**
      * Permanent error indicated by server.
      */
-    const POP3_PERM_ERROR = 301;
+    public const POP3_PERM_ERROR = 301;
 
 
     // Unsupported feature error codes
@@ -242,7 +243,7 @@ class Horde_Imap_Client_Exception extends Horde_Exception_Wrapped
     /**
      * Function/feature is not supported on this server.
      */
-    const NOT_SUPPORTED = 400;
+    public const NOT_SUPPORTED = 400;
 
 
     /**
@@ -267,7 +268,8 @@ class Horde_Imap_Client_Exception extends Horde_Exception_Wrapped
         $this->raw_msg = $this->message;
         try {
             $this->message = Horde_Imap_Client_Translation::t($this->message);
-        } catch (Horde_Translation_Exception $e) {}
+        } catch (Horde_Translation_Exception $e) {
+        }
     }
 
     /**
@@ -299,7 +301,7 @@ class Horde_Imap_Client_Exception extends Horde_Exception_Wrapped
      *
      * @param array $args  Arguments used for substitution.
      */
-    public function messagePrintf(array $args = array())
+    public function messagePrintf(array $args = [])
     {
         $this->raw_msg = vsprintf($this->raw_msg, $args);
         $this->message = vsprintf($this->message, $args);

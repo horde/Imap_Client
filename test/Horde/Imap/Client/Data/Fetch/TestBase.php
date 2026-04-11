@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2015-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2015-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,16 +12,18 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data\Fetch;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Data_Fetch;
-use \Horde_Imap_Client;
-use \Horde_Mime_Part;
-use \Horde_Mime_Headers;
-use \Horde_Stream_String;
-use \Horde_Imap_Client_DateTime;
-use \Horde_Imap_Client_Data_Envelope;
-use \Horde_Stream;
+use Horde_Imap_Client_Data_Fetch;
+use Horde_Imap_Client;
+use Horde_Mime_Part;
+use Horde_Mime_Headers;
+use Horde_Stream_String;
+use Horde_Imap_Client_DateTime;
+use Horde_Imap_Client_Data_Envelope;
+use Horde_Stream;
 
 /**
  * Base class for testing the Horde_Imap_Client_Data_Fetch object.
@@ -59,7 +62,7 @@ abstract class TestBase extends TestCase
         $this->ob->setFullMsg($set_stream ? $stream_ob->stream : $string);
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $string,
                 $val->getFullMsg(false)
@@ -73,18 +76,18 @@ abstract class TestBase extends TestCase
 
     public function fullMsgProvider()
     {
-        $stream = new Horde_Stream_String(array('string' => 'Foo'));
+        $stream = new Horde_Stream_String(['string' => 'Foo']);
 
-        return array(
-            array(
+        return [
+            [
                 clone $stream,
-                false
-            ),
-            array(
+                false,
+            ],
+            [
                 clone $stream,
-                true
-            )
-        );
+                true,
+            ],
+        ];
     }
 
     public function testStructure()
@@ -100,7 +103,7 @@ abstract class TestBase extends TestCase
         $this->ob->setStructure($test);
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $ret = $val->getStructure();
 
             $this->assertInstanceOf(
@@ -127,7 +130,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $string,
                 $val->getHeaders($label)
@@ -155,7 +158,7 @@ abstract class TestBase extends TestCase
             );
             $this->assertEquals(
                 trim($string),
-                trim($hdr_ob->toString(array('nowrap' => true)))
+                trim($hdr_ob->toString(['nowrap' => true]))
             );
         }
     }
@@ -165,20 +168,20 @@ abstract class TestBase extends TestCase
         $hdrs = new Horde_Mime_Headers();
         $hdrs->addHeader('From', 'test@example.com');
 
-        return array(
-            array(
+        return [
+            [
                 null,
-                ''
-            ),
-            array(
+                '',
+            ],
+            [
                 "From: test@example.com\n\n",
-                "From: test@example.com\n\n"
-            ),
-            array(
+                "From: test@example.com\n\n",
+            ],
+            [
                 $hdrs,
-                "From: test@example.com\n\n"
-            )
-        );
+                "From: test@example.com\n\n",
+            ],
+        ];
     }
 
     /**
@@ -194,7 +197,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $string,
                 $val->getHeaderText($id)
@@ -222,23 +225,23 @@ abstract class TestBase extends TestCase
             );
             $this->assertEquals(
                 trim($string),
-                trim($hdr_ob->toString(array('nowrap' => true)))
+                trim($hdr_ob->toString(['nowrap' => true]))
             );
         }
     }
 
     public function headerTextProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
-                ''
-            ),
-            array(
+                '',
+            ],
+            [
                 "From: test@example.com\n\n",
-                "From: test@example.com\n\n"
-            )
-        );
+                "From: test@example.com\n\n",
+            ],
+        ];
     }
 
     /**
@@ -254,7 +257,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $string,
                 $val->getMimeHeader($id)
@@ -282,23 +285,23 @@ abstract class TestBase extends TestCase
             );
             $this->assertEquals(
                 trim($string),
-                trim($hdr_ob->toString(array('nowrap' => true)))
+                trim($hdr_ob->toString(['nowrap' => true]))
             );
         }
     }
 
     public function mimeHeaderProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
-                ''
-            ),
-            array(
+                '',
+            ],
+            [
                 "From: test@example.com\n\n",
-                "From: test@example.com\n\n"
-            )
-        );
+                "From: test@example.com\n\n",
+            ],
+        ];
     }
 
     /**
@@ -320,7 +323,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $string,
                 $val->getBodyPart($id, false)
@@ -338,51 +341,51 @@ abstract class TestBase extends TestCase
 
     public function bodyPartProvider()
     {
-        $stream = new Horde_Stream_String(array('string' => 'Foo'));
+        $stream = new Horde_Stream_String(['string' => 'Foo']);
         $empty_stream = new Horde_Stream();
 
-        return array(
-            array(
+        return [
+            [
                 clone $stream,
                 false,
-                null
-            ),
-            array(
+                null,
+            ],
+            [
                 clone $stream,
                 false,
-                '8bit'
-            ),
-            array(
+                '8bit',
+            ],
+            [
                 clone $stream,
                 false,
-                'binary'
-            ),
-            array(
+                'binary',
+            ],
+            [
                 clone $empty_stream,
                 false,
-                null
-            ),
-            array(
+                null,
+            ],
+            [
                 clone $stream,
                 true,
-                null
-            ),
-            array(
+                null,
+            ],
+            [
                 clone $stream,
                 true,
-                '8bit'
-            ),
-            array(
+                '8bit',
+            ],
+            [
                 clone $stream,
                 true,
-                'binary'
-            ),
-            array(
+                'binary',
+            ],
+            [
                 clone $empty_stream,
                 true,
-                null
-            )
-        );
+                null,
+            ],
+        ];
     }
 
     /**
@@ -398,7 +401,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $size,
                 $val->getBodyPartSize($id)
@@ -409,10 +412,10 @@ abstract class TestBase extends TestCase
 
     public function bodyPartSizeProvider()
     {
-        return array(
-            array(200),
-            array(null)
-        );
+        return [
+            [200],
+            [null],
+        ];
     }
 
     /**
@@ -433,7 +436,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $string,
                 $val->getBodyText($id, false)
@@ -447,18 +450,18 @@ abstract class TestBase extends TestCase
 
     public function bodyTextProvider()
     {
-        $stream = new Horde_Stream_String(array('string' => 'Foo'));
+        $stream = new Horde_Stream_String(['string' => 'Foo']);
 
-        return array(
-            array(
+        return [
+            [
                 clone $stream,
-                false
-            ),
-            array(
+                false,
+            ],
+            [
                 clone $stream,
-                true
-            )
-        );
+                true,
+            ],
+        ];
     }
 
     /**
@@ -472,7 +475,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $envelope = $val->getEnvelope();
 
             $this->assertInstanceOf(
@@ -498,20 +501,20 @@ abstract class TestBase extends TestCase
         $addr = new Horde_Imap_Client_Data_Envelope();
         $addr->to = 'foo@example.com';
 
-        return array(
-            array(
-                array('to' => 'foo@example.com'),
-                'foo@example.com'
-            ),
-            array(
+        return [
+            [
+                ['to' => 'foo@example.com'],
+                'foo@example.com',
+            ],
+            [
                 $addr,
-                'foo@example.com'
-            ),
-            array(
+                'foo@example.com',
+            ],
+            [
                 null,
-                ''
-            )
-        );
+                '',
+            ],
+        ];
     }
 
     /**
@@ -522,7 +525,7 @@ abstract class TestBase extends TestCase
         $this->ob->setFlags($flags);
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $f = $this->ob->getFlags();
 
             $this->assertEquals(
@@ -534,20 +537,20 @@ abstract class TestBase extends TestCase
 
     public function flagsProvider()
     {
-        return array(
-            array(
-                array('foo'),
-                array('foo')
-            ),
-            array(
-                array(),
-                array(),
-            ),
-            array(
-                array('FoO', 'BAR', '     baZ  '),
-                array('foo', 'bar', 'baz')
-            )
-        );
+        return [
+            [
+                ['foo'],
+                ['foo'],
+            ],
+            [
+                [],
+                [],
+            ],
+            [
+                ['FoO', 'BAR', '     baZ  '],
+                ['foo', 'bar', 'baz'],
+            ],
+        ];
     }
 
     /**
@@ -561,7 +564,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $d = $this->ob->getImapDate();
 
             $this->assertInstanceOf(
@@ -578,20 +581,20 @@ abstract class TestBase extends TestCase
 
     public function imapDateProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 '12 Sep 2007 15:49:12 UT',
-                1189612152
-            ),
-            array(
+                1189612152,
+            ],
+            [
                 new Horde_Imap_Client_DateTime('12 Sep 2007 15:49:12 UT'),
-                1189612152
-            ),
-            array(
+                1189612152,
+            ],
+            [
                 null,
-                null
-            )
-        );
+                null,
+            ],
+        ];
     }
 
     /**
@@ -605,7 +608,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $expected,
                 $this->ob->getSize()
@@ -615,16 +618,16 @@ abstract class TestBase extends TestCase
 
     public function sizeProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 200,
-                200
-            ),
-            array(
+                200,
+            ],
+            [
                 null,
-                0
-            )
-        );
+                0,
+            ],
+        ];
     }
 
     /**
@@ -638,7 +641,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $expected,
                 $this->ob->getUid()
@@ -648,16 +651,16 @@ abstract class TestBase extends TestCase
 
     public function uidProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 200,
-                200
-            ),
-            array(
+                200,
+            ],
+            [
                 null,
-                null
-            )
-        );
+                null,
+            ],
+        ];
     }
 
     /**
@@ -671,7 +674,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $expected,
                 $this->ob->getSeq()
@@ -681,16 +684,16 @@ abstract class TestBase extends TestCase
 
     public function seqProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 200,
-                200
-            ),
-            array(
+                200,
+            ],
+            [
                 null,
-                null
-            )
-        );
+                null,
+            ],
+        ];
     }
 
     /**
@@ -704,7 +707,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $expected,
                 $this->ob->getModSeq()
@@ -714,16 +717,16 @@ abstract class TestBase extends TestCase
 
     public function modSeqProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 200,
-                200
-            ),
-            array(
+                200,
+            ],
+            [
                 null,
-                null
-            )
-        );
+                null,
+            ],
+        ];
     }
 
     /**
@@ -737,7 +740,7 @@ abstract class TestBase extends TestCase
 
         $serialize_ob = unserialize(serialize($this->ob));
 
-        foreach (array($this->ob, $serialize_ob) as $val) {
+        foreach ([$this->ob, $serialize_ob] as $val) {
             $this->assertEquals(
                 $expected,
                 $this->ob->isDowngraded()
@@ -747,20 +750,20 @@ abstract class TestBase extends TestCase
 
     public function downgradedProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 true,
-                true
-            ),
-            array(
+                true,
+            ],
+            [
                 false,
-                false
-            ),
-            array(
+                false,
+            ],
+            [
                 null,
-                false
-            )
-        );
+                false,
+            ],
+        ];
     }
 
     public function testMerge()
@@ -806,7 +809,7 @@ abstract class TestBase extends TestCase
 
     public function testClone()
     {
-        $stream = new Horde_Stream_String(array('string' => 'Foo'));
+        $stream = new Horde_Stream_String(['string' => 'Foo']);
         $stream->rewind();
 
         $this->ob->setFullMsg($stream->stream);

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -23,34 +24,33 @@
  *
  * @property-read integer $cmdlength  Allowable command length (in octets).
  */
-class Horde_Imap_Client_Data_Capability_Imap
-extends Horde_Imap_Client_Data_Capability
+class Horde_Imap_Client_Data_Capability_Imap extends Horde_Imap_Client_Data_Capability
 {
     /**
      * The list of enabled extensions.
      *
      * @var array
      */
-    protected $_enabled = array();
+    protected $_enabled = [];
 
     /**
      */
     public function __get($name)
     {
         switch ($name) {
-        case 'cmdlength':
-            /* RFC 2683 [3.2.1.5] originally recommended that lines should
-             * be limited to "approximately 1000 octets". However, servers
-             * should allow a command line of at least "8000 octets".
-             * RFC 7162 [4] updates the recommendation to 8192 octets.
-             * As a compromise, assume all modern IMAP servers handle
-             * ~2000 octets and, if CONDSTORE/QRESYNC is supported, assume
-             * they can handle ~8000 octets. (Don't need dependency support
-             * checks here - the simple presence of CONDSTORE/QRESYNC is
-             * enough to trigger.) */
-             return (isset($this->_data['CONDSTORE']) || isset($this->_data['QRESYNC']))
-                 ? 8000
-                 : 2000;
+            case 'cmdlength':
+                /* RFC 2683 [3.2.1.5] originally recommended that lines should
+                 * be limited to "approximately 1000 octets". However, servers
+                 * should allow a command line of at least "8000 octets".
+                 * RFC 7162 [4] updates the recommendation to 8192 octets.
+                 * As a compromise, assume all modern IMAP servers handle
+                 * ~2000 octets and, if CONDSTORE/QRESYNC is supported, assume
+                 * they can handle ~8000 octets. (Don't need dependency support
+                 * checks here - the simple presence of CONDSTORE/QRESYNC is
+                 * enough to trigger.) */
+                return (isset($this->_data['CONDSTORE']) || isset($this->_data['QRESYNC']))
+                    ? 8000
+                    : 2000;
         }
     }
 
@@ -63,15 +63,15 @@ extends Horde_Imap_Client_Data_Capability
         }
 
         switch (Horde_String::upper($capability)) {
-        case 'CONDSTORE':
-        case 'ENABLE':
-            /* RFC 7162 [3.2.3] - QRESYNC implies CONDSTORE and ENABLE. */
-            return (is_null($parameter) && $this->query('QRESYNC'));
+            case 'CONDSTORE':
+            case 'ENABLE':
+                /* RFC 7162 [3.2.3] - QRESYNC implies CONDSTORE and ENABLE. */
+                return (is_null($parameter) && $this->query('QRESYNC'));
 
-        case 'UTF8':
-            /* RFC 6855 [3] - UTF8=ONLY implies UTF8=ACCEPT. */
-            return ((Horde_String::upper($parameter) === 'ACCEPT') &&
-                    $this->query('UTF8', 'ONLY'));
+            case 'UTF8':
+                /* RFC 6855 [3] - UTF8=ONLY implies UTF8=ACCEPT. */
+                return ((Horde_String::upper($parameter) === 'ACCEPT')
+                        && $this->query('UTF8', 'ONLY'));
         }
 
         return false;
@@ -99,17 +99,17 @@ extends Horde_Imap_Client_Data_Capability
 
         if ($enable && !$enabled) {
             switch ($capability) {
-            case 'QRESYNC':
-                /* RFC 7162 [3.2.3] - Enabling QRESYNC also implies enabling
-                 * of CONDSTORE. */
-                $this->enable('CONDSTORE');
-                break;
+                case 'QRESYNC':
+                    /* RFC 7162 [3.2.3] - Enabling QRESYNC also implies enabling
+                     * of CONDSTORE. */
+                    $this->enable('CONDSTORE');
+                    break;
             }
 
             $this->_enabled[] = $capability;
             $this->notify();
         } elseif (!$enable && $enabled) {
-            $this->_enabled = array_diff($this->_enabled, array($capability));
+            $this->_enabled = array_diff($this->_enabled, [$capability]);
             $this->notify();
         }
     }

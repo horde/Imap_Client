@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_DateTime;
+use Horde_Imap_Client_DateTime;
 
 /**
  * Tests for the Imap Client DateTime object.
@@ -25,24 +28,25 @@ use \Horde_Imap_Client_DateTime;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class DateTimeTest extends TestCase
 {
     public function provider()
     {
-        return array(
+        return [
             // Bug #5715
-            array('12 Sep 2007 15:49:12 UT', 1189612152),
+            ['12 Sep 2007 15:49:12 UT', 1189612152],
             // Bug #9847
-            array('Fri, 06 Oct 2006 12:15:13 +0100 (GMT+01:00)', 1160133313),
+            ['Fri, 06 Oct 2006 12:15:13 +0100 (GMT+01:00)', 1160133313],
             // Bug #13114; This should resolve to 4/13 8:04:48pm UTC of the
             // current year.
-            array('Apr 13 20:4:48', gmmktime(20, 4, 48, 4, 13)),
+            ['Apr 13 20:4:48', gmmktime(20, 4, 48, 4, 13)],
             // Bad date input
-            array('This is a bad date', 0),
+            ['This is a bad date', 0],
             // Bug #14381
-            array('Thu, 1 Aug 2013 20:22:47 0000', 1375388567)
-        );
+            ['Thu, 1 Aug 2013 20:22:47 0000', 1375388567],
+        ];
     }
 
     /**

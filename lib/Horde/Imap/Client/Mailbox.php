@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -85,29 +86,29 @@ class Horde_Imap_Client_Mailbox implements Serializable
     public function __get($name)
     {
         switch ($name) {
-        case 'list_escape':
-            return preg_replace("/\*+/", '%', $this->utf8);
+            case 'list_escape':
+                return preg_replace("/\*+/", '%', $this->utf8);
 
-        case 'utf7imap':
-            if (!isset($this->_utf7imap)) {
-                $n = Horde_Imap_Client_Utf7imap::Utf8ToUtf7Imap($this->_utf8);
-                $this->_utf7imap = ($n == $this->_utf8)
-                    ? true
-                    : $n;
-            }
-
-            return ($this->_utf7imap === true)
-                ? $this->_utf8
-                : $this->_utf7imap;
-
-        case 'utf8':
-            if (!isset($this->_utf8)) {
-                $this->_utf8 = Horde_Imap_Client_Utf7imap::Utf7ImapToUtf8($this->_utf7imap);
-                if ($this->_utf8 == $this->_utf7imap) {
-                    $this->_utf7imap = true;
+            case 'utf7imap':
+                if (!isset($this->_utf7imap)) {
+                    $n = Horde_Imap_Client_Utf7imap::Utf8ToUtf7Imap($this->_utf8);
+                    $this->_utf7imap = ($n == $this->_utf8)
+                        ? true
+                        : $n;
                 }
-            }
-            return (string)$this->_utf8;
+
+                return ($this->_utf7imap === true)
+                    ? $this->_utf8
+                    : $this->_utf7imap;
+
+            case 'utf8':
+                if (!isset($this->_utf8)) {
+                    $this->_utf8 = Horde_Imap_Client_Utf7imap::Utf7ImapToUtf8($this->_utf7imap);
+                    if ($this->_utf8 == $this->_utf7imap) {
+                        $this->_utf7imap = true;
+                    }
+                }
+                return (string) $this->_utf8;
         }
     }
 
@@ -153,10 +154,10 @@ class Horde_Imap_Client_Mailbox implements Serializable
      */
     public function __serialize()
     {
-        return array(
+        return [
             'utf7imap' => $this->_utf7imap,
             'utf8' => $this->_utf8,
-        );
+        ];
     }
 
     public function __unserialize(array $data)

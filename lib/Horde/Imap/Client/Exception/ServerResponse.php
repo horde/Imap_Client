@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -54,8 +55,7 @@ class Horde_Imap_Client_Exception_ServerResponse extends Horde_Imap_Client_Excep
         $code,
         Horde_Imap_Client_Interaction_Server $server,
         Horde_Imap_Client_Interaction_Pipeline $pipeline
-    )
-    {
+    ) {
         $this->details = strval($server->token);
 
         $this->_pipeline = $pipeline;
@@ -69,19 +69,19 @@ class Horde_Imap_Client_Exception_ServerResponse extends Horde_Imap_Client_Excep
     public function __get($name)
     {
         switch ($name) {
-        case 'command':
-            return ($this->_server instanceof Horde_Imap_Client_Interaction_Server_Tagged)
-                ? $this->_pipeline->getCmd($this->_server->tag)->getCommand()
-                : null;
+            case 'command':
+                return ($this->_server instanceof Horde_Imap_Client_Interaction_Server_Tagged)
+                    ? $this->_pipeline->getCmd($this->_server->tag)->getCommand()
+                    : null;
 
-        case 'resp_data':
-            return $this->_pipeline->data;
+            case 'resp_data':
+                return $this->_pipeline->data;
 
-        case 'status':
-            return $this->_server->status;
+            case 'status':
+                return $this->_server->status;
 
-        default:
-            return parent::__get($name);
+            default:
+                return parent::__get($name);
         }
     }
 

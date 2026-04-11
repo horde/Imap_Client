@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -29,14 +29,14 @@ abstract class Horde_Imap_Client_Cache_Backend implements Serializable
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
      * Constructor.
      *
      * @param array $params  Configuration parameters.
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         $this->setParams($params);
         $this->_initOb();
@@ -45,16 +45,14 @@ abstract class Horde_Imap_Client_Cache_Backend implements Serializable
     /**
      * Initialization tasks.
      */
-    protected function _initOb()
-    {
-    }
+    protected function _initOb() {}
 
     /**
      * Add configuration parameters.
      *
      * @param array $params  Configuration parameters.
      */
-    public function setParams(array $params = array())
+    public function setParams(array $params = [])
     {
         $this->_params = array_merge($this->_params, $params);
     }

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -27,7 +28,7 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      * Get the full text of the message.
@@ -42,7 +43,7 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
      *            returned, the starting position is identified here.
      *            DEFAULT: The entire text is returned.
      */
-    public function fullText(array $opts = array())
+    public function fullText(array $opts = [])
     {
         $this->_data[Horde_Imap_Client::FETCH_FULLMSG] = $opts;
     }
@@ -66,11 +67,10 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
      *            returned, the starting position is identified here.
      *            DEFAULT: The entire text is returned.
      */
-    public function headerText(array $opts = array())
+    public function headerText(array $opts = [])
     {
-        $id = isset($opts['id'])
-            ? $opts['id']
-            : 0;
+        $id = $opts['id']
+            ?? 0;
         $this->_data[Horde_Imap_Client::FETCH_HEADERTEXT][$id] = $opts;
     }
 
@@ -93,11 +93,10 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
      *            returned, the starting position is identified here.
      *            DEFAULT: The entire text is returned.
      */
-    public function bodyText(array $opts = array())
+    public function bodyText(array $opts = [])
     {
-        $id = isset($opts['id'])
-            ? $opts['id']
-            : 0;
+        $id = $opts['id']
+            ?? 0;
         $this->_data[Horde_Imap_Client::FETCH_BODYTEXT][$id] = $opts;
     }
 
@@ -118,7 +117,7 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
      *            returned, the starting position is identified here.
      *            DEFAULT: The entire text is returned.
      */
-    public function mimeHeader($id, array $opts = array())
+    public function mimeHeader($id, array $opts = [])
     {
         $this->_data[Horde_Imap_Client::FETCH_MIMEHEADER][$id] = $opts;
     }
@@ -140,7 +139,7 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
      *            returned, the starting position is identified here.
      *            DEFAULT: The entire text is returned.
      */
-    public function bodyPart($id, array $opts = array())
+    public function bodyPart($id, array $opts = [])
     {
         $this->_data[Horde_Imap_Client::FETCH_BODYPART][$id] = $opts;
     }
@@ -182,13 +181,13 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
      *            returned, the starting position is identified here.
      *            DEFAULT: The entire text is returned.
      */
-    public function headers($label, $search, array $opts = array())
+    public function headers($label, $search, array $opts = [])
     {
         $this->_data[Horde_Imap_Client::FETCH_HEADERS][$label] = array_merge(
             $opts,
-            array(
-                'headers' => array_map('strval', $search)
-            )
+            [
+                'headers' => array_map('strval', $search),
+            ]
         );
     }
 
@@ -279,8 +278,8 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
      */
     public function remove($criteria, $key)
     {
-        if (isset($this->_data[$criteria]) &&
-            is_array($this->_data[$criteria])) {
+        if (isset($this->_data[$criteria])
+            && is_array($this->_data[$criteria])) {
             unset($this->_data[$criteria][$key]);
             if (empty($this->_data[$criteria])) {
                 unset($this->_data[$criteria]);
@@ -313,9 +312,8 @@ class Horde_Imap_Client_Fetch_Query implements ArrayAccess, Countable, Iterator
     #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        return isset($this->_data[$offset])
-            ? $this->_data[$offset]
-            : null;
+        return $this->_data[$offset]
+            ?? null;
     }
 
     /**

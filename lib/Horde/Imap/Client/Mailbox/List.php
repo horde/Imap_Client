@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2004-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2004-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -34,7 +35,7 @@ class Horde_Imap_Client_Mailbox_List implements Countable, IteratorAggregate
      *
      * @var array
      */
-    protected $_mboxes = array();
+    protected $_mboxes = [];
 
     /**
      * Should we sort with INBOX at the front of the list?
@@ -52,7 +53,7 @@ class Horde_Imap_Client_Mailbox_List implements Countable, IteratorAggregate
     {
         $this->_mboxes = is_array($mboxes)
             ? $mboxes
-            : array($mboxes);
+            : [$mboxes];
     }
 
     /**
@@ -68,11 +69,10 @@ class Horde_Imap_Client_Mailbox_List implements Countable, IteratorAggregate
      *
      * @return array  List of sorted mailboxes (index association is kept).
      */
-    public function sort(array $opts = array())
+    public function sort(array $opts = [])
     {
-        $this->_delimiter = isset($opts['delimiter'])
-            ? $opts['delimiter']
-            : '.';
+        $this->_delimiter = $opts['delimiter']
+            ?? '.';
         $this->_sortinbox = (!isset($opts['inbox']) || !empty($opts['inbox']));
 
         if (empty($opts['noupdate'])) {
@@ -81,7 +81,7 @@ class Horde_Imap_Client_Mailbox_List implements Countable, IteratorAggregate
             $mboxes = $this->_mboxes;
         }
 
-        uasort($mboxes, array($this, '_mboxCompare'));
+        uasort($mboxes, [$this, '_mboxCompare']);
 
         return $mboxes;
     }

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -22,18 +23,17 @@
  * @package   Imap_Client
  * @since     2.24.0
  */
-class Horde_Imap_Client_Data_SearchCharset_Utf8
-extends Horde_Imap_Client_Data_SearchCharset
+class Horde_Imap_Client_Data_SearchCharset_Utf8 extends Horde_Imap_Client_Data_SearchCharset
 {
     /**
      * Charset data.
      *
      * @var array
      */
-    protected $_charsets = array(
+    protected $_charsets = [
         'US-ASCII' => true,
-        'UTF-8' => true
-    );
+        'UTF-8' => true,
+    ];
 
     /**
      */
@@ -44,9 +44,7 @@ extends Horde_Imap_Client_Data_SearchCharset
 
     /**
      */
-    public function setValid($charset, $valid = true)
-    {
-    }
+    public function setValid($charset, $valid = true) {}
 
     /* Serializable methods. */
 
@@ -59,20 +57,16 @@ extends Horde_Imap_Client_Data_SearchCharset
 
     /**
      */
-    public function unserialize($data)
-    {
-    }
+    public function unserialize($data) {}
 
     /**
      * @return array
      */
     public function __serialize()
     {
-        return array();
+        return [];
     }
 
-    public function __unserialize(array $data)
-    {
-    }
+    public function __unserialize(array $data) {}
 
 }

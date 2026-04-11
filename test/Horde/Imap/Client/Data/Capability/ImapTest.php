@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data\Capability;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Data_Capability_Imap;
+use Horde_Imap_Client_Data_Capability_Imap;
 
 /**
  * Tests for the IMAP-specific capability object.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Data_Capability_Imap;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class ImapTest extends TestCase
 {
@@ -63,7 +67,7 @@ class ImapTest extends TestCase
         $c->add('FOO');
 
         $this->assertEquals(
-            array(),
+            [],
             $c->isEnabled()
         );
         $this->assertFalse($c->isEnabled('FOO'));
@@ -71,7 +75,7 @@ class ImapTest extends TestCase
         $c->enable('FOO');
 
         $this->assertEquals(
-            array('FOO'),
+            ['FOO'],
             $c->isEnabled()
         );
         $this->assertTrue($c->isEnabled('FOO'));

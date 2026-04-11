@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,10 +12,12 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client;
+
 use PHPUnit\Framework\TestCase;
 use Horde\Imap\Client\Stub\Socket;
-use \Horde_Imap_Client_Fetch_Results;
+use Horde_Imap_Client_Fetch_Results;
 
 /**
  * Tests for the IMAP Socket driver.
@@ -26,6 +29,7 @@ use \Horde_Imap_Client_Fetch_Results;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class SocketTest extends TestCase
 {
@@ -33,10 +37,10 @@ class SocketTest extends TestCase
 
     public function setUp(): void
     {
-        $this->test_ob = new Socket(array(
+        $this->test_ob = new Socket([
             'password' => 'foo',
-            'username' => 'bar'
-        ));
+            'username' => 'bar',
+        ]);
     }
 
     public function tearDown(): void
@@ -54,7 +58,7 @@ class SocketTest extends TestCase
         $list = $thread->messageList();
         $this->assertFalse($list instanceof Horde_Imap_Client_Ids);
         $this->assertEquals(
-            array(1),
+            [1],
             $list->ids
         );
 
@@ -64,7 +68,7 @@ class SocketTest extends TestCase
         );
 
         $this->assertEquals(
-            array(1),
+            [1],
             unserialize(serialize($list))->ids
         );
 
@@ -115,10 +119,10 @@ class SocketTest extends TestCase
             count($thread_list)
         );
 
-        foreach (array(1, 2, 3, 4, 5, 7, 9, 11) as $k) {
+        foreach ([1, 2, 3, 4, 5, 7, 9, 11] as $k) {
             $this->assertFalse($thread_list[$k]->last);
         }
-        foreach (array(6, 8, 10, 12, 13, 14, 15) as $k) {
+        foreach ([6, 8, 10, 12, 13, 14, 15] as $k) {
             $this->assertTrue($thread_list[$k]->last);
         }
 
@@ -129,25 +133,25 @@ class SocketTest extends TestCase
             );
         }
 
-        foreach (array(1, 2, 3, 4, 7, 9, 10) as $k) {
+        foreach ([1, 2, 3, 4, 7, 9, 10] as $k) {
             $this->assertEquals(
                 0,
                 $thread_list[$k]->level
             );
         }
-        foreach (array(5, 6, 8, 11, 13) as $k) {
+        foreach ([5, 6, 8, 11, 13] as $k) {
             $this->assertEquals(
                 1,
                 $thread_list[$k]->level
             );
         }
-        foreach (array(12, 14) as $k) {
+        foreach ([12, 14] as $k) {
             $this->assertEquals(
                 2,
                 $thread_list[$k]->level
             );
         }
-        foreach (array(15) as $k) {
+        foreach ([15] as $k) {
             $this->assertEquals(
                 3,
                 $thread_list[$k]->level
@@ -177,11 +181,11 @@ class SocketTest extends TestCase
 
     public function testLargeEnvelopeData()
     {
-        $test = '* 1 FETCH (ENVELOPE ("Fri, 28 Sep 2012 17:09:32 -0700" {10000}' .
-            str_repeat('F', 10000) .
-            ' ((NIL NIL "foo" "example.com")) ((NIL NIL "foo" "example.com")) ((NIL NIL "foo" "example.com")) (' .
-            str_repeat('(NIL NIL "bar" "example.com")', 50000) .
-            ') NIL NIL NIL "<123@example.com>"))';
+        $test = '* 1 FETCH (ENVELOPE ("Fri, 28 Sep 2012 17:09:32 -0700" {10000}'
+            . str_repeat('F', 10000)
+            . ' ((NIL NIL "foo" "example.com")) ((NIL NIL "foo" "example.com")) ((NIL NIL "foo" "example.com")) ('
+            . str_repeat('(NIL NIL "bar" "example.com")', 50000)
+            . ') NIL NIL NIL "<123@example.com>"))';
 
         $this->test_ob->setParam('envelope_addrs', 1000);
         $this->test_ob->setParam('envelope_string', 2000);
@@ -220,9 +224,9 @@ class SocketTest extends TestCase
 
     public function testBug11899()
     {
-        $test = '* 1 FETCH (ENVELOPE (NIL "Standard Subject" (("Test User" NIL "tester" "domain.tld")) (("Test User" NIL "tester" "domain.tld")) (("Test User" NIL "tester" "domain.tld")) (' .
-            str_repeat('("=?windows-1252?Q?=95Test_User?=" NIL "tester" "domain.tld")', 135) .
-            ') NIL NIL NIL "<id@mail.gmail.com>"))';
+        $test = '* 1 FETCH (ENVELOPE (NIL "Standard Subject" (("Test User" NIL "tester" "domain.tld")) (("Test User" NIL "tester" "domain.tld")) (("Test User" NIL "tester" "domain.tld")) ('
+            . str_repeat('("=?windows-1252?Q?=95Test_User?=" NIL "tester" "domain.tld")', 135)
+            . ') NIL NIL NIL "<id@mail.gmail.com>"))';
 
         $env = $this->test_ob->parseFetch($test)->fetch->first()->getEnvelope();
 
@@ -246,18 +250,18 @@ class SocketTest extends TestCase
 
     public function testBug11946()
     {
-        $test = array(
+        $test = [
             '* 1 FETCH (FLAGS (\Seen \Flagged))',
-            '* 1 FETCH (UID 9)'
-        );
+            '* 1 FETCH (UID 9)',
+        ];
 
         $res = new Horde_Imap_Client_Fetch_Results();
 
-        $this->test_ob->parseFetch($test[0], array('results' => $res));
-        $this->test_ob->parseFetch($test[1], array('results' => $res));
+        $this->test_ob->parseFetch($test[0], ['results' => $res]);
+        $this->test_ob->parseFetch($test[1], ['results' => $res]);
 
         $this->assertEquals(
-            array('\seen', '\flagged'),
+            ['\seen', '\flagged'],
             $res->first()->getFlags()
         );
 
@@ -270,11 +274,11 @@ class SocketTest extends TestCase
 
         $res = new Horde_Imap_Client_Fetch_Results();
 
-        $this->test_ob->parseFetch($test[0], array('results' => $res));
-        $this->test_ob->parseFetch($test[1], array('results' => $res));
+        $this->test_ob->parseFetch($test[0], ['results' => $res]);
+        $this->test_ob->parseFetch($test[1], ['results' => $res]);
 
         $this->assertEquals(
-            array('\seen', '\flagged'),
+            ['\seen', '\flagged'],
             $res->first()->getFlags()
         );
     }

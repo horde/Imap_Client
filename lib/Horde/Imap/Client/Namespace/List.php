@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -21,22 +22,21 @@
  * @package   Imap_Client
  * @since     2.21.0
  */
-class Horde_Imap_Client_Namespace_List
-implements ArrayAccess, Countable, IteratorAggregate
+class Horde_Imap_Client_Namespace_List implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * The list of namespace objects.
      *
      * @var array
      */
-    protected $_ns = array();
+    protected $_ns = [];
 
     /**
      * Constructor.
      *
      * @param array $ns  The list of namespace objects.
      */
-    public function __construct($ns = array())
+    public function __construct($ns = [])
     {
         foreach ($ns as $val) {
             $this->_ns[strval($val)] = $val;
@@ -90,9 +90,8 @@ implements ArrayAccess, Countable, IteratorAggregate
     {
         $offset = strval($offset);
 
-        return isset($this->_ns[$offset])
-            ? $this->_ns[$offset]
-            : null;
+        return $this->_ns[$offset]
+            ?? null;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -21,13 +22,12 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Imap_Client
  */
-class Horde_Imap_Client_Cache_Backend_Db
-extends Horde_Imap_Client_Cache_Backend
+class Horde_Imap_Client_Cache_Backend_Db extends Horde_Imap_Client_Cache_Backend
 {
     /** SQL table names. */
-    const BASE_TABLE = 'horde_imap_client_data';
-    const MD_TABLE = 'horde_imap_client_metadata';
-    const MSG_TABLE = 'horde_imap_client_message';
+    public const BASE_TABLE = 'horde_imap_client_data';
+    public const MD_TABLE = 'horde_imap_client_metadata';
+    public const MSG_TABLE = 'horde_imap_client_message';
 
     /**
      * Handle for the database connection.
@@ -45,7 +45,7 @@ extends Horde_Imap_Client_Cache_Backend
      *     - db: (Horde_Db_Adapter) DB object.
      * </pre>
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         if (!isset($params['db'])) {
             throw new InvalidArgumentException('Missing db parameter.');
@@ -65,12 +65,12 @@ extends Horde_Imap_Client_Cache_Backend
      */
     public function get($mailbox, $uids, $fields, $uidvalid)
     {
-        $this->getMetaData($mailbox, $uidvalid, array('uidvalid'));
+        $this->getMetaData($mailbox, $uidvalid, ['uidvalid']);
 
         $query = $this->_baseSql($mailbox, self::MSG_TABLE);
         $query[0] = 'SELECT t.data, t.msguid ' . $query[0];
 
-        $uid_query = array();
+        $uid_query = [];
         foreach ($uids as $val) {
             $uid_query[] = 't.msguid = ?';
             $query[1][] = strval($val);
@@ -78,7 +78,7 @@ extends Horde_Imap_Client_Cache_Backend
         $query[0] .= ' AND (' . implode(' OR ', $uid_query) . ')';
 
         $compress = new Horde_Compress_Fast();
-        $out = array();
+        $out = [];
 
         try {
             $columns = $this->_db->columns(self::MSG_TABLE);
@@ -89,9 +89,11 @@ extends Horde_Imap_Client_Cache_Backend
                     $out[$row['msguid']] = @unserialize($compress->decompress(
                         $columns['data']->binaryToString($row['data'])
                     ));
-                } catch (Exception $e) {}
+                } catch (Exception $e) {
+                }
             }
-        } catch (Horde_Db_Exception $e) {}
+        } catch (Horde_Db_Exception $e) {
+        }
 
         return $out;
     }
@@ -100,7 +102,7 @@ extends Horde_Imap_Client_Cache_Backend
      */
     public function getCachedUids($mailbox, $uidvalid)
     {
-        $this->getMetaData($mailbox, $uidvalid, array('uidvalid'));
+        $this->getMetaData($mailbox, $uidvalid, ['uidvalid']);
 
         $query = $this->_baseSql($mailbox, self::MSG_TABLE);
         $query[0] = 'SELECT DISTINCT t.msguid ' . $query[0];
@@ -108,7 +110,7 @@ extends Horde_Imap_Client_Cache_Backend
         try {
             return $this->_db->selectValues($query[0], $query[1]);
         } catch (Horde_Db_Exception $e) {
-            return array();
+            return [];
         }
     }
 
@@ -117,9 +119,9 @@ extends Horde_Imap_Client_Cache_Backend
     public function set($mailbox, $data, $uidvalid)
     {
         if ($uid = $this->_getUid($mailbox)) {
-            $res = $this->get($mailbox, array_keys($data), array(), $uidvalid);
+            $res = $this->get($mailbox, array_keys($data), [], $uidvalid);
         } else {
-            $res = array();
+            $res = [];
             $uid = $this->_createUid($mailbox);
         }
 
@@ -131,25 +133,27 @@ extends Horde_Imap_Client_Cache_Backend
                     /* Update */
                     $this->_db->updateBlob(
                         self::MSG_TABLE,
-                        array('data' => new Horde_Db_Value_Binary($compress->compress(serialize(array_merge($res[$key], $val))))),
-                        array(
+                        ['data' => new Horde_Db_Value_Binary($compress->compress(serialize(array_merge($res[$key], $val))))],
+                        [
                             'messageid = ? AND msguid = ?',
-                            array($uid, strval($key))
-                        )
+                            [$uid, strval($key)],
+                        ]
                     );
-                } catch (Horde_Db_Exception $e) {}
+                } catch (Horde_Db_Exception $e) {
+                }
             } else {
                 /* Insert */
                 try {
                     $this->_db->insertBlob(
                         self::MSG_TABLE,
-                        array(
+                        [
                             'data' => new Horde_Db_Value_Binary($compress->compress(serialize($val))),
                             'msguid' => strval($key),
-                            'messageid' => $uid
-                        )
+                            'messageid' => $uid,
+                        ]
                     );
-                } catch (Horde_Db_Exception $e) {}
+                } catch (Horde_Db_Exception $e) {
+                }
             }
         }
 
@@ -160,12 +164,13 @@ extends Horde_Imap_Client_Cache_Backend
                     'UPDATE %s SET modified = ? WHERE messageid = ?',
                     self::BASE_TABLE
                 ),
-                array(time(), $uid)
+                [time(), $uid]
             );
-        } catch (Horde_Db_Exception $e) {}
+        } catch (Horde_Db_Exception $e) {
+        }
 
         /* Update uidvalidity. */
-        $this->setMetaData($mailbox, array('uidvalid' => $uidvalid));
+        $this->setMetaData($mailbox, ['uidvalid' => $uidvalid]);
     }
 
     /**
@@ -177,7 +182,7 @@ extends Horde_Imap_Client_Cache_Backend
 
         if (!empty($entries)) {
             $entries[] = 'uidvalid';
-            $entry_query = array();
+            $entry_query = [];
 
             foreach (array_unique($entries) as $val) {
                 $entry_query[] = 't.field = ?';
@@ -191,31 +196,33 @@ extends Horde_Imap_Client_Cache_Backend
                 $columns = $this->_db->columns(self::MD_TABLE);
                 foreach ($res as $key => $val) {
                     switch ($key) {
-                    case 'uidvalid':
-                        $res[$key] = $columns['data']->binaryToString($val);
-                        break;
+                        case 'uidvalid':
+                            $res[$key] = $columns['data']->binaryToString($val);
+                            break;
 
-                    default:
-                        try {
-                            $res[$key] = @unserialize(
-                                $columns['data']->binaryToString($val)
-                            );
-                        } catch (Exception $e) {}
-                        break;
+                        default:
+                            try {
+                                $res[$key] = @unserialize(
+                                    $columns['data']->binaryToString($val)
+                                );
+                            } catch (Exception $e) {
+                            }
+                            break;
                     }
                 }
 
-                if (is_null($uidvalid) ||
-                    !isset($res['uidvalid']) ||
-                    ($res['uidvalid'] == $uidvalid)) {
+                if (is_null($uidvalid)
+                    || !isset($res['uidvalid'])
+                    || ($res['uidvalid'] == $uidvalid)) {
                     return $res;
                 }
 
                 $this->deleteMailbox($mailbox);
             }
-        } catch (Horde_Db_Exception $e) {}
+        } catch (Horde_Db_Exception $e) {
+        }
 
-        return array();
+        return [];
     }
 
     /**
@@ -227,7 +234,7 @@ extends Horde_Imap_Client_Cache_Backend
         }
 
         $query = sprintf('SELECT field FROM %s where messageid = ?', self::MD_TABLE);
-        $values = array($uid);
+        $values = [$uid];
 
         try {
             $fields = $this->_db->selectValues($query, $values);
@@ -243,18 +250,20 @@ extends Horde_Imap_Client_Cache_Backend
                 try {
                     $this->_db->updateBlob(
                         self::MD_TABLE,
-                        array('data' => $val),
-                        array('field = ? AND messageid = ?', array($key, $uid))
+                        ['data' => $val],
+                        ['field = ? AND messageid = ?', [$key, $uid]]
                     );
-                } catch (Horde_Db_Exception $e) {}
+                } catch (Horde_Db_Exception $e) {
+                }
             } else {
                 /* Insert */
                 try {
                     $this->_db->insertBlob(
                         self::MD_TABLE,
-                        array('data' => $val, 'field' => $key, 'messageid' => $uid)
+                        ['data' => $val, 'field' => $key, 'messageid' => $uid]
                     );
-                } catch (Horde_Db_Exception $e) {}
+                } catch (Horde_Db_Exception $e) {
+                }
             }
         }
     }
@@ -273,7 +282,7 @@ extends Horde_Imap_Client_Cache_Backend
             self::MSG_TABLE
         );
 
-        $uid_query = array();
+        $uid_query = [];
         foreach ($uids as $val) {
             $uid_query[] = 'msguid = ?';
             $query[1][] = strval($val);
@@ -282,7 +291,8 @@ extends Horde_Imap_Client_Cache_Backend
 
         try {
             $this->_db->delete($query[0], $query[1]);
-        } catch (Horde_Db_Exception $e) {}
+        } catch (Horde_Db_Exception $e) {
+        }
     }
 
     /**
@@ -293,13 +303,14 @@ extends Horde_Imap_Client_Cache_Backend
             return;
         }
 
-        foreach (array(self::BASE_TABLE, self::MD_TABLE, self::MSG_TABLE) as $val) {
+        foreach ([self::BASE_TABLE, self::MD_TABLE, self::MSG_TABLE] as $val) {
             try {
                 $this->_db->delete(
                     sprintf('DELETE FROM %s WHERE messageid = ?', $val),
-                    array($uid)
+                    [$uid]
                 );
-            } catch (Horde_Db_Exception $e) {}
+            } catch (Horde_Db_Exception $e) {
+            }
         }
     }
 
@@ -312,18 +323,19 @@ extends Horde_Imap_Client_Cache_Backend
                 $this->_db->delete(sprintf('DELETE FROM %s', self::BASE_TABLE));
                 $this->_db->delete(sprintf('DELETE FROM %s', self::MD_TABLE));
                 $this->_db->delete(sprintf('DELETE FROM %s', self::MSG_TABLE));
-            } catch (Horde_Db_Exception $e) {}
+            } catch (Horde_Db_Exception $e) {
+            }
             return;
         }
 
         $purge = time() - $lifetime;
         $sql = 'DELETE FROM %s WHERE messageid IN (SELECT messageid FROM %s WHERE modified < ?)';
 
-        foreach (array(self::MD_TABLE, self::MSG_TABLE) as $val) {
+        foreach ([self::MD_TABLE, self::MSG_TABLE] as $val) {
             try {
                 $this->_db->delete(
                     sprintf($sql, $val, self::BASE_TABLE),
-                    array($purge)
+                    [$purge]
                 );
             } catch (Horde_Db_Exception $e) {
             }
@@ -332,7 +344,7 @@ extends Horde_Imap_Client_Cache_Backend
         try {
             $this->_db->delete(
                 sprintf('DELETE FROM %s WHERE modified < ?', self::BASE_TABLE),
-                array($purge)
+                [$purge]
             );
         } catch (Horde_Db_Exception $e) {
         }
@@ -354,15 +366,15 @@ extends Horde_Imap_Client_Cache_Backend
             $sql .= sprintf(' INNER JOIN %s t ON d.messageid = t.messageid', $join);
         }
 
-        return array(
+        return [
             $sql . ' WHERE d.hostspec = ? AND d.port = ? AND d.username = ? AND d.mailbox = ?',
-            array(
+            [
                 $this->_params['hostspec'],
                 $this->_params['port'],
                 $this->_params['username'],
-                $mailbox
-            )
-        );
+                $mailbox,
+            ],
+        ];
     }
 
     /**
@@ -391,16 +403,16 @@ extends Horde_Imap_Client_Cache_Backend
     {
         return $this->_db->insert(
             sprintf(
-                'INSERT INTO %s (hostspec, mailbox, port, username) ' .
-                    'VALUES (?, ?, ?, ?)',
+                'INSERT INTO %s (hostspec, mailbox, port, username) '
+                    . 'VALUES (?, ?, ?, ?)',
                 self::BASE_TABLE
             ),
-            array(
+            [
                 $this->_params['hostspec'],
                 $mailbox,
                 $this->_params['port'],
-                $this->_params['username']
-            )
+                $this->_params['username'],
+            ]
         );
     }
 

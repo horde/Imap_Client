@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2013-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2013-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -31,10 +32,10 @@ class Horde_Imap_Client_Interaction_Pipeline implements Countable, IteratorAggre
      *
      * @var array
      */
-    public $data = array(
-        'modseqs' => array(),
-        'modseqs_nouid' => array()
-    );
+    public $data = [
+        'modseqs' => [],
+        'modseqs_nouid' => [],
+    ];
 
     /**
      * Fetch results.
@@ -48,14 +49,14 @@ class Horde_Imap_Client_Interaction_Pipeline implements Countable, IteratorAggre
      *
      * @var array
      */
-    protected $_commands = array();
+    protected $_commands = [];
 
     /**
      * The list of commands to complete.
      *
      * @var array
      */
-    protected $_todo = array();
+    protected $_todo = [];
 
     /**
      * Constructor.
@@ -72,8 +73,8 @@ class Horde_Imap_Client_Interaction_Pipeline implements Countable, IteratorAggre
     public function __get($name)
     {
         switch ($name) {
-        case 'finished':
-            return empty($this->_todo);
+            case 'finished':
+                return empty($this->_todo);
         }
     }
 
@@ -84,12 +85,13 @@ class Horde_Imap_Client_Interaction_Pipeline implements Countable, IteratorAggre
      * @param boolean $top                                Add command to top
      *                                                    of queue?
      */
-    public function add(Horde_Imap_Client_Interaction_Command $cmd,
-                        $top = false)
-    {
+    public function add(
+        Horde_Imap_Client_Interaction_Command $cmd,
+        $top = false
+    ) {
         if ($top) {
             // This won't re-index keys, which may be numerical.
-            $this->_commands = array($cmd->tag => $cmd) + $this->_commands;
+            $this->_commands = [$cmd->tag => $cmd] + $this->_commands;
         } else {
             $this->_commands[$cmd->tag] = $cmd;
         }
@@ -134,9 +136,8 @@ class Horde_Imap_Client_Interaction_Pipeline implements Countable, IteratorAggre
      */
     public function getCmd($tag)
     {
-        return isset($this->_commands[$tag])
-            ? $this->_commands[$tag]
-            : null;
+        return $this->_commands[$tag]
+            ?? null;
     }
 
     /* Countable methods. */

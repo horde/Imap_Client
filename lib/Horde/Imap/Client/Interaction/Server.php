@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -26,11 +27,11 @@ class Horde_Imap_Client_Interaction_Server
     /**
      * Response codes (RFC 3501 [7.1]).
      */
-    const BAD = 1;
-    const BYE = 2;
-    const NO = 3;
-    const OK = 4;
-    const PREAUTH = 5;
+    public const BAD = 1;
+    public const BYE = 2;
+    public const NO = 3;
+    public const OK = 4;
+    public const PREAUTH = 5;
 
     /**
      * Check for status response?
@@ -77,14 +78,14 @@ class Horde_Imap_Client_Interaction_Server
         $t->next();
 
         switch ($tag) {
-        case '+':
-            return new Horde_Imap_Client_Interaction_Server_Continuation($t);
+            case '+':
+                return new Horde_Imap_Client_Interaction_Server_Continuation($t);
 
-        case '*':
-            return new Horde_Imap_Client_Interaction_Server_Untagged($t);
+            case '*':
+                return new Horde_Imap_Client_Interaction_Server_Untagged($t);
 
-        default:
-            return new Horde_Imap_Client_Interaction_Server_Tagged($t, $tag);
+            default:
+                return new Horde_Imap_Client_Interaction_Server_Tagged($t, $tag);
         }
     }
 
@@ -100,7 +101,7 @@ class Horde_Imap_Client_Interaction_Server
 
         /* Check for response status. */
         $status = $token->current();
-        $valid = array('BAD', 'BYE', 'NO', 'OK', 'PREAUTH');
+        $valid = ['BAD', 'BYE', 'NO', 'OK', 'PREAUTH'];
 
         if (in_array($status, $valid)) {
             $this->status = constant(__CLASS__ . '::' . $status);
@@ -109,8 +110,8 @@ class Horde_Imap_Client_Interaction_Server
             /* Check for response code. Only occurs if there is a response
              * status. */
             if (is_string($resp_text) && ($resp_text[0] === '[')) {
-                $resp = new stdClass;
-                $resp->data = array();
+                $resp = new stdClass();
+                $resp->data = [];
 
                 if ($resp_text[strlen($resp_text) - 1] === ']') {
                     $resp->code = substr($resp_text, 1, -1);

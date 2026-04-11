@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,8 +12,10 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Url;
-use \Horde_Imap_Client_Mailbox;
+
+use Horde_Imap_Client_Mailbox;
 
 /**
  * Tests for IMAP URL parsing.
@@ -24,6 +27,7 @@ use \Horde_Imap_Client_Mailbox;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class ImapTest extends TestBase
 {
@@ -34,84 +38,84 @@ class ImapTest extends TestBase
     {
         $this->markTestIncomplete();
 
-        return array(
-            array(
+        return [
+            [
                 'imap://test.example.com/',
                 null,
-                array(
+                [
                     'host' => 'test.example.com',
                     'port' => 143,
-                    'mailbox' => null
-                )
-            ),
-            array(
+                    'mailbox' => null,
+                ],
+            ],
+            [
                 'imap://test.example.com:143/',
                 'imap://test.example.com/',
-                array(
+                [
                     'host' => 'test.example.com',
                     'port' => 143,
-                    'mailbox' => null
-                )
-            ),
-            array(
+                    'mailbox' => null,
+                ],
+            ],
+            [
                 'imap://testuser@test.example.com/',
                 null,
-                array(
+                [
                     'host' => 'test.example.com',
                     'port' => 143,
                     'username' => 'testuser',
-                    'mailbox' => null
-                )
-            ),
-            array(
+                    'mailbox' => null,
+                ],
+            ],
+            [
                 'imap://testuser@test.example.com:14300/',
                 null,
-                array(
+                [
                     'host' => 'test.example.com',
                     'port' => 14300,
                     'username' => 'testuser',
                     'mailbox' => null,
-                )
-            ),
-            array(
+                ],
+            ],
+            [
                 'imap://testuser;AUTH=*@test.example.com:143/',
                 'imap://testuser@test.example.com/',
-                array(
+                [
                     'auth' => null,
                     'host' => 'test.example.com',
                     'port' => 143,
                     'username' => 'testuser',
-                    'mailbox' => null
-                )
-            ),
-            array(
+                    'mailbox' => null,
+                ],
+            ],
+            [
                 'imap://testuser;AUTH=PLAIN@test.example.com:14300/',
                 null,
-                array(
+                [
                     'host' => 'test.example.com',
                     'port' => 14300,
                     'username' => 'testuser',
                     'auth' => 'PLAIN',
-                    'mailbox' => null
-                )
-            ),
-            array(
+                    'mailbox' => null,
+                ],
+            ],
+            [
                 'imap://test.example.com:14300/Quarant%26AOQ-ne;UIDVALIDITY=1240054819/;UID=39193/;SECTION=HEADER/;PARTIAL=0.1024',
                 null,
-                array(
+                [
                     'host' => 'test.example.com',
                     'partial' => '0.1024',
                     'port' => 14300,
                     'section' => 'HEADER',
                     'uid' => 39193,
                     'uidvalidity' => 1240054819,
-                    'mailbox' => new Horde_Imap_Client_Mailbox('Quarant&AOQ-ne', true)
-                )
-            ),
-            array(
+                    'mailbox' => new Horde_Imap_Client_Mailbox('Quarant&AOQ-ne', true),
+                ],
+            ],
+            [
                 'imap://test.example.com:14300/INBOX;UIDVALIDITY=123/;UID=456?FLAGGED%20SINCE%201-Feb-1994%20NOT%20FROM%20%22Smith%22',
                 'imap://test.example.com:14300/INBOX;UIDVALIDITY=123?FLAGGED%20SINCE%201-Feb-1994%20NOT%20FROM%20%22Smith%22',
-                array(
+                [
                     'host' => 'test.example.com',
                     'port' => 14300,
                     'uidvalidity' => 123,
@@ -119,17 +123,17 @@ class ImapTest extends TestBase
                     // Ignore extra data after UIDVALIDITY
                     'uid' => '',
                     // Search example from RFC 3501 [6.4.4]
-                    'search' => 'FLAGGED SINCE 1-Feb-1994 NOT FROM "Smith"'
-                )
-            )
-        );
+                    'search' => 'FLAGGED SINCE 1-Feb-1994 NOT FROM "Smith"',
+                ],
+            ],
+        ];
     }
 
     public function serializeProvider()
     {
-        return array(
-            array('imap://test.example.com/')
-        );
+        return [
+            ['imap://test.example.com/'],
+        ];
     }
 
 }

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2015-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2015-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,6 +12,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Fetch\Results;
 
 /**
@@ -24,13 +26,14 @@ namespace Horde\Imap\Client\Fetch\Results;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class FetchPop3Test extends TestBase
 {
     protected function _setUp()
     {
         $this->ob_class = 'Horde_Imap_Client_Data_Fetch_Pop3';
-        $this->ob_ids = array('a', 'b', 'c');
+        $this->ob_ids = ['a', 'b', 'c'];
     }
 
 }

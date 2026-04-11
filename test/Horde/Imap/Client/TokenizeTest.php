@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Tokenize;
+use Horde_Imap_Client_Tokenize;
 
 /**
  * Tests for the IMAP string tokenizer.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Tokenize;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class TokenizeTest extends TestCase
 {
@@ -188,8 +192,8 @@ class TokenizeTest extends TestCase
     public function testTokenizeComplexFetchExample()
     {
         $test = <<<EOT
-* 8 FETCH (UID 39210 BODYSTRUCTURE (("text" "plain" ("charset" "ISO-8859-1") NIL NIL "quoted-printable" 1559 40 NIL NIL NIL NIL)("text" "html" ("charset" "ISO-8859-1") NIL NIL {16}quoted-printable 25318 427 NIL NIL NIL NIL) {11}alternative ("boundary" "_Part_1_xMiAxODoyNjozNyAtMDQwMA==") NIL NIL NIL))
-EOT;
+            * 8 FETCH (UID 39210 BODYSTRUCTURE (("text" "plain" ("charset" "ISO-8859-1") NIL NIL "quoted-printable" 1559 40 NIL NIL NIL NIL)("text" "html" ("charset" "ISO-8859-1") NIL NIL {16}quoted-printable 25318 427 NIL NIL NIL NIL) {11}alternative ("boundary" "_Part_1_xMiAxODoyNjozNyAtMDQwMA==") NIL NIL NIL))
+            EOT;
 
         $token = new Horde_Imap_Client_Tokenize($test);
         $token->rewind();
@@ -407,7 +411,7 @@ EOT;
         $token->next(); // Opening paren
 
         $this->assertEquals(
-            array('BAR', 'BAR2'),
+            ['BAR', 'BAR2'],
             $token->flushIterator()
         );
         $this->assertEquals(
@@ -420,7 +424,7 @@ EOT;
         $token->next(); // Opening paren
 
         $this->assertEquals(
-            array(),
+            [],
             $token->flushIterator(false)
         );
         $this->assertEquals(
@@ -433,7 +437,7 @@ EOT;
         $token->next(); // Opening paren
 
         $this->assertEquals(
-            array(),
+            [],
             $token->flushIterator(false, false)
         );
         $this->assertTrue($token->eos);
@@ -570,7 +574,7 @@ EOT;
     public function testSerialize()
     {
         $this->expectException('LogicException');
-        
+
         $test = 'FOO BAR';
         $token = new Horde_Imap_Client_Tokenize($test);
 

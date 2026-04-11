@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -62,10 +63,10 @@ class Horde_Imap_Client_Data_Acl extends Horde_Imap_Client_Data_AclCommon implem
     {
         $rlist = array_diff(str_split($rights), array_keys($this->_virtual));
 
-        return array(
+        return [
             'added' => implode('', array_diff($rlist, $this->_rights)),
-            'removed' => implode('', array_diff($this->_rights, $rlist))
-        );
+            'removed' => implode('', array_diff($this->_rights, $rlist)),
+        ];
     }
 
     /**
@@ -139,7 +140,7 @@ class Horde_Imap_Client_Data_Acl extends Horde_Imap_Client_Data_AclCommon implem
     #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
-        $this->_rights = array_values(array_diff($this->_rights, array($offset)));
+        $this->_rights = array_values(array_diff($this->_rights, [$offset]));
     }
 
     /* IteratorAggregate method. */
@@ -170,14 +171,14 @@ class Horde_Imap_Client_Data_Acl extends Horde_Imap_Client_Data_AclCommon implem
         $this->__unserialize($data);
     }
 
-     /**
-     * @return array
-     */
+    /**
+    * @return array
+    */
     public function __serialize()
     {
-        return array(
-            'rights' => $this->_rights
-        );
+        return [
+            'rights' => $this->_rights,
+        ];
     }
 
     public function __unserialize(array $data)

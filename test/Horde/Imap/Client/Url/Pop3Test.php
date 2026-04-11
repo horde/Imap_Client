@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,6 +12,7 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Url;
 
 /**
@@ -23,6 +25,7 @@ namespace Horde\Imap\Client\Url;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class Pop3Test extends TestBase
 {
@@ -34,83 +37,83 @@ class Pop3Test extends TestBase
     {
         $this->markTestIncomplete();
 
-        return array(
-            array(
+        return [
+            [
                 'pop://test.example.com/',
                 null,
-                array(
+                [
                     'host' => 'test.example.com',
-                    'port' => 110
-                )
-            ),
-            array(
+                    'port' => 110,
+                ],
+            ],
+            [
                 'pop://test.example.com:110/',
                 'pop://test.example.com/',
-                array(
-                    'host' => 'test.example.com',
-                    'port' => 110
-                )
-            ),
-            array(
-                'pop://testuser@test.example.com/',
-                null,
-                array(
+                [
                     'host' => 'test.example.com',
                     'port' => 110,
-                    'username' => 'testuser'
-                )
-            ),
-            // This is the default port for IMAP, not POP3
-            array(
-                'pop://testuser@test.example.com:143/',
-                null,
-                array(
-                    'host' => 'test.example.com',
-                    'port' => 143,
-                    'username' => 'testuser'
-                )
-            ),
-            array(
-                'pop://testuser;AUTH=*@test.example.com:110/',
+                ],
+            ],
+            [
                 'pop://testuser@test.example.com/',
-                array(
-                    'auth' => null,
-                    'host' => 'test.example.com',
-                    'port' => 110,
-                    'username' => 'testuser'
-                )
-            ),
-            array(
-                'pop://testuser;AUTH=PLAIN@test.example.com/',
                 null,
-                array(
+                [
                     'host' => 'test.example.com',
                     'port' => 110,
                     'username' => 'testuser',
-                    'auth' => 'PLAIN'
-                )
-            ),
+                ],
+            ],
+            // This is the default port for IMAP, not POP3
+            [
+                'pop://testuser@test.example.com:143/',
+                null,
+                [
+                    'host' => 'test.example.com',
+                    'port' => 143,
+                    'username' => 'testuser',
+                ],
+            ],
+            [
+                'pop://testuser;AUTH=*@test.example.com:110/',
+                'pop://testuser@test.example.com/',
+                [
+                    'auth' => null,
+                    'host' => 'test.example.com',
+                    'port' => 110,
+                    'username' => 'testuser',
+                ],
+            ],
+            [
+                'pop://testuser;AUTH=PLAIN@test.example.com/',
+                null,
+                [
+                    'host' => 'test.example.com',
+                    'port' => 110,
+                    'username' => 'testuser',
+                    'auth' => 'PLAIN',
+                ],
+            ],
             // Ignore everything after the port.
-            array(
+            [
                 'pop://test.example.com:110/INBOX.Quarant%26AOQ-ne;UIDVALIDITY=1240054819/;UID=39193/;SECTION=HEADER',
                 'pop://test.example.com/',
-                array(
+                [
                     'host' => 'test.example.com',
                     'port' => 110,
                     'section' => '',
                     'uid' => '',
                     'uidvalidity' => '',
-                    'mailbox' => ''
-                )
-            )
-        );
+                    'mailbox' => '',
+                ],
+            ],
+        ];
     }
 
     public function serializeProvider()
     {
-        return array(
-            array('pop://test.example.com/')
-        );
+        return [
+            ['pop://test.example.com/'],
+        ];
     }
 
 }

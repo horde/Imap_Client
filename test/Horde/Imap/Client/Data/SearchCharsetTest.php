@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -11,9 +12,11 @@
  * @package    Imap_Client
  * @subpackage UnitTests
  */
+
 namespace Horde\Imap\Client\Data;
+
 use PHPUnit\Framework\TestCase;
-use \Horde_Imap_Client_Data_SearchCharset;
+use Horde_Imap_Client_Data_SearchCharset;
 
 /**
  * Tests for the SearchCharset object.
@@ -25,6 +28,7 @@ use \Horde_Imap_Client_Data_SearchCharset;
  * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package    Imap_Client
  * @subpackage UnitTests
+ * @coversNothing
  */
 class SearchCharsetTest extends TestCase
 {
@@ -44,7 +48,7 @@ class SearchCharsetTest extends TestCase
     public function testQueryWithoutBaseOb()
     {
         $this->expectException('RuntimeException');
-        
+
         $s = new Horde_Imap_Client_Data_SearchCharset();
 
         $s->query('UTF-8');
@@ -69,7 +73,7 @@ class SearchCharsetTest extends TestCase
         $s->setValid('UTF-8');
 
         $this->assertEquals(
-            array('US-ASCII', 'UTF-8'),
+            ['US-ASCII', 'UTF-8'],
             $s->charsets
         );
     }
