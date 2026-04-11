@@ -26,7 +26,7 @@ license:
   uri: http://www.horde.org/licenses/lgpl21
 dependencies:
   required:
-    php: ^7.4 || ^8
+    php: ^8.1
     composer:
       horde/exception: ^3
       horde/mail: ^3
@@ -40,6 +40,17 @@ dependencies:
     ext:
       hash: '*'
       json: '*'
+  dev:
+    composer:
+      horde/cache: ^3
+      horde/compress_fast: ^2
+      horde/crypt_blowfish: ^2
+      horde/db: ^3
+      horde/hashtable: ^2
+      horde/mongo: ^2
+      horde/pack: ^2
+      horde/stringprep: ^2
+      horde/support: ^3
   optional:
     composer:
       horde/cache: ^3
@@ -51,8 +62,9 @@ dependencies:
       horde/pack: ^2
       horde/stringprep: ^2
       horde/support: ^3
-      horde/test: ^3
     ext:
       intl: '*'
       mbstring: '*'
 vendor: horde
+keywords:
+  - mailbox
