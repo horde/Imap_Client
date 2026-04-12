@@ -3568,21 +3568,29 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
         return $ret;
     }
 
-    /**
-     */
     protected function _vanished($modseq, Horde_Imap_Client_Ids $ids)
     {
-        $pipeline = $this->_pipeline(
-            $this->_command('UID FETCH')->add([
-                strval($ids),
+        // Unlike _fetchCmd(), sequence IDs are rejected before reaching
+        // here, so we always issue UID FETCH. Chunk UIDs to avoid
+        // exceeding the server's command length limit.
+
+        $modifiers = new Horde_Imap_Client_Data_Format_List([
+            'VANISHED',
+            'CHANGEDSINCE',
+            new Horde_Imap_Client_Data_Format_Number($modseq),
+        ]);
+
+        $pipeline = $this->_pipeline();
+
+        foreach ($ids->split($this->_capability()->cmdlength) as $val) {
+            $cmd = $this->_command('UID FETCH')->add([
+                $val,
                 'UID',
-                new Horde_Imap_Client_Data_Format_List([
-                    'VANISHED',
-                    'CHANGEDSINCE',
-                    new Horde_Imap_Client_Data_Format_Number($modseq),
-                ]),
-            ])
-        );
+                $modifiers,
+            ]);
+            $pipeline->add($cmd);
+        }
+
         $pipeline->data['vanished'] = $this->getIdsOb();
 
         return $this->_sendCmd($pipeline)->data['vanished'];
@@ -4339,13 +4347,15 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                         $this->_temp['logout'] = true;
                         $this->logout();
                         throw $e;
-                }
 
-                /* For all other issues, catch and store exception; don't
-                 * throw until all input is read since we need to clear
-                 * incoming queue. (For now, only store first exception.) */
-                if (is_null($exception)) {
-                    $exception = $e;
+                    default:
+                        /* For all other issues, catch and store exception;
+                         * don't throw until all input is read since we need
+                         * to clear incoming queue. (For now, only store first
+                         * exception.) */
+                        if (is_null($exception)) {
+                            $exception = $e;
+                        }
                 }
 
                 if (($e instanceof Horde_Imap_Client_Exception_ServerResponse)
