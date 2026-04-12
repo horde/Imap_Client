@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace Horde\Imap\Client\Test\Stub;
 
+use Horde_Imap_Client_Data_Capability_Imap;
 use Horde_Imap_Client_Data_Thread;
+use Horde_Imap_Client_Ids;
+use Horde_Imap_Client_Interaction_Pipeline;
 use Horde_Imap_Client_Interaction_Server;
 use Horde_Imap_Client_Socket;
 use Horde_Imap_Client_Tokenize;
@@ -29,6 +32,19 @@ use Horde_Imap_Client_Tokenize;
 class Socket extends Horde_Imap_Client_Socket
 {
     public $fetch_results;
+
+    private bool $captureSendCmd = false;
+
+    public ?Horde_Imap_Client_Interaction_Pipeline $capturedPipeline = null;
+
+    protected function _sendCmd($cmd)
+    {
+        if ($this->captureSendCmd) {
+            $this->capturedPipeline = $cmd;
+            return $cmd;
+        }
+        return parent::_sendCmd($cmd);
+    }
 
     public function getThreadSort($data)
     {
@@ -95,5 +111,14 @@ class Socket extends Horde_Imap_Client_Socket
     public function fetch($mailbox, $query, array $options = [])
     {
         return $this->fetch_results;
+    }
+
+    public function doVanishedPipeline(int $modseq, Horde_Imap_Client_Ids $ids): Horde_Imap_Client_Interaction_Pipeline
+    {
+        $this->captureSendCmd = true;
+        $this->capturedPipeline = null;
+        $this->_init['capability'] = new Horde_Imap_Client_Data_Capability_Imap();
+        $this->_vanished($modseq, $ids);
+        return $this->capturedPipeline;
     }
 }

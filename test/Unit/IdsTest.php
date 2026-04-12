@@ -352,4 +352,45 @@ class IdsTest extends TestCase
         );
     }
 
+    public function testForcedIntForRange()
+    {
+        $ids = new Horde_Imap_Client_Ids('1:3');
+        $this->assertEquals(
+            [1, 2, 3],
+            iterator_to_array($ids)
+        );
+
+        foreach (iterator_to_array($ids) as $id) {
+            $this->assertIsInt($id);
+        }
+    }
+
+    public function testForcedIntForSequence()
+    {
+        $ids = new Horde_Imap_Client_Ids('1,5,7');
+        $this->assertEquals(
+            [1, 5, 7],
+            iterator_to_array($ids)
+        );
+
+        foreach (iterator_to_array($ids) as $id) {
+            $this->assertIsInt($id);
+        }
+    }
+
+    public function testAddingWithForcedIntConversion()
+    {
+        $ids = new Horde_Imap_Client_Ids('1,5,7');
+        $ids->add('101:103');
+
+        $this->assertEquals(
+            [1, 5, 7, 101, 102, 103],
+            iterator_to_array($ids)
+        );
+
+        foreach (iterator_to_array($ids) as $id) {
+            $this->assertIsInt($id);
+        }
+    }
+
 }

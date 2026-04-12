@@ -17,7 +17,9 @@ namespace Horde\Imap\Client\Test\Unit;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Horde\Imap\Client\Test\Stub\Socket;
+use Horde_Imap_Client_Data_Thread;
 use Horde_Imap_Client_Fetch_Results;
+use Horde_Imap_Client_Ids;
 
 /**
  * Tests for the IMAP Socket driver.
@@ -49,10 +51,10 @@ class SocketTest extends TestCase
         $data = '* THREAD (1)';
         $thread = $this->test_ob->getThreadSort($data);
 
-        $this->assertFalse($thread instanceof Horde_Imap_Client_Data_Thread);
+        $this->assertInstanceOf(Horde_Imap_Client_Data_Thread::class, $thread);
 
         $list = $thread->messageList();
-        $this->assertFalse($list instanceof Horde_Imap_Client_Ids);
+        $this->assertInstanceOf(Horde_Imap_Client_Ids::class, $list);
         $this->assertEquals(
             [1],
             $list->ids
@@ -92,7 +94,7 @@ class SocketTest extends TestCase
         $thread = $this->test_ob->getThreadSort($data);
 
         $list = $thread->messageList();
-        $this->assertFalse($list instanceof Horde_Imap_Client_Ids);
+        $this->assertInstanceOf(Horde_Imap_Client_Ids::class, $list);
         $this->assertEquals(
             range(1, 17),
             $list->ids
@@ -352,6 +354,24 @@ class SocketTest extends TestCase
         $env = $this->test_ob->parseFetch($test)->fetch->first()->getEnvelope();
 
         $this->assertNotNull($env->to);
+    }
+
+    public function testVanishedCommand()
+    {
+        // 200 non-consecutive 4-digit UIDs, fits in one 2000-octet command.
+        $ids = new Horde_Imap_Client_Ids(range(1001, 1399, 2));
+        $pipeline = $this->test_ob->doVanishedPipeline(12345, $ids);
+
+        $this->assertCount(1, $pipeline);
+    }
+
+    public function testVanishedCommandChunks()
+    {
+        // 500 non-consecutive 4-digit UIDs, exceeds the 2000-octet limit.
+        $ids = new Horde_Imap_Client_Ids(range(1001, 1999, 2));
+        $pipeline = $this->test_ob->doVanishedPipeline(12345, $ids);
+
+        $this->assertGreaterThan(1, count($pipeline));
     }
 
 }
