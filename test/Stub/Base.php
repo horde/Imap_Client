@@ -41,35 +41,25 @@ class Base extends Horde_Imap_Client_Base
         return $this->_initCache($current);
     }
 
-    protected function _initCapability()
-    {
-    }
+    protected function _initCapability() {}
 
-    protected function _noop()
-    {
-    }
+    protected function _noop() {}
 
     protected function _getNamespaces()
     {
         return [];
     }
 
-    protected function _connect()
-    {
-    }
+    protected function _connect() {}
 
     protected function _login()
     {
         return true;
     }
 
-    protected function _logout()
-    {
-    }
+    protected function _logout() {}
 
-    protected function _sendID($info)
-    {
-    }
+    protected function _sendID($info) {}
 
     protected function _getID()
     {
@@ -89,30 +79,24 @@ class Base extends Horde_Imap_Client_Base
     protected function _openMailbox(
         Horde_Imap_Client_Mailbox $mailbox,
         $mode
-    ) {
-    }
+    ) {}
 
     protected function _createMailbox(
         Horde_Imap_Client_Mailbox $mailbox,
         $opts
-    ) {
-    }
+    ) {}
 
-    protected function _deleteMailbox(Horde_Imap_Client_Mailbox $mailbox)
-    {
-    }
+    protected function _deleteMailbox(Horde_Imap_Client_Mailbox $mailbox) {}
 
     protected function _renameMailbox(
         Horde_Imap_Client_Mailbox $old,
         Horde_Imap_Client_Mailbox $new
-    ) {
-    }
+    ) {}
 
     protected function _subscribeMailbox(
         Horde_Imap_Client_Mailbox $mailbox,
         $subscribe
-    ) {
-    }
+    ) {}
 
     protected function _listMailboxes($pattern, $mode, $options)
     {
@@ -132,47 +116,35 @@ class Base extends Horde_Imap_Client_Base
         return new Horde_Imap_Client_Ids();
     }
 
-    protected function _check()
-    {
-    }
+    protected function _check() {}
 
-    protected function _close($options)
-    {
-    }
+    protected function _close($options) {}
 
-    protected function _expunge($options)
-    {
-    }
+    protected function _expunge($options) {}
 
     protected function _search($query, $options)
     {
         return [];
     }
 
-    protected function _setComparator($comparator)
-    {
-    }
+    protected function _setComparator($comparator) {}
 
     protected function _getComparator()
     {
         return [];
     }
 
-    protected function _thread($options)
-    {
-    }
+    protected function _thread($options) {}
 
     protected function _fetch(
         Horde_Imap_Client_Fetch_Results $results,
         $queries
-    ) {
-    }
+    ) {}
 
     protected function _vanished(
         $modseq,
         Horde_Imap_Client_Ids $ids
-    ) {
-    }
+    ) {}
 
     protected function _store($options)
     {
@@ -189,8 +161,7 @@ class Base extends Horde_Imap_Client_Base
     protected function _setQuota(
         Horde_Imap_Client_Mailbox $root,
         $resources
-    ) {
-    }
+    ) {}
 
     protected function _getQuota(Horde_Imap_Client_Mailbox $root)
     {
@@ -211,24 +182,19 @@ class Base extends Horde_Imap_Client_Base
         Horde_Imap_Client_Mailbox $mailbox,
         $identifier,
         $options
-    ) {
-    }
+    ) {}
 
     protected function _deleteACL(
         Horde_Imap_Client_Mailbox $mailbox,
         $identifier
-    ) {
-    }
+    ) {}
 
     protected function _listACLRights(
         Horde_Imap_Client_Mailbox $mailbox,
         $identifier
-    ) {
-    }
+    ) {}
 
-    protected function _getMyACLRights(Horde_Imap_Client_Mailbox $mailbox)
-    {
-    }
+    protected function _getMyACLRights(Horde_Imap_Client_Mailbox $mailbox) {}
 
     protected function _getMetadata(
         Horde_Imap_Client_Mailbox $mailbox,
@@ -241,6 +207,5 @@ class Base extends Horde_Imap_Client_Base
     protected function _setMetadata(
         Horde_Imap_Client_Mailbox $mailbox,
         $data
-    ) {
-    }
+    ) {}
 }

@@ -19,6 +19,7 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Horde\Imap\Client\Test\Stub\Base;
 use Horde_Imap_Client;
+use Horde_Imap_Client_Cache_Backend;
 
 /**
  * Tests for Horde_Imap_Client_Base constructor logic.
@@ -118,7 +119,7 @@ class BaseConstructorTest extends TestCase
 
     public function testCacheFieldsDefaultWhenBackendProvided(): void
     {
-        $backend = $this->createMock(\Horde_Imap_Client_Cache_Backend::class);
+        $backend = $this->createMock(Horde_Imap_Client_Cache_Backend::class);
         $ob = $this->create([
             'cache' => ['backend' => $backend],
         ]);
