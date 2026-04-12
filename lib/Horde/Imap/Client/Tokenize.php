@@ -96,13 +96,17 @@ class Horde_Imap_Client_Tokenize implements Iterator
 
     public function __destruct()
     {
-        $this->_stream->close();
+        if (isset($this->_stream)) {
+            $this->_stream->close();
+            $this->_stream = null;
+        }
     }
 
     /**
      */
     public function __clone()
     {
+        $this->_stream = null;
         throw new LogicException('Object can not be cloned.');
     }
 
