@@ -197,7 +197,7 @@ class Horde_Imap_Client_Socket_Connection_Socket extends Horde_Imap_Client_Socke
                         $read_now = microtime(true);
                         $t_read = $read_now - $read_start;
                         if ($t_read > $this->_params['timeout']) {
-                            $this->_params['debug']->info(sprintf('ERROR: read timeout. No data received for %d seconds.', $this->_params['read_timeout']));
+                            $this->_params['debug']->info(sprintf('ERROR: read timeout. No data received for %d seconds.', $this->_params['timeout']));
 
                             throw new Horde_Imap_Client_Exception(
                                 Horde_Imap_Client_Translation::r("Read timeout."),
