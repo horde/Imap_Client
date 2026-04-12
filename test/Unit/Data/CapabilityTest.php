@@ -1,0 +1,174 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
+ *
+ * See the enclosed file LICENSE for license information (LGPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/lgpl21.
+ *
+ * @copyright  2014-2026 Horde LLC
+ * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ */
+
+namespace Horde\Imap\Client\Test\Unit\Data;
+
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use Horde_Imap_Client_Data_Capability;
+
+/**
+ * Tests for the Capability object.
+ *
+ * @author     Michael Slusarz <slusarz@horde.org>
+ * @copyright  2014-2026 Horde LLC
+ * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ */
+#[CoversNothing]
+class CapabilityTest extends TestCase
+{
+    public function testQuery()
+    {
+        $c = new Horde_Imap_Client_Data_Capability();
+        $c->add('FOO');
+
+        $this->assertTrue($c->query('FOO'));
+        $this->assertTrue($c->query('foo'));
+
+        $this->assertFalse($c->query('BAR'));
+        $this->assertFalse($c->query('FOO', 'BAR'));
+
+        $c->add('bar');
+
+        $this->assertTrue($c->query('bar'));
+        $this->assertTrue($c->query('BAR'));
+    }
+
+    public function testQueryParameters()
+    {
+        $c = new Horde_Imap_Client_Data_Capability();
+        $c->add('FOO', ['A', 'B']);
+
+        $this->assertTrue($c->query('FOO'));
+        $this->assertTrue($c->query('foo'));
+        $this->assertTrue($c->query('FOO', 'A'));
+        $this->assertTrue($c->query('FOO', 'B'));
+        $this->assertTrue($c->query('FOO', 'a'));
+        $this->assertTrue($c->query('FOO', 'b'));
+        $this->assertTrue($c->query('foo', 'a'));
+        $this->assertTrue($c->query('foo', 'b'));
+
+        $this->assertFalse($c->query('FOO', 'C'));
+    }
+
+    public function testIncrementalParameterAddition()
+    {
+        $c = new Horde_Imap_Client_Data_Capability();
+        $c->add('FOO', 'A');
+        $c->add('FOO', 'B');
+
+        $this->assertTrue($c->query('FOO'));
+        $this->assertTrue($c->query('FOO', 'A'));
+        $this->assertTrue($c->query('FOO', 'B'));
+        $this->assertTrue($c->query('FOO', 'a'));
+        $this->assertTrue($c->query('FOO', 'b'));
+        $this->assertTrue($c->query('foo', 'a'));
+        $this->assertTrue($c->query('foo', 'b'));
+
+        $this->assertFalse($c->query('FOO', 'C'));
+
+        /* This should not affect the current parameter list. */
+        $c->add('FOO');
+
+        $this->assertTrue($c->query('FOO', 'A'));
+        $this->assertTrue($c->query('FOO', 'B'));
+
+        $c->add('FOO', ['C', 'D']);
+
+        $this->assertTrue($c->query('FOO', 'A'));
+        $this->assertTrue($c->query('FOO', 'B'));
+        $this->assertTrue($c->query('FOO', 'C'));
+        $this->assertTrue($c->query('FOO', 'D'));
+    }
+
+    public function testRemoval()
+    {
+        $c = new Horde_Imap_Client_Data_Capability();
+        $c->add('FOO');
+
+        $this->assertTrue($c->query('FOO'));
+
+        $c->remove('FOO');
+
+        $this->assertFalse($c->query('FOO'));
+
+        $c->add('BAR', ['A', 'B', 'C']);
+        $c->remove('BAR', ['A', 'C']);
+
+        $this->assertTrue($c->query('BAR'));
+        $this->assertFalse($c->query('BAR', 'A'));
+        $this->assertTrue($c->query('BAR', 'B'));
+        $this->assertFalse($c->query('BAR', 'C'));
+
+        $c->remove('BAR', 'b');
+
+        $this->assertFalse($c->query('BAR'));
+        $this->assertFalse($c->query('BAR', 'A'));
+        $this->assertFalse($c->query('BAR', 'B'));
+        $this->assertFalse($c->query('BAR', 'C'));
+    }
+
+    public function testGetParams()
+    {
+        $c = new Horde_Imap_Client_Data_Capability();
+        $c->add('FOO', 'A');
+        $c->add('FOO', 'B');
+        $c->add('BAR');
+
+        $this->assertNotEmpty($c->getParams('FOO'));
+        $this->assertEquals(
+            ['A', 'B'],
+            $c->getParams('FOO')
+        );
+        $this->assertEmpty($c->getParams('BAR'));
+        $this->assertEmpty($c->getParams('BAZ'));
+    }
+
+    public function isEnabled()
+    {
+        $c = new Horde_Imap_Client_Data_Capability();
+        $c->add('FOO');
+
+        $this->assertFalse($c->isEnabled('FOO'));
+    }
+
+    public function testObserver()
+    {
+        $c = new Horde_Imap_Client_Data_Capability();
+        $mock = $this->getMockBuilder('SplObserver')
+                        ->getMock();
+        $mock->expects($this->once())
+            ->method('update')
+            ->with($this->equalTo($c));
+
+        $c->attach($mock);
+
+        $c->add('FOO');
+    }
+
+    public function testSerialize()
+    {
+        $c = new Horde_Imap_Client_Data_Capability();
+        $c->add('FOO', 'A');
+        $c->add('FOO', 'B');
+        $c->add('BAR');
+
+        $c_copy = unserialize(serialize($c));
+
+        $this->assertTrue($c_copy->query('FOO', 'A'));
+        $this->assertTrue($c_copy->query('FOO', 'B'));
+        $this->assertTrue($c_copy->query('BAR'));
+    }
+
+}
