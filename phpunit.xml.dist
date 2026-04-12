@@ -20,6 +20,10 @@
         </testsuite>
         <testsuite name="integration">
             <directory>test/Integration</directory>
+            <exclude>test/Integration/Connection</exclude>
+        </testsuite>
+        <testsuite name="connection">
+            <directory>test/Integration/Connection</directory>
         </testsuite>
     </testsuites>
     <source>
