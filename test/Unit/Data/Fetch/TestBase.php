@@ -1,0 +1,797 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Copyright 2015-2026 Horde LLC (http://www.horde.org/)
+ *
+ * See the enclosed file LICENSE for license information (LGPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/lgpl21.
+ *
+ * @copyright  2015-2026 Horde LLC
+ * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ */
+
+namespace Horde\Imap\Client\Test\Unit\Data\Fetch;
+
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Horde_Imap_Client_Data_Fetch;
+use Horde_Imap_Client;
+use Horde_Mime_Part;
+use Horde_Mime_Headers;
+use Horde_Stream_String;
+use Horde_Imap_Client_DateTime;
+use Horde_Imap_Client_Data_Envelope;
+use Horde_Stream;
+
+/**
+ * Base class for testing the Horde_Imap_Client_Data_Fetch object.
+ *
+ * @author     Michael Slusarz <slusarz@horde.org>
+ * @copyright  2015-2026 Horde LLC
+ * @license    http://www.horde.org/licenses/lgpl21 LGPL 2.1
+ */
+abstract class TestBase extends TestCase
+{
+    private $ob;
+
+    /* Set in child class via _setUp(). */
+    protected $ob_class;
+    abstract protected function _setUp();
+
+    public function setUp(): void
+    {
+        $this->_setUp();
+
+        $this->ob = new Horde_Imap_Client_Data_Fetch($this->ob_class);
+    }
+
+    #[DataProvider('fullMsgProvider')]
+    public function testFullMsg($stream_ob, $set_stream)
+    {
+        $string = strval($stream_ob);
+        $stream_ob->rewind();
+
+        $this->ob->setFullMsg($set_stream ? $stream_ob->stream : $string);
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $string,
+                $val->getFullMsg(false)
+            );
+            $this->assertEquals(
+                $string,
+                stream_get_contents($val->getFullMsg(true))
+            );
+        }
+    }
+
+    public static function fullMsgProvider()
+    {
+        $stream = new Horde_Stream_String(['string' => 'Foo']);
+
+        return [
+            [
+                clone $stream,
+                false,
+            ],
+            [
+                clone $stream,
+                true,
+            ],
+        ];
+    }
+
+    public function testStructure()
+    {
+        $this->assertInstanceOf(
+            'Horde_Mime_Part',
+            $this->ob->getStructure()
+        );
+
+        $test = new Horde_Mime_Part();
+        $test->setType('image/foo');
+
+        $this->ob->setStructure($test);
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $ret = $val->getStructure();
+
+            $this->assertInstanceOf(
+                'Horde_Mime_Part',
+                $ret
+            );
+            $this->assertEquals(
+                'image/foo',
+                $ret->getType('image/foo')
+            );
+        }
+    }
+
+    #[DataProvider('headersProvider')]
+    public function testHeaders($input, $string)
+    {
+        $label = 'foo';
+
+        if (!is_null($input)) {
+            $this->ob->setHeaders($label, $input);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $string,
+                $val->getHeaders($label)
+            );
+
+            $stream = $val->getHeaders(
+                $label,
+                constant($this->ob_class . '::HEADER_STREAM')
+            );
+            rewind($stream);
+
+            $this->assertEquals(
+                $string,
+                stream_get_contents($stream)
+            );
+
+            $hdr_ob = $val->getHeaders(
+                $label,
+                constant($this->ob_class . '::HEADER_PARSE')
+            );
+
+            $this->assertInstanceOf(
+                'Horde_Mime_Headers',
+                $hdr_ob
+            );
+            $this->assertEquals(
+                trim($string),
+                trim($hdr_ob->toString(['nowrap' => true]))
+            );
+        }
+    }
+
+    public static function headersProvider()
+    {
+        $hdrs = new Horde_Mime_Headers();
+        $hdrs->addHeader('From', 'test@example.com');
+
+        return [
+            [
+                null,
+                '',
+            ],
+            [
+                "From: test@example.com\n\n",
+                "From: test@example.com\n\n",
+            ],
+            [
+                $hdrs,
+                "From: test@example.com\n\n",
+            ],
+        ];
+    }
+
+    #[DataProvider('headerTextProvider')]
+    public function testHeaderText($input, $string)
+    {
+        $id = 1;
+
+        if (!is_null($input)) {
+            $this->ob->setHeaderText($id, $input);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $string,
+                $val->getHeaderText($id)
+            );
+
+            $stream = $val->getHeaderText(
+                $id,
+                constant($this->ob_class . '::HEADER_STREAM')
+            );
+            rewind($stream);
+
+            $this->assertEquals(
+                $string,
+                stream_get_contents($stream)
+            );
+
+            $hdr_ob = $val->getHeaderText(
+                $id,
+                constant($this->ob_class . '::HEADER_PARSE')
+            );
+
+            $this->assertInstanceOf(
+                'Horde_Mime_Headers',
+                $hdr_ob
+            );
+            $this->assertEquals(
+                trim($string),
+                trim($hdr_ob->toString(['nowrap' => true]))
+            );
+        }
+    }
+
+    public static function headerTextProvider()
+    {
+        return [
+            [
+                null,
+                '',
+            ],
+            [
+                "From: test@example.com\n\n",
+                "From: test@example.com\n\n",
+            ],
+        ];
+    }
+
+    #[DataProvider('mimeHeaderProvider')]
+    public function testMimeHeader($input, $string)
+    {
+        $id = 1;
+
+        if (!is_null($input)) {
+            $this->ob->setMimeHeader($id, $input);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $string,
+                $val->getMimeHeader($id)
+            );
+
+            $stream = $val->getMimeHeader(
+                $id,
+                constant($this->ob_class . '::HEADER_STREAM')
+            );
+            rewind($stream);
+
+            $this->assertEquals(
+                $string,
+                stream_get_contents($stream)
+            );
+
+            $hdr_ob = $val->getMimeHeader(
+                $id,
+                constant($this->ob_class . '::HEADER_PARSE')
+            );
+
+            $this->assertInstanceOf(
+                'Horde_Mime_Headers',
+                $hdr_ob
+            );
+            $this->assertEquals(
+                trim($string),
+                trim($hdr_ob->toString(['nowrap' => true]))
+            );
+        }
+    }
+
+    public static function mimeHeaderProvider()
+    {
+        return [
+            [
+                null,
+                '',
+            ],
+            [
+                "From: test@example.com\n\n",
+                "From: test@example.com\n\n",
+            ],
+        ];
+    }
+
+    #[DataProvider('bodyPartProvider')]
+    public function testBodyPart($stream_ob, $set_stream, $decode)
+    {
+        $id = 1;
+        $string = strval($stream_ob);
+        $stream_ob->rewind();
+
+        if (strlen($string)) {
+            $this->ob->setBodyPart(
+                $id,
+                $set_stream ? $stream_ob->stream : $string,
+                $decode
+            );
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $string,
+                $val->getBodyPart($id, false)
+            );
+            $this->assertEquals(
+                $string,
+                stream_get_contents($val->getBodyPart($id, true))
+            );
+            $this->assertEquals(
+                $decode,
+                $this->ob->getBodyPartDecode($id)
+            );
+        }
+    }
+
+    public static function bodyPartProvider()
+    {
+        $stream = new Horde_Stream_String(['string' => 'Foo']);
+        $empty_stream = new Horde_Stream();
+
+        return [
+            [
+                clone $stream,
+                false,
+                null,
+            ],
+            [
+                clone $stream,
+                false,
+                '8bit',
+            ],
+            [
+                clone $stream,
+                false,
+                'binary',
+            ],
+            [
+                clone $empty_stream,
+                false,
+                null,
+            ],
+            [
+                clone $stream,
+                true,
+                null,
+            ],
+            [
+                clone $stream,
+                true,
+                '8bit',
+            ],
+            [
+                clone $stream,
+                true,
+                'binary',
+            ],
+            [
+                clone $empty_stream,
+                true,
+                null,
+            ],
+        ];
+    }
+
+    #[DataProvider('bodyPartSizeProvider')]
+    public function testBodyPartSize($size)
+    {
+        $id = 1;
+
+        if (!is_null($size)) {
+            $this->ob->setBodyPartSize($id, $size);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $size,
+                $val->getBodyPartSize($id)
+            );
+        }
+
+    }
+
+    public static function bodyPartSizeProvider()
+    {
+        return [
+            [200],
+            [null],
+        ];
+    }
+
+    #[DataProvider('bodyTextProvider')]
+    public function testBodyText($stream_ob, $set_stream)
+    {
+        $id = 1;
+        $string = strval($stream_ob);
+        $stream_ob->rewind();
+
+        if (strlen($string)) {
+            $this->ob->setBodyText(
+                $id,
+                $set_stream ? $stream_ob->stream : $string
+            );
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $string,
+                $val->getBodyText($id, false)
+            );
+            $this->assertEquals(
+                $string,
+                stream_get_contents($val->getBodyText($id, true))
+            );
+        }
+    }
+
+    public static function bodyTextProvider()
+    {
+        $stream = new Horde_Stream_String(['string' => 'Foo']);
+
+        return [
+            [
+                clone $stream,
+                false,
+            ],
+            [
+                clone $stream,
+                true,
+            ],
+        ];
+    }
+
+    #[DataProvider('envelopeProvider')]
+    public function testEnvelope($data, $to)
+    {
+        if (!is_null($data)) {
+            $this->ob->setEnvelope($data);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $envelope = $val->getEnvelope();
+
+            $this->assertInstanceOf(
+                'Horde_Imap_Client_Data_Envelope',
+                $envelope
+            );
+
+            $addr_ob = $envelope->to;
+
+            $this->assertInstanceof(
+                'Horde_Mail_Rfc822_List',
+                $addr_ob
+            );
+            $this->assertEquals(
+                $to,
+                strval($addr_ob)
+            );
+        }
+    }
+
+    public static function envelopeProvider()
+    {
+        $addr = new Horde_Imap_Client_Data_Envelope();
+        $addr->to = 'foo@example.com';
+
+        return [
+            [
+                ['to' => 'foo@example.com'],
+                'foo@example.com',
+            ],
+            [
+                $addr,
+                'foo@example.com',
+            ],
+            [
+                null,
+                '',
+            ],
+        ];
+    }
+
+    #[DataProvider('flagsProvider')]
+    public function testFlags($flags, $expected)
+    {
+        $this->ob->setFlags($flags);
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $f = $this->ob->getFlags();
+
+            $this->assertEquals(
+                $expected,
+                $f
+            );
+        }
+    }
+
+    public static function flagsProvider()
+    {
+        return [
+            [
+                ['foo'],
+                ['foo'],
+            ],
+            [
+                [],
+                [],
+            ],
+            [
+                ['FoO', 'BAR', '     baZ  '],
+                ['foo', 'bar', 'baz'],
+            ],
+        ];
+    }
+
+    #[DataProvider('imapDateProvider')]
+    public function testImapDate($date, $expected)
+    {
+        if (!is_null($date)) {
+            $this->ob->setImapDate($date);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $d = $this->ob->getImapDate();
+
+            $this->assertInstanceOf(
+                'Horde_Imap_Client_DateTime',
+                $d
+            );
+
+            $this->assertEquals(
+                is_null($expected) ? time() : $expected,
+                intval(strval($d))
+            );
+        }
+    }
+
+    public static function imapDateProvider()
+    {
+        return [
+            [
+                '12 Sep 2007 15:49:12 UT',
+                1189612152,
+            ],
+            [
+                new Horde_Imap_Client_DateTime('12 Sep 2007 15:49:12 UT'),
+                1189612152,
+            ],
+            [
+                null,
+                null,
+            ],
+        ];
+    }
+
+    #[DataProvider('sizeProvider')]
+    public function testSize($size, $expected)
+    {
+        if (!is_null($size)) {
+            $this->ob->setSize($size);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $expected,
+                $this->ob->getSize()
+            );
+        }
+    }
+
+    public static function sizeProvider()
+    {
+        return [
+            [
+                200,
+                200,
+            ],
+            [
+                null,
+                0,
+            ],
+        ];
+    }
+
+    #[DataProvider('uidProvider')]
+    public function testUid($uid, $expected)
+    {
+        if (!is_null($uid)) {
+            $this->ob->setUid($uid);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $expected,
+                $this->ob->getUid()
+            );
+        }
+    }
+
+    public static function uidProvider()
+    {
+        return [
+            [
+                200,
+                200,
+            ],
+            [
+                null,
+                null,
+            ],
+        ];
+    }
+
+    #[DataProvider('seqProvider')]
+    public function testSeq($seq, $expected)
+    {
+        if (!is_null($seq)) {
+            $this->ob->setSeq($seq);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $expected,
+                $this->ob->getSeq()
+            );
+        }
+    }
+
+    public static function seqProvider()
+    {
+        return [
+            [
+                200,
+                200,
+            ],
+            [
+                null,
+                null,
+            ],
+        ];
+    }
+
+    #[DataProvider('modSeqProvider')]
+    public function testModSeq($modseq, $expected)
+    {
+        if (!is_null($modseq)) {
+            $this->ob->setModSeq($modseq);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $expected,
+                $this->ob->getModSeq()
+            );
+        }
+    }
+
+    public static function modSeqProvider()
+    {
+        return [
+            [
+                200,
+                200,
+            ],
+            [
+                null,
+                null,
+            ],
+        ];
+    }
+
+    #[DataProvider('downgradedProvider')]
+    public function testDowngraded($downgraded, $expected)
+    {
+        if (!is_null($downgraded)) {
+            $this->ob->setDowngraded($downgraded);
+        }
+
+        $serialize_ob = unserialize(serialize($this->ob));
+
+        foreach ([$this->ob, $serialize_ob] as $val) {
+            $this->assertEquals(
+                $expected,
+                $this->ob->isDowngraded()
+            );
+        }
+    }
+
+    public static function downgradedProvider()
+    {
+        return [
+            [
+                true,
+                true,
+            ],
+            [
+                false,
+                false,
+            ],
+            [
+                null,
+                false,
+            ],
+        ];
+    }
+
+    public function testMerge()
+    {
+        $this->ob->setUid(1);
+
+        $this->assertEquals(
+            1,
+            $this->ob->getUid()
+        );
+        $this->assertNull($this->ob->getSeq());
+
+        $ob2 = new Horde_Imap_Client_Data_Fetch($this->ob_class);
+        $ob2->setUid(2);
+        $ob2->setSeq(2);
+
+        $this->ob->merge($ob2);
+
+        $this->assertEquals(
+            2,
+            $this->ob->getUid()
+        );
+        $this->assertEquals(
+            2,
+            $this->ob->getSeq()
+        );
+    }
+
+    public function testObjectStateFunctions()
+    {
+        $this->assertEmpty($this->ob->getRawData());
+        $this->assertFalse($this->ob->exists(Horde_Imap_Client::FETCH_UID));
+        $this->assertFalse($this->ob->exists(Horde_Imap_Client::FETCH_SEQ));
+        $this->assertTrue($this->ob->isDefault());
+
+        $this->ob->setUid(1);
+
+        $this->assertNotEmpty($this->ob->getRawData());
+        $this->assertTrue($this->ob->exists(Horde_Imap_Client::FETCH_UID));
+        $this->assertFalse($this->ob->exists(Horde_Imap_Client::FETCH_SEQ));
+        $this->assertFalse($this->ob->isDefault());
+    }
+
+    public function testClone()
+    {
+        $stream = new Horde_Stream_String(['string' => 'Foo']);
+        $stream->rewind();
+
+        $this->ob->setFullMsg($stream->stream);
+
+        $ob2 = clone $this->ob;
+
+        $this->ob->setFullMsg('Bar');
+
+        $this->assertEquals(
+            'Bar',
+            $this->ob->getFullMsg()
+        );
+        $this->assertEquals(
+            'Foo',
+            $ob2->getFullMsg()
+        );
+    }
+
+}

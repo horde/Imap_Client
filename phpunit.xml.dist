@@ -1,13 +1,30 @@
-<phpunit bootstrap="test/Horde/Imap/Client/bootstrap.php"
-colors="true">
-  <testsuites>
-    <testsuite>
-      <directory>test</directory>
-    </testsuite>
-  </testsuites>
-  <filter>
-    <whitelist>
-      <directory suffix=".php">lib</directory>
-    </whitelist>
-  </filter>
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         requireCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         defaultTestSuite="unit">
+    <testsuites>
+        <testsuite name="unit">
+            <directory>test/Unit</directory>
+            <exclude>test/Unit/Cache</exclude>
+        </testsuite>
+        <testsuite name="cache">
+            <directory>test/Unit/Cache</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>test/Integration</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>lib</directory>
+        </include>
+    </source>
 </phpunit>

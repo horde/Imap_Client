@@ -48,3 +48,9 @@ run-tests.log
 /phpstan.neon
 # PHPStan cache directory
 /.phpstan.cache/
+
+# Added by horde-components QC --fix-qc-issues
+# Composer lock file (libraries should not commit lock files)
+/composer.lock
+# PHPUnit Cache (other)
+/.phpunit.cache
