@@ -66,6 +66,19 @@
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
   notes: |+
+3.0.0-beta1:
+  api: 3.0.0-beta1
+  state:
+    release: beta
+    api: beta
+  date: 2026-04-12
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    feat/modernize test suite (#40)
+    style: php-cs-fixer
+    chore(metadata): Commit metadata change due to tool mishap
 3.0.0-alpha7:
   api: 3.0.0-alpha7
   state:
