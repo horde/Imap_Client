@@ -14,47 +14,47 @@
     "keywords": [
         "mailbox"
     ],
-    "time": "2026-04-12",
+    "time": "2026-04-24",
     "repositories": [],
     "require": {
-        "horde/horde-installer-plugin": "^3 || ^2",
+        "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0 || ^3 || ^2",
         "php": "^8.1",
-        "horde/eventdispatcher": "^1",
-        "horde/exception": "^3",
-        "horde/mail": "^3",
-        "horde/mime": "^3",
-        "horde/socket_client": "^3",
-        "horde/stream": "^2",
-        "horde/secret": "^3",
-        "horde/stream_filter": "^3",
-        "horde/translation": "^3",
-        "horde/util": "^3",
+        "horde/eventdispatcher": "^1 || dev-FRAMEWORK_6_0",
+        "horde/exception": "^3 || dev-FRAMEWORK_6_0",
+        "horde/mail": "^3 || dev-FRAMEWORK_6_0",
+        "horde/mime": "^3 || dev-FRAMEWORK_6_0",
+        "horde/socket_client": "^3 || dev-FRAMEWORK_6_0",
+        "horde/stream": "^2 || dev-FRAMEWORK_6_0",
+        "horde/secret": "^3 || dev-FRAMEWORK_6_0",
+        "horde/stream_filter": "^3 || dev-FRAMEWORK_6_0",
+        "horde/translation": "^3 || dev-FRAMEWORK_6_0",
+        "horde/util": "^3 || dev-FRAMEWORK_6_0",
         "ext-hash": "*",
         "ext-json": "*"
     },
     "require-dev": {
-        "horde/cache": "^3",
-        "horde/compress_fast": "^2",
-        "horde/crypt_blowfish": "^2",
-        "horde/db": "^3",
-        "horde/hashtable": "^2",
-        "horde/mongo": "^2",
-        "horde/pack": "^2",
-        "horde/stringprep": "^2",
-        "horde/support": "^3",
+        "horde/cache": "^3 || dev-FRAMEWORK_6_0",
+        "horde/compress_fast": "^2 || dev-FRAMEWORK_6_0",
+        "horde/crypt_blowfish": "^2 || dev-FRAMEWORK_6_0",
+        "horde/db": "^3 || dev-FRAMEWORK_6_0",
+        "horde/hashtable": "^2 || dev-FRAMEWORK_6_0",
+        "horde/mongo": "^2 || dev-FRAMEWORK_6_0",
+        "horde/pack": "^2 || dev-FRAMEWORK_6_0",
+        "horde/stringprep": "^2 || dev-FRAMEWORK_6_0",
+        "horde/support": "^3 || dev-FRAMEWORK_6_0",
         "psr/event-dispatcher": "^1",
         "psr/simple-cache": "^3"
     },
     "suggest": {
-        "horde/cache": "^3",
-        "horde/compress_fast": "^2",
-        "horde/crypt_blowfish": "^2",
-        "horde/db": "^3",
-        "horde/hashtable": "^2",
-        "horde/mongo": "^2",
-        "horde/pack": "^2",
-        "horde/stringprep": "^2",
-        "horde/support": "^3",
+        "horde/cache": "^3 || dev-FRAMEWORK_6_0",
+        "horde/compress_fast": "^2 || dev-FRAMEWORK_6_0",
+        "horde/crypt_blowfish": "^2 || dev-FRAMEWORK_6_0",
+        "horde/db": "^3 || dev-FRAMEWORK_6_0",
+        "horde/hashtable": "^2 || dev-FRAMEWORK_6_0",
+        "horde/mongo": "^2 || dev-FRAMEWORK_6_0",
+        "horde/pack": "^2 || dev-FRAMEWORK_6_0",
+        "horde/stringprep": "^2 || dev-FRAMEWORK_6_0",
+        "horde/support": "^3 || dev-FRAMEWORK_6_0",
         "ext-intl": "*",
         "ext-mbstring": "*"
     },
@@ -77,5 +77,9 @@
             "horde/horde-installer-plugin": true
         }
     },
-    "minimum-stability": "dev"
+    "extra": {
+        "branch-alias": {
+            "dev-FRAMEWORK_6_0": "3.x-dev"
+        }
+    }
 }

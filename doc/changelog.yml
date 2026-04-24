@@ -66,6 +66,22 @@
     identifier: LGPL-2.1
     uri: http://www.horde.org/licenses/lgpl21
   notes: |+
+3.0.0-beta2:
+  api: 3.0.0-beta2
+  state:
+    release: beta
+    api: beta
+  date: 2026-04-24
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    test: port bytestream tests and fix pre-existing test bugs
+    fix: backport community fixes from bytestream fork
+    chore: metadata .horde.yml add PSR dependencies directly
+    test: Modern implementation's test suite
+    feat: PSR-4 / PSR-16 / PSR-14 Modern PHP Re-Packaging of ImapClient
+    feat: Add connection tests
 3.0.0-beta1:
   api: 3.0.0-beta1
   state:
