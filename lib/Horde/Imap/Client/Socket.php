@@ -1709,7 +1709,13 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                             $fetch_res = $this->fetch($this->_selected, $fquery, [
                                 'ids' => $this->getIdsOb(Horde_Imap_Client_Ids::LARGEST),
                             ]);
-                            $data[$key] = $fetch_res->first()->getUid() + 1;
+                            if (($first = $fetch_res->first()) !== null) {
+                                $data[$key] = $first->getUid() + 1;
+                            } else {
+                                /* Fetch failed to return a message (e.g. stale
+                                 * STATUS_MESSAGES); fall back to STATUS. */
+                                $query[] = $key;
+                            }
                         }
                     } elseif (in_array($val, $unseen_flags)) {
                         /* RFC 3501 [6.3.1] - FIRSTUNSEEN information is not
