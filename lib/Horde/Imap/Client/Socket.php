@@ -1730,6 +1730,9 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                         $mbox_ob->setStatus(Horde_Imap_Client::STATUS_UNSEEN, $search['count']);
 
                         $data[$key] = $mbox_ob->getStatus($val);
+                    } else {
+                        /* Status not cached after SELECT/EXAMINE; use STATUS. */
+                        $query[] = $key;
                     }
                 } else {
                     $query[] = $key;
