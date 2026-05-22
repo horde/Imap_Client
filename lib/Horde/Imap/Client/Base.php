@@ -2253,7 +2253,7 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
             switch ($squery['query']) {
                 case 'ALL':
                     $ret = $this->status($mailbox, Horde_Imap_Client::STATUS_MESSAGES);
-                    return ['count' => $ret['messages']];
+                    return ['count' => $ret['messages'] ?? 0];
 
                 case 'RECENT':
                     $ret = $this->status($mailbox, Horde_Imap_Client::STATUS_RECENT);
@@ -2284,7 +2284,7 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
 
         /* Optimization: Catch when there are no messages in a mailbox. */
         $status_res = $this->status($this->_selected, Horde_Imap_Client::STATUS_MESSAGES | Horde_Imap_Client::STATUS_HIGHESTMODSEQ);
-        if ($status_res['messages']
+        if (!empty($status_res['messages'])
             || in_array(Horde_Imap_Client::SEARCH_RESULTS_SAVE, $options['results'])) {
             /* RFC 7162 [3.1.2.2] - trying to do a MODSEQ SEARCH on a mailbox
              * that doesn't support it will return BAD. */
@@ -2448,7 +2448,7 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
 
         $status_res = $this->status($this->_selected, Horde_Imap_Client::STATUS_MESSAGES);
 
-        $ob = $status_res['messages']
+        $ob = !empty($status_res['messages'])
             ? $this->_thread($options)
             : new Horde_Imap_Client_Data_Thread([], empty($options['sequence']) ? 'uid' : 'sequence');
 
@@ -3553,7 +3553,8 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
             /* Optimization for ALL sequence searches. */
             if (!$convert && $ids->all && $ids->sequence) {
                 $res = $this->status($mailbox, Horde_Imap_Client::STATUS_MESSAGES);
-                return $this->getIdsOb($res['messages'] ? ('1:' . $res['messages']) : [], true);
+                $messages = $res['messages'] ?? 0;
+                return $this->getIdsOb($messages ? ('1:' . $messages) : [], true);
             }
 
             $convert = 2;
