@@ -54,3 +54,9 @@ run-tests.log
 /composer.lock
 # PHPUnit Cache (other)
 /.phpunit.cache
+
+# Added by horde-components QC --fix-qc-issues
+# Horde installer plugin runtime data
+/var/
+# Horde installer plugin web-accessible directory
+/web/

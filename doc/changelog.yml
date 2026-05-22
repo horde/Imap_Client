@@ -229,6 +229,20 @@
     Fix Travis tests.
     Add Travis configuration and .gitignore files.
     Development mode for Horde_Imap_Client-2.29.16
+3.0.0-RC1:
+  api: 3.0.0-RC1
+  state:
+    release: RC
+    api: RC
+  date: 2026-05-22
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    Merge pull request #45 from horde/fix/undefined_array_key_messages
+    Handle null fetch result in Socket.php
+    Handle cases with no messages in IMAP client
+    Add fallback to STATUS query for non-cached status
 2.30.5:
   api: 2.30.0
   state:

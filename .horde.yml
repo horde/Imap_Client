@@ -16,10 +16,10 @@ authors:
     active: false
     role: lead
 version:
-  release: 3.0.0-beta2
+  release: 3.0.0-RC1
   api: 3.0.0alpha1
 state:
-  release: beta
+  release: RC
   api: alpha
 license:
   identifier: LGPL-2.1-only
