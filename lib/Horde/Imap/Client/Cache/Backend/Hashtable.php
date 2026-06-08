@@ -22,6 +22,14 @@
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  * @package   Imap_Client
  * @since     2.17.0
+ *
+ * @deprecated Retired in favor of {@see Horde_Imap_Client_Cache_Backend_Cache}.
+ *             That backend uses Horde_Cache (which itself can wrap a HashTable
+ *             via Horde_Cache_Storage_Hashtable), giving one consistent code
+ *             path with TTL/age handling. The original per-UID storage strategy
+ *             this class implemented was justified for Memcache 1.0 with poor
+ *             multi-get performance; modern Redis with MGET/pipelining handles
+ *             the sliced strategy of Backend_Cache equally well.
  */
 class Horde_Imap_Client_Cache_Backend_Hashtable extends Horde_Imap_Client_Cache_Backend
 {
