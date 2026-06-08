@@ -11,6 +11,23 @@
 This lists the API changes between releases of the package.
 
 
+Upgrading to 3.0.0
+==================
+
+  - Horde_Imap_Client_Cache_Backend_Hashtable
+
+    Deprecated. The per-UID HashTable storage strategy was justified for
+    Memcache 1.0 with poor multi-get; modern Redis with MGET/pipelining
+    handles the sliced strategy of Backend_Cache equally well. Use
+    Backend_Cache with Horde_Cache configured to wrap a HashTable storage
+    instead — single code path, consistent TTL/age handling.
+
+    Existing IMP configurations setting ``cache.driver = 'hashtable'`` for
+    the IMAP cache continue to work: the IMP wrapper transparently falls
+    through to Backend_Cache during the deprecation period. Update your
+    config to ``cache.driver = 'cache'`` when convenient.
+
+
 Upgrading to 2.29.0
 ===================
 
