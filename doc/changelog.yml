@@ -1,71 +1,31 @@
 ---
-3.0.0alpha6:
-  api: 3.0.0alpha1
+3.0.0-RC2:
+  api: 3.0.0-RC2
   state:
-    release: alpha
-    api: alpha
-  date: 2022-12-05
+    release: RC
+    api: RC
+  date: 2026-06-11
   license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-3.0.0alpha5:
-  api: 3.0.0alpha1
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    fix(imap_client): load slice data before persisting cache updates
+    refactor(Imap_Client): deprecate Cache_Backend_Hashtable in favor of Cache_Backend_Cache
+    chore: Update workflow dependency
+3.0.0-RC1:
+  api: 3.0.0-RC1
   state:
-    release: alpha
-    api: alpha
-  date: 2022-12-05
+    release: RC
+    api: RC
+  date: 2026-05-22
   license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-3.0.0alpha4:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2022-10-08
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [rla] Fix some PHP 8.1 issues. Safeguard against missing cache object.
-    [rla] Added CI jobs for github actions (with Corbinian Koch).
-    [rla] changed package data for composer2 support.
-    [rla] Updated unit tests for PHPUnit 9 (with Marco Abbrancati)
-    |+
-3.0.0alpha3:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-03-13
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
-3.0.0alpha2:
-  api: 2.30.0
-  state:
-    release: stable
-    api: stable
-  date: 2022-05-15
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mjr] Null string fixes for PHP 8.1 (PR #4, Christoph Wurst <christoph@winzerhof-wurst.at>)
-  2.30.6: ~
-3.0.0alpha1:
-  api: 3.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-02-24
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |+
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    Merge pull request #45 from horde/fix/undefined_array_key_messages
+    Handle null fetch result in Socket.php
+    Handle cases with no messages in IMAP client
+    Add fallback to STATUS query for non-cached status
 3.0.0-beta2:
   api: 3.0.0-beta2
   state:
@@ -229,20 +189,73 @@
     Fix Travis tests.
     Add Travis configuration and .gitignore files.
     Development mode for Horde_Imap_Client-2.29.16
-3.0.0-RC1:
-  api: 3.0.0-RC1
+3.0.0alpha6:
+  api: 3.0.0alpha1
   state:
-    release: RC
-    api: RC
-  date: 2026-05-22
+    release: alpha
+    api: alpha
+  date: 2022-12-05
   license:
-    identifier: LGPL-2.1-only
-    uri: https://spdx.org/licenses/LGPL-2.1-only.html
-  notes: |-
-    Merge pull request #45 from horde/fix/undefined_array_key_messages
-    Handle null fetch result in Socket.php
-    Handle cases with no messages in IMAP client
-    Add fallback to STATUS query for non-cached status
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |+
+3.0.0alpha5:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2022-12-05
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |+
+3.0.0alpha4:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2022-10-08
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [rla] Fix some PHP 8.1 issues. Safeguard against missing cache object.
+    [rla] Added CI jobs for github actions (with Corbinian Koch).
+    [rla] changed package data for composer2 support.
+    [rla] Updated unit tests for PHPUnit 9 (with Marco Abbrancati)
+    |+
+3.0.0alpha3:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-03-13
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |+
+3.0.0alpha2:
+  api: 2.30.0
+  state:
+    release: stable
+    api: stable
+  date: 2022-05-15
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mjr] Null string fixes for PHP 8.1 (PR #4, Christoph Wurst <christoph@winzerhof-wurst.at>)
+  2.30.6: ~
+3.0.0alpha1:
+  api: 3.0.0alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2021-02-24
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |+
 2.30.5:
   api: 2.30.0
   state:
@@ -1673,6 +1686,62 @@
     [mms] Correctly handle FETCH results intermingled with EXPUNGE/VANISHED requests within a single request.
     [mms] Correctly handle EXISTS/EXPUNGE/VANISHED untagged responses which may appear at any time.
     [mms] Fix handling message sequence number actions returned from server when using CONDSTORE/QRESYNC.
+2.0.0:
+  api: 2.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2012-10-30
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First stable release for Horde 5.
+    [mms] Fix regression in Horde_Imap_Client_Base#listMailboxes() return when both the 'flat' and 'sort' options are active.
+    [mms] Add STATUS_SYNCMODSEQ, STATUS_SYNCFLAGUIDS, and STATUS_SYNCVANISHED return options to Horde_Imap_Client_Base#status().
+2.0.0RC2:
+  api: 2.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-10-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix invalid class name usage (Bug #11586).
+    [mms] Remove STATUS_LASTMODSEQ and STATUS_LASTMODSEQUIDS return options from status().
+2.0.0RC1:
+  api: 2.0.0beta1
+  state:
+    release: beta
+    api: beta
+  date: 2012-10-26
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    [mms] Fix CONDSTORE synchronization of deleted messages since last mailbox access.
+    [mms] Need to immediately synchronize mailbox on mailbox load with CONDSTORE or else we may lose flag change information.
+    [mms] Fixes/improvements to CONDSTORE capability sniffing and enabling.
+    [mms] Remove statuscache configuration option.
+    [mms] Optimize generation of POP3 sequence string.
+    [mms] Abstract forced determination of UIDNEXT value from cache method to a status() flag.
+    [mms] Remove Horde_Imap_Client_Base#fetchFromSectionString().
+    [mms] Horde_Imap_Client_Base#listMailboxes() now supports 'status' return even if server does not server LIST-STATUS.
+    [mms] Remove Horde_Imap_Client_Base#fetchCacheIgnore().
+    [mms] Move IMAP/POP URL parsing to new Horde_Imap_Client_Url object.
+    [mms] Move base subject parsing to new Horde_Imap_Client_Data_BaseSubject class.
+    [mms] Move IMAP sequence string generation/parsing to the Horde_Imap_Client_Ids object.
+    [mms] Remove Horde_Imap_Client_Utils#escape().
+    [mms] Remove Horde_Imap_Client_Utils#removeBareNewlines().
+    [mms] Move IMAP mailboxes sorting into new Horde_Imap_Client_Mailbox_List class.
+    [mms] Correctly handle determination of highestmodseq in currently selected mailbox if CONDSTORE, but not QRESYNC, is active.
+    [mms] Optimize APPEND so that we don't send large amounts of data to server if the server is not going to accept the data.
+    [mms] Don't expunge mailbox when it is labeled as read-only.
+    [mms] Fix regression in FETCH/COPY with sequence numbers (Bug #11521).
+    [mms] Fix quoting empty astrings (Bug #11505).
+    [jan] Fix Horde_Stream dependency.
 2.0.0beta4:
   api: 2.0.0beta1
   state:
@@ -1745,62 +1814,6 @@
     [mms] Internally workaround IMAP servers that don't support text searches other than US-ASCII.
     [mms] Horde_Imap_Client_DateTime is now a wrapper around the native PHP DateTime object (Request #11074).
     [mms] Implement new 2.0 API. See UPGRADING for full details of changes.
-2.0.0RC2:
-  api: 2.0.0beta1
-  state:
-    release: beta
-    api: beta
-  date: 2012-10-29
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Fix invalid class name usage (Bug #11586).
-    [mms] Remove STATUS_LASTMODSEQ and STATUS_LASTMODSEQUIDS return options from status().
-2.0.0RC1:
-  api: 2.0.0beta1
-  state:
-    release: beta
-    api: beta
-  date: 2012-10-26
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    [mms] Fix CONDSTORE synchronization of deleted messages since last mailbox access.
-    [mms] Need to immediately synchronize mailbox on mailbox load with CONDSTORE or else we may lose flag change information.
-    [mms] Fixes/improvements to CONDSTORE capability sniffing and enabling.
-    [mms] Remove statuscache configuration option.
-    [mms] Optimize generation of POP3 sequence string.
-    [mms] Abstract forced determination of UIDNEXT value from cache method to a status() flag.
-    [mms] Remove Horde_Imap_Client_Base#fetchFromSectionString().
-    [mms] Horde_Imap_Client_Base#listMailboxes() now supports 'status' return even if server does not server LIST-STATUS.
-    [mms] Remove Horde_Imap_Client_Base#fetchCacheIgnore().
-    [mms] Move IMAP/POP URL parsing to new Horde_Imap_Client_Url object.
-    [mms] Move base subject parsing to new Horde_Imap_Client_Data_BaseSubject class.
-    [mms] Move IMAP sequence string generation/parsing to the Horde_Imap_Client_Ids object.
-    [mms] Remove Horde_Imap_Client_Utils#escape().
-    [mms] Remove Horde_Imap_Client_Utils#removeBareNewlines().
-    [mms] Move IMAP mailboxes sorting into new Horde_Imap_Client_Mailbox_List class.
-    [mms] Correctly handle determination of highestmodseq in currently selected mailbox if CONDSTORE, but not QRESYNC, is active.
-    [mms] Optimize APPEND so that we don't send large amounts of data to server if the server is not going to accept the data.
-    [mms] Don't expunge mailbox when it is labeled as read-only.
-    [mms] Fix regression in FETCH/COPY with sequence numbers (Bug #11521).
-    [mms] Fix quoting empty astrings (Bug #11505).
-    [jan] Fix Horde_Stream dependency.
-2.0.0:
-  api: 2.0.0
-  state:
-    release: stable
-    api: stable
-  date: 2012-10-30
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First stable release for Horde 5.
-    [mms] Fix regression in Horde_Imap_Client_Base#listMailboxes() return when both the 'flat' and 'sort' options are active.
-    [mms] Add STATUS_SYNCMODSEQ, STATUS_SYNCFLAGUIDS, and STATUS_SYNCVANISHED return options to Horde_Imap_Client_Base#status().
 1.5.11:
   api: 1.5.0
   state:
@@ -2298,6 +2311,45 @@
     [mms] Fix server-side sorting of subjects in Socket driver (Bug #9840).
     [mms] Fix UIDVALIDITY determination for POP3 servers that support UIDL.
     [mms] Added Horde_Imap_Client_Data_Fetch_Pop3 object.
+1.0.0:
+  api: 1.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-04-06
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First stable release for Horde 4.
+    [mms] Fixes for IMAP servers that support CONDSTORE but disable MODSEQs in mialboxes (Bug #9796).
+    [mms] Fix obtaining fetch results when searching by sequence number and using caching.
+    [mms] Add ability to sort mailboxes return from Horde_Imap_Client_Base#statusMultiple().
+1.0.0RC2:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-29
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    Second release candidate for Horde 4.
+    [mms] Provide way to indicate mailboxes that should not have FETCH data cached.
+1.0.0RC1:
+  api: 1.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2011-03-22
+  license:
+    identifier: LGPL-2.1
+    uri: http://www.horde.org/licenses/lgpl21
+  notes: |
+    First release candidate for Horde 4.
+    [mms] Use UIDPLUS results to copy cached data to new mailbox when copying messags.
+    [mms] Fix fetching by sequence number when caching.
 1.0.0beta1:
   api: 1.0.0
   state:
@@ -2332,42 +2384,3 @@
     [mms] Add Horde_Imap_Client_Ids data object.
     [mms] Add Horde_Imap_Client_Fetch_Query data object.
     [mms] Add Horde_Imap_Client_Data_Envelope data object.
-1.0.0RC2:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-29
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    Second release candidate for Horde 4.
-    [mms] Provide way to indicate mailboxes that should not have FETCH data cached.
-1.0.0RC1:
-  api: 1.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2011-03-22
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First release candidate for Horde 4.
-    [mms] Use UIDPLUS results to copy cached data to new mailbox when copying messags.
-    [mms] Fix fetching by sequence number when caching.
-1.0.0:
-  api: 1.0.0
-  state:
-    release: stable
-    api: stable
-  date: 2011-04-06
-  license:
-    identifier: LGPL-2.1
-    uri: http://www.horde.org/licenses/lgpl21
-  notes: |
-    First stable release for Horde 4.
-    [mms] Fixes for IMAP servers that support CONDSTORE but disable MODSEQs in mialboxes (Bug #9796).
-    [mms] Fix obtaining fetch results when searching by sequence number and using caching.
-    [mms] Add ability to sort mailboxes return from Horde_Imap_Client_Base#statusMultiple().
