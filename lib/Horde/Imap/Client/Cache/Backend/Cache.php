@@ -142,8 +142,13 @@ class Horde_Imap_Client_Cache_Backend_Cache extends Horde_Imap_Client_Cache_Back
                     $val['slicemap'] = true;
 
                     foreach (array_keys(array_flip($val['slice'])) as $slice) {
+                        $this->_loadSlice($mbox, $slice);
                         $data = [];
                         foreach (array_keys($s['s'], $slice) as $uid) {
+                            if (!isset($d[$uid])) {
+                                unset($s['s'][$uid]);
+                                continue;
+                            }
                             $data[$uid] = is_array($d[$uid])
                                 ? serialize($d[$uid])
                                 : $d[$uid];
