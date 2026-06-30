@@ -9,8 +9,7 @@ list: dev
 type: library
 homepage: https://www.horde.org/libraries/Horde_Imap_Client
 authors:
-  -
-    name: Michael Slusarz
+  - name: Michael Slusarz
     user: slusarz
     email: slusarz@horde.org
     active: false
@@ -71,3 +70,66 @@ dependencies:
 vendor: horde
 keywords:
   - mailbox
+ci-platform:
+  '8.1':
+    - php: '>=7.2'
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+    - ext-hash
+    - ext-iconv
+    - ext-intl
+    - ext-pcre
+    - ext-simplexml
+    - ext-spl
+  '8.2':
+    - php: '>=7.2'
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+    - ext-hash
+    - ext-iconv
+    - ext-intl
+    - ext-pcre
+    - ext-simplexml
+    - ext-spl
+  '8.3':
+    - php: '>=7.2'
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+    - ext-hash
+    - ext-iconv
+    - ext-intl
+    - ext-pcre
+    - ext-simplexml
+    - ext-spl
+  '8.4':
+    - php: '>=7.2'
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+    - ext-hash
+    - ext-iconv
+    - ext-intl
+    - ext-pcre
+    - ext-simplexml
+    - ext-spl
+  '8.5':
+    - php: '>=7.2'
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+    - ext-hash
+    - ext-iconv
+    - ext-intl
+    - ext-pcre
+    - ext-simplexml
+    - ext-spl
+  '8.6':
+    - php: '>=7.2'
+    - composer-plugin-api: ^2.2.0
+    - ext-dom
+    - ext-hash
+    - ext-iconv
+    - ext-intl
+    - ext-pcre
+    - ext-simplexml
+    - ext-spl
+ci-platform-flags:
+  needs_installer_plugin: true
