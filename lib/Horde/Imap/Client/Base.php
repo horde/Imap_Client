@@ -712,7 +712,8 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
      *                           additional namespaces to add to the
      *                           namespace list that are not broadcast by
      *                           the server. The namespaces must be UTF-8
-     *                           strings.
+     *                           strings. Non-scalar entries (e.g. nested
+     *                           arrays) are ignored.
      * @param array $opts        Additional options:
      *   - ob_return: (boolean) If true, returns a
      *                Horde_Imap_Client_Namespace_List object instead of an
@@ -741,7 +742,19 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
         array $additional = [],
         array $opts = []
     ) {
-        $additional = array_map('strval', $additional);
+        /* Only scalar/Stringable values are valid namespace names. Nested
+         * arrays (e.g. from a misconfigured IMP backends.php 'namespace'
+         * entry) must not be passed to strval() — that triggers
+         * "Array to string conversion" on PHP 8+. */
+        $normalized = [];
+        foreach ($additional as $val) {
+            if (is_array($val) ||
+                (is_object($val) && !($val instanceof Stringable))) {
+                continue;
+            }
+            $normalized[] = strval($val);
+        }
+        $additional = $normalized;
         $sig = hash(
             'md5',
             json_encode($additional) . intval(empty($opts['ob_return']))
@@ -756,7 +769,7 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
 
             /* Skip namespaces if we have already auto-detected them. Also,
              * hidden namespaces cannot be empty. */
-            $to_process = array_diff(array_filter($additional, 'strlen'), array_map('strlen', iterator_to_array($ns)));
+            $to_process = array_diff(array_filter($additional, 'strlen'), array_map('strval', iterator_to_array($ns)));
             if (!empty($to_process)) {
                 foreach ($this->listMailboxes($to_process, Horde_Imap_Client::MBOX_ALL, ['delimiter' => true]) as $key => $val) {
                     $ob = new Horde_Imap_Client_Data_Namespace();
