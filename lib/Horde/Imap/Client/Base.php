@@ -748,8 +748,8 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
          * "Array to string conversion" on PHP 8+. */
         $normalized = [];
         foreach ($additional as $val) {
-            if (is_array($val) ||
-                (is_object($val) && !($val instanceof Stringable))) {
+            if (is_array($val)
+                || (is_object($val) && !($val instanceof Stringable))) {
                 continue;
             }
             $normalized[] = strval($val);
@@ -902,7 +902,12 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
      */
     public function logout()
     {
-        if ($this->_isAuthenticated && $this->_connection->connected) {
+        // shutdown() reaches this via register_shutdown_function; if the
+        // client was torn down before _connection was materialized we
+        // still want to zero the state below, so guard the connection
+        // read explicitly rather than relying on _isAuthenticated as a
+        // proxy - PHP 8+ warns on ->connected of null.
+        if ($this->_isAuthenticated && $this->_connection !== null && $this->_connection->connected) {
             $this->_logout();
             $this->_connection->close();
         }
