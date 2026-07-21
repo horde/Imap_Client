@@ -1,4 +1,14 @@
 ---
+3.0.1:
+  api: 3.0.1
+  state:
+    release: stable
+    api: stable
+  date: 2026-07-21
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: "fix: Regression on PHP 8.x for connection check\nfix(imap_client): avoid array-to-string warning in getNamespaces"
 3.0.0:
   api: 3.0.0
   state:

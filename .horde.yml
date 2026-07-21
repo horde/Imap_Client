@@ -15,7 +15,7 @@ authors:
     active: false
     role: lead
 version:
-  release: 3.0.0
+  release: 3.0.1
   api: 3.0.0alpha1
 state:
   release: stable
@@ -72,7 +72,7 @@ keywords:
   - mailbox
 ci-platform:
   '8.1':
-    - php: '>=7.2'
+    - php: ^8.1
     - composer-plugin-api: ^2.2.0
     - ext-dom
     - ext-hash
@@ -82,7 +82,7 @@ ci-platform:
     - ext-simplexml
     - ext-spl
   '8.2':
-    - php: '>=7.2'
+    - php: ^8.2
     - composer-plugin-api: ^2.2.0
     - ext-dom
     - ext-hash
@@ -92,7 +92,7 @@ ci-platform:
     - ext-simplexml
     - ext-spl
   '8.3':
-    - php: '>=7.2'
+    - php: ^8.3
     - composer-plugin-api: ^2.2.0
     - ext-dom
     - ext-hash
@@ -102,7 +102,7 @@ ci-platform:
     - ext-simplexml
     - ext-spl
   '8.4':
-    - php: '>=7.2'
+    - php: ^8.4
     - composer-plugin-api: ^2.2.0
     - ext-dom
     - ext-hash
@@ -112,7 +112,7 @@ ci-platform:
     - ext-simplexml
     - ext-spl
   '8.5':
-    - php: '>=7.2'
+    - php: ^8.5
     - composer-plugin-api: ^2.2.0
     - ext-dom
     - ext-hash
@@ -122,7 +122,7 @@ ci-platform:
     - ext-simplexml
     - ext-spl
   '8.6':
-    - php: '>=7.2'
+    - php: ^8.6
     - composer-plugin-api: ^2.2.0
     - ext-dom
     - ext-hash
