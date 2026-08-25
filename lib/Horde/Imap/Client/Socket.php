@@ -4242,6 +4242,20 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
 
         $this->_sendCmdChunk($pipeline, $cmd_list);
 
+        /* A mailbox switch with QRESYNC active is deferred to the 'CLOSED'
+         * response code handler (RFC 7162 [3.2.11]). Not all servers send
+         * that response code, so perform the pending switch here if the
+         * command completed without it - otherwise the newly selected
+         * mailbox is never recorded and all subsequent commands operate on
+         * the stale selection. */
+        if (isset($pipeline->data['qresyncmbox'])) {
+            $this->_changeSelected(
+                $pipeline->data['qresyncmbox'][0],
+                $pipeline->data['qresyncmbox'][1]
+            );
+            unset($pipeline->data['qresyncmbox']);
+        }
+
         /* If any FLAGS responses contain MODSEQs but not UIDs, don't
          * cache any data and immediately close the mailbox. */
         foreach ($pipeline->data['modseqs_nouid'] as $val) {
