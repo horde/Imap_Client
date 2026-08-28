@@ -3889,6 +3889,24 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
         $mbox_ob->setStatus(Horde_Imap_Client::STATUS_SYNCVANISHED, $ids_ob->ids);
         $mbox_ob->map->remove($ids);
 
+        /* The message set in this mailbox just changed (message(s)
+         * expunged/moved out). Any cached SEARCH results for this
+         * mailbox may now reference vanished UIDs, so they can no
+         * longer be trusted even if the tracked sync token has not
+         * (yet) advanced. Only touch the cache if a SEARCH was
+         * actually cached for this mailbox. */
+        $search_md = $this->_cache->getMetaData(
+            $mailbox,
+            null,
+            [self::CACHE_SEARCHID]
+        );
+        if (isset($search_md[self::CACHE_SEARCHID])) {
+            $this->_cache->setMetaData($mailbox, null, [
+                self::CACHE_SEARCH => [],
+                self::CACHE_SEARCHID => null,
+            ]);
+        }
+
         return $ids_ob;
     }
 
