@@ -15,7 +15,15 @@
         "mailbox"
     ],
     "time": "2026-07-21",
-    "repositories": [],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../Sasl",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require": {
         "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0 || ^3 || ^2",
         "php": "^8.1",
@@ -23,7 +31,8 @@
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/mail": "^3 || dev-FRAMEWORK_6_0",
         "horde/mime": "^3 || dev-FRAMEWORK_6_0",
-        "horde/socket_client": "^3 || dev-FRAMEWORK_6_0",
+        "horde/sasl": "^1 || dev-FRAMEWORK_6_0",
+        "horde/socket_client": "^3.1 || dev-FRAMEWORK_6_0",
         "horde/stream": "^2 || dev-FRAMEWORK_6_0",
         "horde/secret": "^3 || dev-FRAMEWORK_6_0",
         "horde/stream_filter": "^3 || dev-FRAMEWORK_6_0",

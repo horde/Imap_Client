@@ -31,7 +31,8 @@ dependencies:
       horde/exception: ^3
       horde/mail: ^3
       horde/mime: ^3
-      horde/socket_client: ^3
+      horde/sasl: ^1
+      horde/socket_client: ^3.1
       horde/stream: ^2
       horde/secret: ^3
       horde/stream_filter: ^3
