@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 The Horde Project (http://www.horde.org/)
  *
  * getBaseSubject() code adapted from imap-base-subject.c (Dovecot 1.2)
  *   Original code released under the LGPL-2.1

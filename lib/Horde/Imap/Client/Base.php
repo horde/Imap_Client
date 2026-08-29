@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 The Horde Project (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
@@ -3437,7 +3437,7 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
      *              DEFAULT: No maximal size.
      *
      * @return array  An array with metadata names as the keys and metadata
-     *                values as the values. If 'maxsize' is set, and entries
+     *                values as the values. If 'maxsize' is set and entries
      *                exist on the server larger than this size, the size will
      *                be returned in the key '*longentries'.
      *
