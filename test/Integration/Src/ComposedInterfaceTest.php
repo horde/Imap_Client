@@ -6,7 +6,7 @@ namespace Horde\Imap\Client\Test\Integration\Src;
 
 use DateTimeImmutable;
 use Generator;
-use Horde\Imap\Client\CapabilityInterface;
+use Horde\Imap\Client\Capability;
 use Horde\Imap\Client\ImapAclAware;
 use Horde\Imap\Client\ImapMetadataAware;
 use Horde\Imap\Client\ImapProtocol;
@@ -19,7 +19,8 @@ use Horde\Imap\Client\OpenMode;
 use Horde\Imap\Client\ParsedAccess;
 use Horde\Imap\Client\PartAccess;
 use Horde\Imap\Client\Test\Stub\StubMessageIdSet;
-use Horde_Stream;
+use Horde\Stream\StreamInterface;
+use Horde\Stream\Temp;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -55,9 +56,9 @@ class ComposedInterfaceTest extends TestCase
                 return new StubMessageIdSet();
             }
             // ImapProtocol
-            public function getCapability(): CapabilityInterface
+            public function getCapability(): Capability
             {
-                return new class implements CapabilityInterface {
+                return new class implements Capability {
                     public function query(string $capability, ?string $parameter = null): bool
                     {
                         return false;
@@ -114,9 +115,9 @@ class ComposedInterfaceTest extends TestCase
                 return [];
             }
             // ImapAclAware
-            public function getACL(string $mailbox): object
+            public function getACL(string $mailbox): array
             {
-                return new stdClass();
+                return [];
             }
             public function setACL(string $mailbox, string $identifier, array $options): void {}
             public function deleteACL(string $mailbox, string $identifier): void {}
@@ -177,24 +178,24 @@ class ComposedInterfaceTest extends TestCase
             {
                 return null;
             }
-            public function getFullMsg(): Horde_Stream
+            public function getFullMsg(): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
-            public function getHeaderText(string|int $id = 0): Horde_Stream
+            public function getHeaderText(string|int $id = 0): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
-            public function getBodyText(string|int $id = 0): Horde_Stream
+            public function getBodyText(string|int $id = 0): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
         };
 
         $this->assertInstanceOf(MessageMetadata::class, $stub);
         $this->assertInstanceOf(MessageContent::class, $stub);
         $this->assertSame(1, $stub->getUid());
-        $this->assertInstanceOf(Horde_Stream::class, $stub->getFullMsg());
+        $this->assertInstanceOf(StreamInterface::class, $stub->getFullMsg());
     }
 
     public function testMessageCanImplementAllFourLayers(): void
@@ -224,25 +225,25 @@ class ComposedInterfaceTest extends TestCase
             {
                 return null;
             }
-            public function getFullMsg(): Horde_Stream
+            public function getFullMsg(): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
-            public function getHeaderText(string|int $id = 0): Horde_Stream
+            public function getHeaderText(string|int $id = 0): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
-            public function getBodyText(string|int $id = 0): Horde_Stream
+            public function getBodyText(string|int $id = 0): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
-            public function getBodyPart(string $id): Horde_Stream
+            public function getBodyPart(string $id): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
-            public function getMimeHeader(string $id): Horde_Stream
+            public function getMimeHeader(string $id): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
             public function getParts(): Generator
             {
@@ -272,7 +273,7 @@ class ComposedInterfaceTest extends TestCase
         $this->assertInstanceOf(ParsedAccess::class, $stub);
 
         $this->assertSame(42, $stub->getUid());
-        $this->assertInstanceOf(Horde_Stream::class, $stub->getBodyPart('1'));
+        $this->assertInstanceOf(StreamInterface::class, $stub->getBodyPart('1'));
         $this->assertIsObject($stub->getEnvelope());
     }
 }

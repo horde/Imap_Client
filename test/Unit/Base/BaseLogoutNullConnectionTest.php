@@ -29,7 +29,7 @@ use ReflectionClass;
  * still flagged true), PHP 8+ raised
  * "Attempt to read property 'connected' on null" from shutdown().
  * PHPUnit's `failOnWarning="true"` in phpunit.xml.dist turns the
- * warning into a test failure — the assertion is implicit.
+ * warning into a test failure.
  */
 #[CoversNothing]
 class BaseLogoutNullConnectionTest extends TestCase
@@ -49,8 +49,7 @@ class BaseLogoutNullConnectionTest extends TestCase
         // Force the exact state the CI stack trace observed:
         // _isAuthenticated = true, _connection = null. Reflection
         // is needed because both properties are protected and no
-        // setter exists (nor should one — this state is only
-        // reachable through internal lifecycle races).
+        // setter exists.
         $reflection = new ReflectionClass($ob);
 
         $authProperty = $reflection->getProperty('_isAuthenticated');

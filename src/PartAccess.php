@@ -3,39 +3,34 @@
 declare(strict_types=1);
 
 /**
- * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 The Horde Project (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
  *
- * @copyright 2011-2026 Horde LLC
+ * @copyright 2011-2026 The Horde Project
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
 
 namespace Horde\Imap\Client;
 
 use Generator;
-use Horde_Stream;
+use Horde\Stream\StreamInterface;
 
 /**
- * Layer 2: MIME part access (IMAP-only).
+ * MIME part access for IMAP.
  *
- * POP3 does not implement this — MIME part addressing is not a POP3 feature.
+ * POP3 does not implement this.
  *
  * @author    Michael Slusarz <slusarz@horde.org>
- * @copyright 2011-2026 Horde LLC
+ * @author    Ralf Lang <ralf.lang@ralf-lang.de>
+ * @copyright 2011-2026 The Horde Project
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
 interface PartAccess
 {
-    public function getBodyPart(string $id): Horde_Stream;
+    public function getBodyPart(string $id): StreamInterface;
 
-    public function getMimeHeader(string $id): Horde_Stream;
+    public function getMimeHeader(string $id): StreamInterface;
 
-    /**
-     * Yields parts lazily from BODYSTRUCTURE.
-     *
-     * @return Generator
-     */
-    public function getParts(): Generator;
 }

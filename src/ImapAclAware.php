@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 /**
- * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 The Horde Project (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (LGPL). If you
  * did not receive this file, see http://www.horde.org/licenses/lgpl21.
  *
- * @copyright 2008-2026 Horde LLC
+ * @copyright 2008-2026 The Horde Project
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
 
@@ -20,16 +20,21 @@ namespace Horde\Imap\Client;
  * Separated because ACL is an optional server capability.
  *
  * @author    Michael Slusarz <slusarz@horde.org>
- * @copyright 2008-2026 Horde LLC
+ * @author    Ralf Lang <ralf.lang@ralf-lang.de>
+ * @copyright 2008-2026 The Horde Project
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
 interface ImapAclAware
 {
     /**
-     * @return object Acl value object
+     * @return array<string, object> ACL rights keyed by identifier (each
+     *                               value an Acl value object).
      */
-    public function getACL(string $mailbox): object;
+    public function getACL(string $mailbox): array;
 
+    /**
+     * @param array{rights?: string} $options
+     */
     public function setACL(string $mailbox, string $identifier, array $options): void;
 
     public function deleteACL(string $mailbox, string $identifier): void;

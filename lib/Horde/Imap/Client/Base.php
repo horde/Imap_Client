@@ -743,8 +743,7 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
         array $opts = []
     ) {
         /* Only scalar/Stringable values are valid namespace names. Nested
-         * arrays (e.g. from a misconfigured IMP backends.php 'namespace'
-         * entry) must not be passed to strval() — that triggers
+         * arrays must not be passed to strval() as it triggers
          * "Array to string conversion" on PHP 8+. */
         $normalized = [];
         foreach ($additional as $val) {

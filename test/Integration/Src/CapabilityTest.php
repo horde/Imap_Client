@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Horde\Imap\Client\Test\Integration\Src;
 
-use Horde\Imap\Client\CapabilityInterface;
+use Horde\Imap\Client\Capability;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 #[CoversNothing]
-class CapabilityInterfaceTest extends TestCase
+class CapabilityTest extends TestCase
 {
-    private function createImplementation(): CapabilityInterface
+    private function createImplementation(): Capability
     {
-        return new class implements CapabilityInterface {
+        return new class implements Capability {
             public function query(string $capability, ?string $parameter = null): bool
             {
                 if ($capability === 'IMAP4rev1' && $parameter === null) {
