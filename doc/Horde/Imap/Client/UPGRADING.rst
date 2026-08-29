@@ -20,7 +20,7 @@ Upgrading to 3.0.0
     Memcache 1.0 with poor multi-get; modern Redis with MGET/pipelining
     handles the sliced strategy of Backend_Cache equally well. Use
     Backend_Cache with Horde_Cache configured to wrap a HashTable storage
-    instead — single code path, consistent TTL/age handling.
+    instead. Single code path, consistent TTL/age handling.
 
     Existing IMP configurations setting ``cache.driver = 'hashtable'`` for
     the IMAP cache continue to work: the IMP wrapper transparently falls
@@ -325,7 +325,7 @@ Upgrading to 2.9.0
 
   - Horde_Imap_Client_Base
 
-    The 'cacheob', 'lifetime', and 'slicesize' parameters to the 'cache'
+    The 'cacheob', 'lifetime' and 'slicesize' parameters to the 'cache'
     constructor option have been deprecated. Use the 'backend' parameter
     instead.
 

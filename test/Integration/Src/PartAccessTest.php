@@ -6,7 +6,8 @@ namespace Horde\Imap\Client\Test\Integration\Src;
 
 use Generator;
 use Horde\Imap\Client\PartAccess;
-use Horde_Stream;
+use Horde\Stream\StreamInterface;
+use Horde\Stream\Temp;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -17,14 +18,14 @@ class PartAccessTest extends TestCase
     private function createImplementation(): PartAccess
     {
         return new class implements PartAccess {
-            public function getBodyPart(string $id): Horde_Stream
+            public function getBodyPart(string $id): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
 
-            public function getMimeHeader(string $id): Horde_Stream
+            public function getMimeHeader(string $id): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
 
             public function getParts(): Generator
@@ -37,12 +38,12 @@ class PartAccessTest extends TestCase
 
     public function testGetBodyPartReturnsHordeStream(): void
     {
-        $this->assertInstanceOf(Horde_Stream::class, $this->createImplementation()->getBodyPart('1.1'));
+        $this->assertInstanceOf(StreamInterface::class, $this->createImplementation()->getBodyPart('1.1'));
     }
 
     public function testGetMimeHeaderReturnsHordeStream(): void
     {
-        $this->assertInstanceOf(Horde_Stream::class, $this->createImplementation()->getMimeHeader('1'));
+        $this->assertInstanceOf(StreamInterface::class, $this->createImplementation()->getMimeHeader('1'));
     }
 
     public function testGetPartsReturnsGenerator(): void
@@ -55,14 +56,14 @@ class PartAccessTest extends TestCase
     public function testGetPartsEmptyGenerator(): void
     {
         $stub = new class implements PartAccess {
-            public function getBodyPart(string $id): Horde_Stream
+            public function getBodyPart(string $id): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
 
-            public function getMimeHeader(string $id): Horde_Stream
+            public function getMimeHeader(string $id): StreamInterface
             {
-                return new Horde_Stream();
+                return new Temp();
             }
 
             public function getParts(): Generator

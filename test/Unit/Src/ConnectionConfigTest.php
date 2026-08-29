@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Horde\Imap\Client\Test\Unit\Src;
 
 use Horde\Imap\Client\ConnectionConfig;
-use Horde\Imap\Client\PasswordInterface;
 use Horde\Imap\Client\SecureMode;
+use Horde\Sasl\Negotiation\SaslPolicy;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -15,10 +15,8 @@ class ConnectionConfigTest extends TestCase
 {
     public function testMinimalConstruction(): void
     {
-        $cfg = new ConnectionConfig('user', 'pass');
+        $cfg = new ConnectionConfig();
 
-        $this->assertSame('user', $cfg->username);
-        $this->assertSame('pass', $cfg->password);
         $this->assertSame('localhost', $cfg->hostspec);
         $this->assertNull($cfg->port);
         $this->assertSame(SecureMode::None, $cfg->secure);
@@ -28,13 +26,14 @@ class ConnectionConfigTest extends TestCase
         $this->assertSame([], $cfg->capabilityIgnore);
         $this->assertNull($cfg->id);
         $this->assertSame([], $cfg->lang);
+        $this->assertNull($cfg->saslPolicy);
     }
 
     public function testFullConstruction(): void
     {
+        $policy = SaslPolicy::legacyCompatible();
+
         $cfg = new ConnectionConfig(
-            username: 'admin',
-            password: 'secret',
             hostspec: 'mail.example.com',
             port: 993,
             secure: SecureMode::Ssl,
@@ -44,28 +43,22 @@ class ConnectionConfigTest extends TestCase
             capabilityIgnore: ['CONDSTORE'],
             id: ['name' => 'TestClient'],
             lang: ['en'],
+            saslPolicy: $policy,
         );
 
-        $this->assertSame('admin', $cfg->username);
+        $this->assertSame('mail.example.com', $cfg->hostspec);
         $this->assertSame(993, $cfg->port);
         $this->assertSame(SecureMode::Ssl, $cfg->secure);
         $this->assertSame(60, $cfg->timeout);
         $this->assertSame(['CONDSTORE'], $cfg->capabilityIgnore);
         $this->assertSame(['en'], $cfg->lang);
+        $this->assertSame($policy, $cfg->saslPolicy);
     }
 
-    public function testPasswordInterface(): void
+    public function testSaslPolicyDefaultsToNull(): void
     {
-        $pw = new class implements PasswordInterface {
-            public function getPassword(): string
-            {
-                return 'dynamic-pass';
-            }
-        };
+        $cfg = new ConnectionConfig(hostspec: 'mail.example.com');
 
-        $cfg = new ConnectionConfig('user', $pw);
-
-        $this->assertInstanceOf(PasswordInterface::class, $cfg->password);
-        $this->assertSame('dynamic-pass', $cfg->password->getPassword());
+        $this->assertNull($cfg->saslPolicy);
     }
 }

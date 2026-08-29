@@ -15,9 +15,9 @@ class ImapAclAwareTest extends TestCase
     private function createImplementation(): ImapAclAware
     {
         return new class implements ImapAclAware {
-            public function getACL(string $mailbox): object
+            public function getACL(string $mailbox): array
             {
-                return new stdClass();
+                return [];
             }
             public function setACL(string $mailbox, string $identifier, array $options): void {}
             public function deleteACL(string $mailbox, string $identifier): void {}
@@ -32,9 +32,9 @@ class ImapAclAwareTest extends TestCase
         };
     }
 
-    public function testGetACLReturnsObject(): void
+    public function testGetACLReturnsArray(): void
     {
-        $this->assertIsObject($this->createImplementation()->getACL('INBOX'));
+        $this->assertIsArray($this->createImplementation()->getACL('INBOX'));
     }
 
     public function testSetACLReturnsVoid(): void

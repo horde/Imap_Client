@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Horde\Imap\Client\Test\Integration\Src;
 
 use Generator;
-use Horde\Imap\Client\CapabilityInterface;
+use Horde\Imap\Client\Capability;
 use Horde\Imap\Client\ImapProtocol;
 use Horde\Imap\Client\MailboxListMode;
 use Horde\Imap\Client\MailboxProtocol;
@@ -48,9 +48,9 @@ class ImapProtocolTest extends TestCase
             }
 
             // ImapProtocol methods
-            public function getCapability(): CapabilityInterface
+            public function getCapability(): Capability
             {
-                return new class implements CapabilityInterface {
+                return new class implements Capability {
                     public function query(string $capability, ?string $parameter = null): bool
                     {
                         return false;
@@ -109,9 +109,9 @@ class ImapProtocolTest extends TestCase
         $this->assertInstanceOf(ImapProtocol::class, $this->createImplementation());
     }
 
-    public function testGetCapabilityReturnsCapabilityInterface(): void
+    public function testGetCapabilityReturnsCapability(): void
     {
-        $this->assertInstanceOf(CapabilityInterface::class, $this->createImplementation()->getCapability());
+        $this->assertInstanceOf(Capability::class, $this->createImplementation()->getCapability());
     }
 
     public function testOpenMailboxAcceptsOpenModeEnum(): void

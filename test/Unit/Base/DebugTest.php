@@ -122,7 +122,7 @@ class DebugTest extends TestCase
 
         // After shutdown, writing should produce no output
         $debug->client('after shutdown');
-        // Stream is closed, so we can't read it — just verify no error
+        // Stream is closed, so we can't read it. Just verify no error
         $this->assertFalse(is_resource($stream));
     }
 }

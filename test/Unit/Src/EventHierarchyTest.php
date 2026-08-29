@@ -19,6 +19,7 @@ use Horde\Imap\Client\Event\ImapEvent;
 use Horde\Imap\Client\Event\MailboxExpunged;
 use Horde\Imap\Client\Event\MailboxSelected;
 use Horde\Imap\Client\Event\SlowCommand;
+use Horde\Imap\Client\ImapIdSet;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -62,8 +63,6 @@ class EventHierarchyTest extends TestCase
             [AuthenticationSucceeded::class],
             [AuthenticationFailed::class],
             [CapabilityNegotiated::class],
-            [MailboxSelected::class],
-            [MailboxExpunged::class],
             [AlertReceived::class],
             [SlowCommand::class],
         ];
@@ -75,6 +74,23 @@ class EventHierarchyTest extends TestCase
         $event = new $class();
         $this->assertInstanceOf(ImapEvent::class, $event);
         $this->assertNotInstanceOf(DiagnosticEvent::class, $event);
+    }
+
+    /**
+     * MailboxSelected and MailboxExpunged carry typed payloads so they are
+     * asserted separately from the zero-argument lifecycle events. They are
+     * still plain ImapEvent (non-diagnostic) subclasses so the default
+     * FilteredEventDispatcher lets them through to listeners.
+     */
+    public function testTypedDomainEventsExtendImapEvent(): void
+    {
+        $selected = new MailboxSelected('INBOX', 42, 100, 715);
+        $this->assertInstanceOf(ImapEvent::class, $selected);
+        $this->assertNotInstanceOf(DiagnosticEvent::class, $selected);
+
+        $expunged = new MailboxExpunged('INBOX', new ImapIdSet([5], false), 42);
+        $this->assertInstanceOf(ImapEvent::class, $expunged);
+        $this->assertNotInstanceOf(DiagnosticEvent::class, $expunged);
     }
 
     public static function diagnosticEventProvider(): array
