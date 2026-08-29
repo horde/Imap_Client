@@ -41,6 +41,17 @@ class Base extends Horde_Imap_Client_Base
         return $this->_initCache($current);
     }
 
+    /**
+     * Expose the protected message deletion cache handler for testing.
+     */
+    public function deleteMsgs(
+        Horde_Imap_Client_Mailbox $mailbox,
+        Horde_Imap_Client_Ids $ids,
+        array $opts = []
+    ): Horde_Imap_Client_Ids {
+        return $this->_deleteMsgs($mailbox, $ids, $opts);
+    }
+
     protected function _initCapability() {}
 
     protected function _noop() {}
