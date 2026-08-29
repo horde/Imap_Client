@@ -14,16 +14,8 @@
     "keywords": [
         "mailbox"
     ],
-    "time": "2026-07-21",
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../Sasl",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
+    "time": "2026-08-29",
+    "repositories": [],
     "require": {
         "horde/horde-installer-plugin": "dev-FRAMEWORK_6_0 || ^3 || ^2",
         "php": "^8.1",

@@ -15,7 +15,7 @@ authors:
     active: false
     role: lead
 version:
-  release: 3.0.1
+  release: 3.1.0
   api: 3.0.0alpha1
 state:
   release: stable
@@ -79,6 +79,7 @@ ci-platform:
     - ext-hash
     - ext-iconv
     - ext-intl
+    - ext-json
     - ext-pcre
     - ext-simplexml
     - ext-spl
@@ -89,6 +90,7 @@ ci-platform:
     - ext-hash
     - ext-iconv
     - ext-intl
+    - ext-json
     - ext-pcre
     - ext-simplexml
     - ext-spl
@@ -99,6 +101,7 @@ ci-platform:
     - ext-hash
     - ext-iconv
     - ext-intl
+    - ext-json
     - ext-pcre
     - ext-simplexml
     - ext-spl
@@ -109,6 +112,7 @@ ci-platform:
     - ext-hash
     - ext-iconv
     - ext-intl
+    - ext-json
     - ext-pcre
     - ext-simplexml
     - ext-spl
@@ -119,6 +123,7 @@ ci-platform:
     - ext-hash
     - ext-iconv
     - ext-intl
+    - ext-json
     - ext-pcre
     - ext-simplexml
     - ext-spl
@@ -129,6 +134,7 @@ ci-platform:
     - ext-hash
     - ext-iconv
     - ext-intl
+    - ext-json
     - ext-pcre
     - ext-simplexml
     - ext-spl

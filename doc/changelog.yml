@@ -1,4 +1,14 @@
 ---
+3.1.0:
+  api: 3.1.0
+  state:
+    release: stable
+    api: stable
+  date: 2026-08-29
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: "test: Add test coverage for #52 search cache invalidation bug\nchore(metadata) add dependency on horde/sasl and bump horde/socket_client dependency to 3.1\nstyle: php-cs-fixer\nfeat: IMAP4rev2 implementation on src/ PSR-4 codebase\nfix: invalidate cached SEARCH results on message deletion/move"
 3.0.1:
   api: 3.0.1
   state:
