@@ -1824,6 +1824,21 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
     ) {
         $c = $this->_capability();
 
+        // Validate the entire batch before a MULTIAPPEND fallback can send any
+        // messages. An explicitly binary upload must never become text data.
+        $binary_append = false;
+        foreach ($data as $message) {
+            if (!empty($message['binary'])) {
+                $binary_append = true;
+                if (!$c->query('BINARY')) {
+                    throw new Horde_Imap_Client_Exception(
+                        'Binary APPEND requires the BINARY extension.',
+                        Horde_Imap_Client_Exception::NOT_SUPPORTED
+                    );
+                }
+            }
+        }
+
         // Check for MULTIAPPEND extension (RFC 3502)
         if ((count($data) > 1) && !$c->query('MULTIAPPEND')) {
             $result = $this->getIdsOb();
@@ -1851,6 +1866,10 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
         $cmd->literal8 = true;
 
         foreach (array_keys($data) as $key) {
+            $append_data = empty($data[$key]['binary'])
+                ? '_appendData'
+                : '_appendBinaryData';
+
             if (!empty($data[$key]['flags'])) {
                 $tmp = new Horde_Imap_Client_Data_Format_List();
                 foreach ($data[$key]['flags'] as $val) {
@@ -1880,7 +1899,7 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                     switch ($v['t']) {
                         case 'text':
                             if ($catenate) {
-                                $tdata = $this->_appendData($v['v'], $asize);
+                                $tdata = $this->$append_data($v['v'], $asize);
                                 if ($utf8) {
                                     /* RFC 6855 [4]: CATENATE UTF8 extension. */
                                     $tdata->forceBinary();
@@ -1918,10 +1937,10 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                 if ($catenate) {
                     $cmd->add($tmp);
                 } else {
-                    $adata = $this->_appendData($data_stream->stream, $asize);
+                    $adata = $this->$append_data($data_stream->stream, $asize);
                 }
             } else {
-                $adata = $this->_appendData($data[$key]['data'], $asize);
+                $adata = $this->$append_data($data[$key]['data'], $asize);
             }
 
             if (!is_null($adata)) {
@@ -1967,7 +1986,7 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
 
                 case $e::DISCONNECT:
                     /* Workaround broken literal8 on Cyrus. */
-                    if ($binary) {
+                    if ($binary && !$binary_append) {
                         // Need to re-login first before removing capability.
                         $this->login();
                         $c->remove('BINARY');
@@ -1987,7 +2006,8 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
              * using literal8 "~{#} format", but it doesn't seem to work on
              * all servers tried (UW-IMAP/Cyrus). Do a last-ditch check for
              * broken BINARY and attempt to fix here. */
-            if ($c->query('BINARY')
+            if (!$binary_append
+                && $c->query('BINARY')
                 && ($e instanceof Horde_Imap_Client_Exception_ServerResponse)) {
                 switch ($e->status) {
                     case Horde_Imap_Client_Interaction_Server::BAD:
@@ -2030,6 +2050,38 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
 
         // APPEND data MUST be sent in a literal (RFC 3501 [6.3.11]).
         $ob->forceLiteral();
+
+        $asize += $ob->length();
+
+        return $ob;
+    }
+
+    /**
+     * Prepare byte-preserving APPEND data for an explicitly binary message.
+     *
+     * The caller supplies canonical MIME headers; applying an EOL filter to
+     * the whole message would also modify binary body octets (RFC 3516).
+     * Keep _appendData() unchanged for existing callers and subclasses.
+     *
+     * @param mixed $data      Either a resource or a string.
+     * @param integer &$asize  Total append size.
+     *
+     * @return Horde_Imap_Client_Data_Format_String_Nonascii  The binary literal.
+     */
+    protected function _appendBinaryData($data, &$asize)
+    {
+        if (is_resource($data)
+            && (!stream_get_meta_data($data)['seekable'] || !rewind($data))) {
+            throw new InvalidArgumentException(
+                'Binary APPEND requires a seekable stream.'
+            );
+        }
+
+        $ob = new Horde_Imap_Client_Data_Format_String_Nonascii($data, [
+            'eol' => false,
+            'skipscan' => true,
+        ]);
+        $ob->forceBinary();
 
         $asize += $ob->length();
 

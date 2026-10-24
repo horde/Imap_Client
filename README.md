@@ -63,6 +63,8 @@ MULTIAPPEND, CATENATE, BINARY and SEARCH=FUZZY.
 - `doc/examples/pop3client.php`: the equivalent POP3 demonstration.
 - `doc/POP3CAPABILITIES.md`: what the POP3 client implements, what it
   deliberately does not and a server-compatibility matrix.
+- `doc/BINARY_APPEND.md`: opt-in byte-preserving binary APPEND with the
+  legacy socket API, including the MIME and server capability requirements.
 
 ## License
 
