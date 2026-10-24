@@ -1788,6 +1788,10 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
             return;
         }
 
+        if ($query->wantsBinary() && !$this->getCapability()->query('BINARY')) {
+            throw new CapabilityNotSupportedException('Decoded FETCH requires the BINARY extension.');
+        }
+
         $sequenceMode = $ids instanceof ImapIdSet && $ids->isSequence();
 
         // Cache read-through is only possible in UID mode (the cache keys
@@ -1873,7 +1877,8 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
      */
     private function cacheServiceable(ImapFetchQuery $query): bool
     {
-        if ($this->cache === null || $this->selectedUidValidity === 0 || $query->wantsStreamContent()) {
+        if ($this->cache === null || $this->selectedUidValidity === 0
+            || $query->wantsStreamContent() || $query->wantsBinary()) {
             return false;
         }
 

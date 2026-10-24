@@ -58,6 +58,8 @@ MULTIAPPEND, CATENATE, BINARY and SEARCH=FUZZY.
 
 - `doc/UPGRADING.md`: migrating from the legacy `lib/` API to the modern
   `src/` clients, with a class-mapping table and before/after examples.
+- `doc/BINARY_FETCH.md`: server-decoded MIME parts, decoded sizes, and
+  bounded partial reads using the modern BINARY FETCH API.
 - `doc/examples/imapclient.php`: a runnable, read-only IMAP demonstration
   (capabilities, namespaces, mailbox list, status, fetch, search).
 - `doc/examples/pop3client.php`: the equivalent POP3 demonstration.
