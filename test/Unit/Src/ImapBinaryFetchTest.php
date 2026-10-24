@@ -23,6 +23,7 @@ use Horde\Imap\Client\ImapIdSet;
 use Horde\Imap\Client\ImapResponseParser;
 use Horde\Imap\Client\ImapTokenizer;
 use Horde\Imap\Client\OpenMode;
+use Horde\Socket\Client\ClientInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -221,5 +222,28 @@ class ImapBinaryFetchTest extends TestCase
         self::assertSame('hello', $body[7]->getBinaryBodyPart(1)?->getString(0));
         self::assertSame(5, $size[7]->getBodyPartSize(1));
         self::assertCount(4, $socket->written);
+    }
+
+    public function testLiteralIsReassembledAcrossShortSocketReads(): void
+    {
+        foreach (['~', ''] as $marker) {
+            $socket = $this->createMock(ClientInterface::class);
+            $socket->method('gets')->willReturnOnConsecutiveCalls('* 1 FETCH (BINARY[1] ' . $marker . "{4}\r\n", ")\r\n");
+            $socket->expects(self::exactly(4))->method('read')->willReturnOnConsecutiveCalls("\0", 'a', "\r", "\n");
+            $socket->expects(self::never())->method('close');
+            $response = ImapResponseParser::parse((new ImapTokenizer($socket))->readLine());
+            $parsed = ImapFetchParser::parse($response, new ImapFetchQuery());
+            self::assertSame("\0a\r\n", $parsed['result']->getBinaryBodyPart(1)?->getString(0));
+        }
+    }
+
+    public function testTruncatedLiteralFailsAndClosesConnection(): void
+    {
+        $socket = $this->createMock(ClientInterface::class);
+        $socket->method('gets')->willReturn("* 1 FETCH (BINARY[1] ~{4}\r\n");
+        $socket->method('read')->willReturnOnConsecutiveCalls("\0a", '');
+        $socket->expects(self::once())->method('close');
+        $this->expectException(ImapProtocolException::class);
+        (new ImapTokenizer($socket))->readLine();
     }
 }

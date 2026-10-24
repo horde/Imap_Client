@@ -212,7 +212,27 @@ final class ImapTokenizer
 
         $length = (int) $matches[2];
 
-        return $this->client->read($length);
+        // A socket read may return fewer bytes than requested (in particular
+        // over TLS). A literal ends at its announced byte count, not at a
+        // packet boundary. Do not let its tail be parsed as protocol text.
+        $data = '';
+        try {
+            while (strlen($data) < $length) {
+                $chunk = $this->client->read(min(65536, $length - strlen($data)));
+                if ($chunk === '' || strlen($chunk) > $length - strlen($data)) {
+                    throw new ImapProtocolException('Connection ended before the IMAP literal was complete.');
+                }
+                $data .= $chunk;
+            }
+        } catch (\Throwable $e) {
+            try {
+                $this->client->close();
+            } catch (\Throwable) {
+                // Preserve the original read failure.
+            }
+            throw $e;
+        }
+        return $data;
     }
 
     private function skipSpaces(): void
