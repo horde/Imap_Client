@@ -186,7 +186,7 @@ class SocketBinaryAppendTest extends TestCase
         }
     }
 
-    public function testBinaryCatenateTextPartsPreserveTheirBytes(): void
+    public function testBinaryPartsAreAssembledLocallyEvenWithCatenateCapability(): void
     {
         $socket = $this->socket(['BINARY', 'CATENATE']);
         $socket->appendMessages([['binary' => true, 'data' => [
@@ -194,11 +194,10 @@ class SocketBinaryAppendTest extends TestCase
             ['t' => 'text', 'v' => "\0\n\r\xff"],
         ]]]);
         $literals = $this->literals($socket->commands[0]);
-        self::assertCount(2, $literals);
+        self::assertCount(1, $literals);
         self::assertTrue($literals[0]->binary());
-        self::assertTrue($literals[1]->binary());
-        self::assertSame("header\r\n\r\n", stream_get_contents($literals[0]->getStream()->stream, -1, 0));
-        self::assertSame("\0\n\r\xff", stream_get_contents($literals[1]->getStream()->stream, -1, 0));
+        self::assertSame("header\r\n\r\n\0\n\r\xff", stream_get_contents($literals[0]->getStream()->stream, -1, 0));
+        self::assertStringNotContainsString('CATENATE', $socket->renderCommand($socket->commands[0]));
     }
 
     public function testCatenateFallbackAssemblesWithoutNormalizingBinaryParts(): void

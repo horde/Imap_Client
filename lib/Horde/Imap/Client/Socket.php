@@ -1870,6 +1870,10 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                 ? '_appendData'
                 : '_appendBinaryData';
 
+            // RFC 4469 TEXT permits literal, not literal8. Assemble explicitly
+            // binary parts locally and send one binary APPEND literal instead.
+            $message_catenate = $catenate && empty($data[$key]['binary']);
+
             if (!empty($data[$key]['flags'])) {
                 $tmp = new Horde_Imap_Client_Data_Format_List();
                 foreach ($data[$key]['flags'] as $val) {
@@ -1888,7 +1892,7 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
             $adata = null;
 
             if (is_array($data[$key]['data'])) {
-                if ($catenate) {
+                if ($message_catenate) {
                     $cmd->add('CATENATE');
                     $tmp = new Horde_Imap_Client_Data_Format_List();
                 } else {
@@ -1898,7 +1902,7 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                 foreach ($data[$key]['data'] as $v) {
                     switch ($v['t']) {
                         case 'text':
-                            if ($catenate) {
+                            if ($message_catenate) {
                                 $tdata = $this->$append_data($v['v'], $asize);
                                 if ($utf8) {
                                     /* RFC 6855 [4]: CATENATE UTF8 extension. */
@@ -1922,7 +1926,7 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                             break;
 
                         case 'url':
-                            if ($catenate) {
+                            if ($message_catenate) {
                                 $tmp->add([
                                     'URL',
                                     new Horde_Imap_Client_Data_Format_Astring($v['v']),
@@ -1934,7 +1938,7 @@ class Horde_Imap_Client_Socket extends Horde_Imap_Client_Base
                     }
                 }
 
-                if ($catenate) {
+                if ($message_catenate) {
                     $cmd->add($tmp);
                 } else {
                     $adata = $this->$append_data($data_stream->stream, $asize);
