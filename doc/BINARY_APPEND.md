@@ -29,22 +29,23 @@ The displayed header lines and separator above represent CRLF; the body is
 preserved verbatim, including NULs, bare CR/LF, and trailing bytes. The
 library does not validate or repair MIME structure in binary mode. Streams
 must be seekable; they are rewound as with ordinary APPEND and remain owned
-by the caller. Horde
-uses its existing temporary stream storage while preparing the literal;
+by the caller. Horde uses its existing temporary stream storage while
+preparing the literal;
 this option does not promise a zero-copy path.
 
 Binary mode requires the server's `BINARY` capability and forces the
 `~{n}` literal8 syntax even when the content has no NUL. It applies to
 strings, stream resources, and text parts of the legacy CATENATE input
 form. Binary messages use local assembly even when the server advertises
-CATENATE: RFC 4469 permits ordinary literals for TEXT parts, not literal8. Within a MULTIAPPEND batch the flag applies
-to each message independently. Capability requirements are checked before
+CATENATE: RFC 4469 permits ordinary literals for TEXT parts, not literal8.
+Within a MULTIAPPEND batch the flag applies to each message independently.
+Capability requirements are checked before
 sending any message in a batch, including when MULTIAPPEND is unavailable.
 
 If the server rejects an explicitly binary APPEND, the client does not
 retry it as an ordinary literal. Existing mailbox creation retries retain
-the flag. A rejection or disconnect can still leave an
-uncertain upload outcome; reconcile before retrying if duplicates matter.
+the flag. A rejection or disconnect can still leave an uncertain upload
+outcome; reconcile before retrying if duplicates matter.
 
 Omitting `binary`, or setting it to false, preserves the existing CRLF
 normalization and fallback behavior. The modern namespaced `ImapClient`
