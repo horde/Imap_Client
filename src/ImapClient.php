@@ -263,7 +263,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
      * {@see enableQresync()}).
      *
      * @param ?ImapIdSet $knownUids The UIDs the client already has (the
-     *                              QRESYNC "known-uids" set), or null to
+     *                              QRESYNC "known-uids" set) or null to
      *                              omit it.
      *
      * @throws CapabilityNotSupportedException If QRESYNC is not enabled.
@@ -906,7 +906,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
 
         // RFC 3501 §6.4.4: CHARSET is optional and only carried when the
         // query holds text. RFC 6855 §3: once the connection is in UTF-8
-        // mode (UTF8=ACCEPT, or IMAP4rev2 which implies it) the client
+        // mode (UTF8=ACCEPT or IMAP4rev2 which implies it) the client
         // MUST NOT send a CHARSET, since UTF-8 is implied.
         if ($built['charset'] !== null && !$this->utf8Enabled()) {
             $arguments[] = new ImapWireAtom('CHARSET');
@@ -997,13 +997,13 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
     }
 
     /**
-     * Permanently remove messages flagged `\Deleted` (RFC 3501 §6.4.3),
+     * Permanently remove messages flagged `\Deleted` (RFC 3501 §6.4.3)
      * or a UID subset of them with `UID EXPUNGE` (UIDPLUS, RFC 4315).
      *
      * With `delete: true` the requested `ids` are flagged `\Deleted`
      * first. With `list: true` the expunged messages are collected and
      * returned: sequence numbers from `* n EXPUNGE` on a plain
-     * connection, or UIDs from `* VANISHED` once QRESYNC is enabled
+     * connection or UIDs from `* VANISHED` once QRESYNC is enabled
      * (RFC 7162 §3.2.10). Cache-driven expunge bookkeeping is a
      * separate concern (see {@see ImapCacheStore}).
      *
@@ -1059,7 +1059,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
      * @param array{ids?: MessageIdSet, create?: bool} $options
      *
      * @return MessageIdSet The destination UIDs from a `[COPYUID ...]`
-     *                      response (UIDPLUS, RFC 4315), or empty when the
+     *                      response (UIDPLUS, RFC 4315) or empty when the
      *                      server does not report them.
      *
      * @throws ServerResponseException If the server rejects the COPY.
@@ -1079,7 +1079,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
      * @param array{ids?: MessageIdSet, create?: bool} $options
      *
      * @return MessageIdSet The destination UIDs from a `[COPYUID ...]`
-     *                      response, or empty when unreported.
+     *                      response or empty when unreported.
      *
      * @throws ServerResponseException If the server rejects the command.
      */
@@ -1113,16 +1113,22 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
      * an ordinary literal (Dovecot stores bare LF as CRLF), so use it when
      * the message body must be stored byte for byte, for example with
      * `Content-Transfer-Encoding: binary`.
+     * With a `catenate` parts list, `binary: true` assembles TEXT parts locally into one `literal8`
+     * rather than a server-side `CATENATE` (RFC 4469 forbids literal8 for
+     * CATENATE parts).
+     * A `url` part cannot be combined with `binary`.
      *
      * @param list<array{data?: string|resource, catenate?: list<array{text?: string, url?: string}>, flags?: list<SystemFlag|string>, internaldate?: DateTimeInterface, binary?: bool}> $data
      * @param array{create?: bool} $options
      *
      * @return MessageIdSet The new UIDs from `[APPENDUID ...]` responses
-     *                      (UIDPLUS, RFC 4315), or empty when unreported.
+     *                      (UIDPLUS, RFC 4315) or empty when unreported.
      *
      * @throws CapabilityNotSupportedException If a `url` CATENATE part is
      *                                            used without server CATENATE,
-     *                                            or binary content without BINARY.
+     *                                            binary content without BINARY
+     *                                            or a `url` CATENATE part is
+     *                                            combined with `binary`.
      * @throws ServerResponseException          If the server rejects the APPEND.
      * @throws WireEncodingException            If stream input is invalid or cannot be read.
      */
@@ -1134,11 +1140,41 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
         // MULTIAPPEND is unavailable. Capture each stream's original position
         // once so retries and repeated references replay the same literal.
         foreach ($data as $index => $message) {
+            $binary = !empty($message['binary']);
+
             if (isset($message['catenate']) && is_array($message['catenate'])) {
+                if (!$binary) {
+                    continue;
+                }
+                // RFC 4469 permits an ordinary literal for a CATENATE TEXT
+                // part. A byte-preserving message cannot be
+                // assembled server-side. Concatenate the TEXT parts locally
+                // and send the whole thing as one literal8 instead. A URL
+                // part is resolved server side and has no literal8 form.
+                if (!$this->getCapability()->query('BINARY')) {
+                    throw new CapabilityNotSupportedException('Binary APPEND requires the BINARY extension.');
+                }
+                foreach ($message['catenate'] as $part) {
+                    if (isset($part['url'])) {
+                        throw new CapabilityNotSupportedException(
+                            'RFC 4469: A binary APPEND cannot contain a CATENATE URL part.'
+                        );
+                    }
+                }
+                $value = fopen('php://temp', 'w+b');
+                foreach ($message['catenate'] as $part) {
+                    if (isset($part['text'])) {
+                        fwrite($value, $part['text']);
+                    }
+                }
+                rewind($value);
+                unset($data[$index]['catenate']);
+                $data[$index]['data'] = new ImapWireStream($value, true);
+
                 continue;
             }
+
             $value = $message['data'] ?? '';
-            $binary = !empty($message['binary']);
             if ($binary && !$this->getCapability()->query('BINARY')) {
                 throw new CapabilityNotSupportedException('Binary APPEND requires the BINARY extension.');
             }
@@ -1209,7 +1245,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
     /**
      * The wire arguments for one appended message: optional flags,
      * optional internaldate, then the message content (a plain literal, a
-     * `UTF8 (...)` wrapper under UTF8=ACCEPT, or a `CATENATE (...)` list).
+     * `UTF8 (...)` wrapper under UTF8=ACCEPT or a `CATENATE (...)` list).
      *
      * @param array<string, mixed> $message
      *
