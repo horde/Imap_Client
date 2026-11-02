@@ -81,7 +81,14 @@ final class ImapInteraction
     public function run(ImapCommand $command, bool $nonSynchronizingLiterals = false): ImapCommandResult
     {
         $this->pipeline->enqueue($command);
-        $untagged = $this->connection->sendCommand($command, $nonSynchronizingLiterals);
+        try {
+            $untagged = $this->connection->sendCommand($command, $nonSynchronizingLiterals);
+        } catch (\Throwable $e) {
+            // Rejected announcements and failed stream writes complete this
+            // attempt too; don't retain its command and borrowed resources.
+            $this->pipeline->complete($command->tag);
+            throw $e;
+        }
 
         while (true) {
             $response = $this->connection->readResponse();

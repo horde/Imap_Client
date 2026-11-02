@@ -29,6 +29,7 @@ use Horde\Imap\Client\Exception\ImapProtocolException;
 use Horde\Imap\Client\Exception\MailboxNotFoundException;
 use Horde\Imap\Client\Exception\ServerResponseException;
 use Horde\Imap\Client\Exception\SyncException;
+use Horde\Imap\Client\Exception\WireEncodingException;
 use Horde\Sasl\Credentials\Credentials;
 use Horde\Sasl\Credentials\PasswordCredentials;
 use Horde\Mime\Part;
@@ -1091,31 +1092,71 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
      * Append one or more messages to a mailbox (RFC 3501 §6.3.11).
      *
      * Each `$data` entry is
-     * `['data' => string, 'flags' => list, 'internaldate' => DateTimeInterface]`
+     * `['data' => string|resource, 'flags' => list, 'internaldate' => DateTimeInterface]`
      * (only `data` is required). Alternatively `data` may be a CATENATE
      * (RFC 4469) parts list: `['catenate' => [['text' => '...'],
      * ['url' => 'imap://...'], ...]]`, assembled server-side when the
      * server advertises `CATENATE`.
+     * A stream must be readable and seekable. Bytes from its current position
+     * through EOF are sent verbatim in bounded chunks; the position is restored
+     * and the stream remains owned by the caller. Non-seekable input must be
+     * spooled by the caller first. Do not modify a stream during APPEND.
      *
      * Extensions used when advertised: `MULTIAPPEND` (RFC 3502, all
      * messages in one command), `literal8`/`~{n}` (RFC 3516, automatic for
-     * 8-bit bodies), and the `UTF8 (...)` wrapper (RFC 6855) once
+     * bodies containing NUL), and the `UTF8 (...)` wrapper (RFC 6855) once
      * UTF8=ACCEPT is enabled. `create: true` creates the mailbox and
      * retries on `[TRYCREATE]`.
      *
-     * @param list<array{data?: string, catenate?: list<array{text?: string, url?: string}>, flags?: list<SystemFlag|string>, internaldate?: DateTimeInterface}> $data
+     * `binary: true` on an entry sends it as `literal8` even without NUL,
+     * which requires BINARY. Servers may otherwise normalize line endings of
+     * an ordinary literal (Dovecot stores bare LF as CRLF), so use it when
+     * the message body must be stored byte for byte, for example with
+     * `Content-Transfer-Encoding: binary`.
+     *
+     * @param list<array{data?: string|resource, catenate?: list<array{text?: string, url?: string}>, flags?: list<SystemFlag|string>, internaldate?: DateTimeInterface, binary?: bool}> $data
      * @param array{create?: bool} $options
      *
      * @return MessageIdSet The new UIDs from `[APPENDUID ...]` responses
      *                      (UIDPLUS, RFC 4315), or empty when unreported.
      *
      * @throws CapabilityNotSupportedException If a `url` CATENATE part is
-     *                                            used without server CATENATE.
+     *                                            used without server CATENATE,
+     *                                            or binary content without BINARY.
      * @throws ServerResponseException          If the server rejects the APPEND.
+     * @throws WireEncodingException            If stream input is invalid or cannot be read.
      */
     public function append(string $mailbox, array $data, array $options = []): MessageIdSet
     {
         $this->connect();
+
+        // Prepare the entire batch before sending any APPEND, including when
+        // MULTIAPPEND is unavailable. Capture each stream's original position
+        // once so retries and repeated references replay the same literal.
+        foreach ($data as $index => $message) {
+            if (isset($message['catenate']) && is_array($message['catenate'])) {
+                continue;
+            }
+            $value = $message['data'] ?? '';
+            $binary = !empty($message['binary']);
+            if ($binary && !$this->getCapability()->query('BINARY')) {
+                throw new CapabilityNotSupportedException('Binary APPEND requires the BINARY extension.');
+            }
+            if (is_string($value) && $binary) {
+                // Route forced-binary strings through the stream path, the
+                // only literal encoding that can force literal8.
+                $value = fopen('php://temp', 'w+b');
+                fwrite($value, $message['data']);
+                rewind($value);
+            }
+            if (!is_string($value)) {
+                $stream = new ImapWireStream($value, $this->utf8Enabled() || $binary);
+                if ($stream->containsNul() && !$this->getCapability()->query('BINARY')) {
+                    throw new CapabilityNotSupportedException('A stream containing NUL requires the BINARY extension.');
+                }
+                $data[$index]['data'] = $stream;
+            }
+        }
 
         $create = !empty($options['create']);
 
@@ -1194,7 +1235,15 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
             return $arguments;
         }
 
-        $content = new ImapWireString(is_string($message['data'] ?? null) ? $message['data'] : '');
+        $value = $message['data'] ?? '';
+        $content = $value instanceof ImapWireStream ? $value : new ImapWireString($value);
+        if ($content instanceof ImapWireStream && $this->utf8Enabled()) {
+            // RFC 6855 section 4: UTF8 SP '(' literal8 ')'. The surrounding
+            // append-data itself is not a parenthesized list.
+            $arguments[] = new ImapWireAtom('UTF8');
+            $arguments[] = new ImapWireList([$content]);
+            return $arguments;
+        }
 
         // RFC 6855 §4: under UTF8=ACCEPT, an appended message is wrapped as
         // UTF8 (...). literal8 (~{n}) is chosen automatically by the wire

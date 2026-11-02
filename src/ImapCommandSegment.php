@@ -34,6 +34,7 @@ final class ImapCommandSegment
         public readonly string $text,
         public readonly bool $isBinary,
         public readonly string $bytes,
+        public readonly ?ImapWireStream $stream = null,
     ) {}
 
     public static function text(string $text): self
@@ -46,8 +47,13 @@ final class ImapCommandSegment
         return new self(true, '', $binary, $bytes);
     }
 
+    public static function streamed(ImapWireStream $stream): self
+    {
+        return new self(true, '', $stream->isBinary(), '', $stream);
+    }
+
     public function length(): int
     {
-        return strlen($this->bytes);
+        return $this->stream?->length() ?? strlen($this->bytes);
     }
 }

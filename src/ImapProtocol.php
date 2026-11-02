@@ -59,6 +59,11 @@ interface ImapProtocol extends MailboxProtocol
 
     public function move(string $source, string $dest, array $options = []): MessageIdSet;
 
+    /**
+     * Message data accepts strings or readable, seekable stream resources.
+     * Streams are sent from their current position to EOF, preserving position
+     * and caller ownership. See ImapClient::append() for message options.
+     */
     public function append(string $mailbox, array $data, array $options = []): MessageIdSet;
 
     /**

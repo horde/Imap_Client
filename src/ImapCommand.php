@@ -114,6 +114,10 @@ final class ImapCommand
      */
     private function flatten(ImapWireEncodable $value): array
     {
+        if ($value instanceof ImapWireStream) {
+            return [ImapCommandSegment::streamed($value)];
+        }
+
         if ($value->isLiteral()) {
             return [ImapCommandSegment::literal($value->isBinary(), $value->rawBytes())];
         }

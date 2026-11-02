@@ -24,6 +24,11 @@ final class InMemoryImapSocket implements ClientInterface
     /** @var list<string> */
     public array $written = [];
 
+    /** @var list<string> Exact writes, including payload CR/LF and wire framing. */
+    public array $rawWritten = [];
+
+    public bool $closed = false;
+
     public function __construct(
         private readonly string $buffer,
     ) {}
@@ -45,7 +50,7 @@ final class InMemoryImapSocket implements ClientInterface
 
     public function isConnected(): bool
     {
-        return true;
+        return !$this->closed;
     }
 
     public function isSecure(): bool
@@ -70,6 +75,7 @@ final class InMemoryImapSocket implements ClientInterface
 
     public function close(): void
     {
+        $this->closed = true;
     }
 
     public function getStatus(): StreamStatus
@@ -109,6 +115,7 @@ final class InMemoryImapSocket implements ClientInterface
 
     public function write(string $data): void
     {
+        $this->rawWritten[] = $data;
         $this->written[] = rtrim($data, "\r\n");
     }
 }

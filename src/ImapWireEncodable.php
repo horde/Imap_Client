@@ -65,6 +65,8 @@ interface ImapWireEncodable
      *
      * Meaningless (and not guaranteed to mean anything) unless
      * `isLiteral()` is true.
+     * ImapWireStream is emitted through chunks() instead; rawBytes() throws
+     * for that implementation to prevent materializing a large payload.
      */
     public function rawBytes(): string;
 }

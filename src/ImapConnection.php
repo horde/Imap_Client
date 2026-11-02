@@ -87,7 +87,24 @@ final class ImapConnection
                 array_push($untagged, ...$this->awaitContinuation($command));
             }
 
-            $this->client->write($segment->bytes);
+            if ($segment->stream === null) {
+                $this->client->write($segment->bytes);
+            } else {
+                try {
+                    foreach ($segment->stream->chunks() as $chunk) {
+                        $this->client->write($chunk);
+                    }
+                } catch (\Throwable $e) {
+                    // The announced literal may be incomplete. Never allow a
+                    // subsequent command to be interpreted as its payload.
+                    try {
+                        $this->client->close();
+                    } catch (\Throwable) {
+                        // Preserve the original read/write failure.
+                    }
+                    throw $e;
+                }
+            }
         }
 
         $this->client->write($buffer . "\r\n");
@@ -119,8 +136,9 @@ final class ImapConnection
                 0,
                 null,
                 $command->name,
-                null,
+                $response->status?->label(),
                 $response->text,
+                $response->responseCode,
             );
         }
     }
