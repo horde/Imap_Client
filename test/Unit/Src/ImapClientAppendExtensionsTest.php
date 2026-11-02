@@ -143,4 +143,81 @@ class ImapClientAppendExtensionsTest extends TestCase
 
         $client->append('Drafts', [['catenate' => [['url' => '/Sent;UID=20']]]]);
     }
+
+    public function testBinaryCatenateAssemblesLocallyEvenWithCatenateCapability(): void
+    {
+        $socket = InMemoryImapSocket::fromParts(
+            InMemoryImapSocket::line('* OK [CAPABILITY IMAP4rev1 BINARY CATENATE UIDPLUS] Server ready.'),
+            InMemoryImapSocket::line('+ go'),
+            InMemoryImapSocket::line('A1 OK [APPENDUID 1 5] APPEND completed.'),
+        );
+        $client = $this->client($socket);
+
+        $client->append('Drafts', [[
+            'binary' => true,
+            'catenate' => [
+                ['text' => "header\r\n\r\n"],
+                ['text' => "\0\n\r\xff"],
+            ],
+        ]]);
+
+        // RFC 4469 forbids literal8 for CATENATE parts. A binary message is
+        // assembled locally into one literal8. We don't send a CATENATE keyword on the wire.
+        $body = "header\r\n\r\n\0\n\r\xff";
+        self::assertSame(
+            'A1 APPEND Drafts ~{' . strlen($body) . '}',
+            $socket->written[0],
+        );
+        self::assertStringContainsString('~{', implode('', $socket->rawWritten));
+        self::assertStringNotContainsString('CATENATE', implode('', $socket->rawWritten));
+        self::assertStringContainsString($body, implode('', $socket->rawWritten));
+    }
+
+    public function testBinaryCatenateAssemblesLocallyWithoutCatenateCapability(): void
+    {
+        $socket = InMemoryImapSocket::fromParts(
+            InMemoryImapSocket::line('* OK [CAPABILITY IMAP4rev1 BINARY UIDPLUS] Server ready.'),
+            InMemoryImapSocket::line('+ go'),
+            InMemoryImapSocket::line('A1 OK [APPENDUID 1 5] APPEND completed.'),
+        );
+        $client = $this->client($socket);
+
+        $client->append('Drafts', [[
+            'binary' => true,
+            'catenate' => [
+                ['text' => "header\r\n\r\n"],
+                ['text' => "\0\n\r\xff"],
+            ],
+        ]]);
+
+        $body = "header\r\n\r\n\0\n\r\xff";
+        self::assertStringNotContainsString('CATENATE', implode('', $socket->rawWritten));
+        self::assertStringContainsString($body, implode('', $socket->rawWritten));
+    }
+
+    public function testBinaryCatenateWithUrlPartThrows(): void
+    {
+        $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 BINARY CATENATE] Server ready.');
+        $client = $this->client($socket);
+
+        $this->expectException(CapabilityNotSupportedException::class);
+
+        $client->append('Drafts', [[
+            'binary' => true,
+            'catenate' => [['text' => 'Header: v'], ['url' => '/Sent;UID=20']],
+        ]]);
+    }
+
+    public function testBinaryCatenateWithoutBinaryCapabilityThrows(): void
+    {
+        $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 CATENATE] Server ready.');
+        $client = $this->client($socket);
+
+        $this->expectException(CapabilityNotSupportedException::class);
+
+        $client->append('Drafts', [[
+            'binary' => true,
+            'catenate' => [['text' => 'Header: v']],
+        ]]);
+    }
 }
