@@ -120,6 +120,77 @@ it (SQL, Redis, file, ...) is now the PSR-16 implementation's concern, not
 this library's. If you want a SQL-indexed IMAP cache, supply a SQL-backed
 `CacheInterface`.
 
+### Appending messages
+
+`append()` is still a list of per-message arrays with
+`data`, `flags` and `internaldate`.
+
+However the byte handling differs from `lib/`.
+
+**Line endings are no longer normalized.** The legacy `Socket` driver
+rewrote bare `LF` and `CR` to `CRLF` throughout an ordinary APPEND via an
+EOL filter. The modern `ImapClient` sends your bytes verbatim. If you
+relied on the legacy driver to canonicalize line endings you need to normalize the
+message yourself before calling `append()`.
+
+```php
+// AFTER (3.x): supply a message whose textual headers and MIME
+// boundaries already use CRLF.
+$client->append('Drafts', [['data' => $rfc822WithCrlf]]);
+```
+
+**Streams are accepted for `data`.** A `data` entry may be a readable,
+seekable stream resource as well as a string. Bytes from the stream's
+current position through EOF are sent in bounded chunks, so a large
+message is never fully buffered in PHP memory. The caller keeps ownership.
+The position is restored after sending. A non-seekable stream is rejected
+before any command goes out. Spool it first.
+
+```php
+// AFTER (3.x): append straight from a file handle.
+$fh = fopen('/path/message.eml', 'rb');
+try {
+    $client->append('Archive', [['data' => $fh]]);
+} finally {
+    fclose($fh);
+}
+```
+
+**Byte-preserving binary APPEND is opt-in per message.** Set
+`binary: true` to force `literal8` (`~{n}`) and guarantee the server
+stores the body byte for byte.
+
+This is required for `Content-Transfer-Encoding: binary` payloads.
+We check for the server's `BINARY` capability first.
+
+```php
+// AFTER (3.x): preserve an octet-stream body exactly.
+$client->append('Objects', [['data' => $mimeMessage, 'binary' => true]]);
+```
+
+**CATENATE part shape changed.** The legacy `['t' => 'text', 'v' => ...]`
+/ `['t' => 'url', 'v' => ...]` tuples become `['text' => ...]` /
+`['url' => ...]` under a `catenate` key.
+
+A `url` part still needs the server's `CATENATE` capability.
+
+With `binary: true` set, the TEXT parts are assembled locally into one `literal8`
+instead of a server side `CATENATE`. A `url` part cannot be combined with `binary`.
+
+```php
+// BEFORE (2.x)
+$client->append('Drafts', [['data' => [
+    ['t' => 'text', 'v' => $headers],
+    ['t' => 'url',  'v' => 'imap://...'],
+]]]);
+
+// AFTER (3.x)
+$client->append('Drafts', [['catenate' => [
+    ['text' => $headers],
+    ['url'  => 'imap://...'],
+]]]);
+```
+
 ### Deliberately dropped
 
 - The `Serializable` interface throughout: value objects use
