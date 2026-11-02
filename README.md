@@ -60,11 +60,15 @@ MULTIAPPEND, CATENATE, BINARY and SEARCH=FUZZY.
   `src/` clients, with a class-mapping table and before/after examples.
 - `doc/APPEND_STREAMS.md`: sending complete MIME messages from seekable
   stream resources with the modern APPEND API and bounded memory.
+- `doc/BINARY_FETCH.md`: server-decoded MIME parts, decoded sizes, and
+  bounded partial reads using the modern BINARY FETCH API.
 - `doc/examples/imapclient.php`: a runnable, read-only IMAP demonstration
   (capabilities, namespaces, mailbox list, status, fetch, search).
 - `doc/examples/pop3client.php`: the equivalent POP3 demonstration.
 - `doc/POP3CAPABILITIES.md`: what the POP3 client implements, what it
   deliberately does not and a server-compatibility matrix.
+- `doc/BINARY_APPEND.md`: opt-in byte-preserving binary APPEND with the
+  legacy socket API, including the MIME and server capability requirements.
 
 ## License
 

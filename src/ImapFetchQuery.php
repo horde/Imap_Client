@@ -62,6 +62,8 @@ final class ImapFetchQuery
 
     private bool $wantModSeq = false;
 
+    private bool $wantBinary = false;
+
     /**
      * Requested `HEADER.FIELDS` groups, keyed by caller label. Each maps
      * to the reconstructed section signature (`HEADER.FIELDS (FROM TO)`)
@@ -178,6 +180,46 @@ final class ImapFetchQuery
     }
 
     /**
+     * Fetch server-decoded MIME content (RFC 3516). Partial offsets and lengths
+     * count decoded octets. PEEK is the default, preserving the Seen flag.
+     * Use an empty section for BINARY[], or a numeric MIME id such as 1.2.
+     */
+    public function binaryBodyPart(int|string $id, ?int $start = null, ?int $length = null, bool $peek = true): self
+    {
+        $section = $this->binarySection($id);
+        if (($start !== null && $start < 0) || ($length !== null && $length < 1)
+            || ($start !== null && $length === null)) {
+            throw new \InvalidArgumentException('A BINARY partial requires a nonnegative start and a positive length.');
+        }
+        $this->wantBinary = true;
+        $this->addItem(($peek ? 'BINARY.PEEK[' : 'BINARY[') . $section . ']' . $this->partialSuffix($start, $length));
+        return $this;
+    }
+
+    /** Request the decoded octet count, not the MIME-encoded BODY size. */
+    public function binaryBodyPartSize(int|string $id): self
+    {
+        $section = $this->binarySection($id);
+        $this->wantBinary = true;
+        $this->addItem('BINARY.SIZE[' . $section . ']');
+        return $this;
+    }
+
+    public function wantsBinary(): bool
+    {
+        return $this->wantBinary;
+    }
+
+    private function binarySection(int|string $id): string
+    {
+        $section = (string) $id;
+        if ($section !== '' && !preg_match('/^[1-9][0-9]*(?:\.[1-9][0-9]*)*$/D', $section)) {
+            throw new \InvalidArgumentException('BINARY requires an empty section or a numeric MIME part id.');
+        }
+        return $section;
+    }
+
+    /**
      * Request the full raw message (`BODY[]`), optionally a byte range.
      * Overrides the trait's storage-only `fullMsg()` so the wire item is
      * recorded too.
@@ -239,6 +281,7 @@ final class ImapFetchQuery
                 str_starts_with($item, 'BODY.PEEK[')
                 || str_starts_with($item, 'BODY[')
                 || str_starts_with($item, 'BINARY[')
+                || str_starts_with($item, 'BINARY.PEEK[')
             ) {
                 return true;
             }

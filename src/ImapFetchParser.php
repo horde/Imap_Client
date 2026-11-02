@@ -220,6 +220,18 @@ final class ImapFetchParser
                 return;
         }
 
+        if (str_starts_with($upper, 'BINARY.SIZE[')) {
+            $size = self::asString($value);
+            if ($size === '' || !ctype_digit($size)
+                || strlen(ltrim($size, '0')) > strlen((string) PHP_INT_MAX)
+                || (strlen(ltrim($size, '0')) === strlen((string) PHP_INT_MAX)
+                    && strcmp(ltrim($size, '0'), (string) PHP_INT_MAX) > 0)) {
+                throw new ImapProtocolException('Malformed or unsupported BINARY.SIZE value.');
+            }
+            $result->setBodyPartSize(self::sectionOf($upper), (int) $size);
+            return;
+        }
+
         if (str_starts_with($upper, 'BODY[') || str_starts_with($upper, 'BINARY[')) {
             self::dispatchSection($upper, $value, $result, $query);
         }
@@ -252,9 +264,12 @@ final class ImapFetchParser
         $section = self::sectionOf($upper);
 
         if (str_starts_with($upper, 'BINARY[')) {
-            // No BINARY decoding yet. Store the raw
-            // part body under its id, same slot a BODY[id] would use.
-            $result->setBodyPart($section, self::asString($value));
+            // The server has already removed the MIME transfer encoding.
+            // NIL must remain distinguishable from an empty decoded section.
+            if ($value !== null && !is_string($value)) {
+                throw new ImapProtocolException('Malformed BINARY section value.');
+            }
+            $result->setBinaryBodyPart($section, $value);
 
             return;
         }

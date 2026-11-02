@@ -69,6 +69,9 @@ final class ImapFetchResult implements MessageMetadata, MessageContent, PartAcce
     /** @var array<int|string, StreamInterface> */
     private array $bodyPart = [];
 
+    /** @var array<int|string, StreamInterface|null> Server-decoded BINARY sections. */
+    private array $binaryBodyPart = [];
+
     /** @var array<int|string, int> */
     private array $bodyPartSize = [];
 
@@ -136,6 +139,17 @@ final class ImapFetchResult implements MessageMetadata, MessageContent, PartAcce
     public function setBodyPart(int|string $id, string $data): void
     {
         $this->bodyPart[$id] = $this->toStream($data);
+    }
+
+    public function setBinaryBodyPart(int|string $id, ?string $data): void
+    {
+        $this->binaryBodyPart[$id] = $data === null ? null : $this->toStream($data);
+    }
+
+    /** Null means no decoded section was returned (including a NIL response). */
+    public function getBinaryBodyPart(int|string $id): ?StreamInterface
+    {
+        return $this->binaryBodyPart[$id] ?? null;
     }
 
     public function setBodyPartSize(int|string $id, int $size): void
@@ -214,7 +228,9 @@ final class ImapFetchResult implements MessageMetadata, MessageContent, PartAcce
 
     public function getBodyPart(string $id): StreamInterface
     {
-        return $this->bodyPart[$id] ?? $this->toStream('');
+        // Preserve the earlier parser's BINARY-only getBodyPart behavior, while
+        // keeping encoded BODY and decoded BINARY distinct when both arrive.
+        return $this->bodyPart[$id] ?? $this->binaryBodyPart[$id] ?? $this->toStream('');
     }
 
     public function getMimeHeader(string $id): StreamInterface
@@ -226,7 +242,7 @@ final class ImapFetchResult implements MessageMetadata, MessageContent, PartAcce
      * The reported octet size of a body part (`BINARY.SIZE`/`BODY[id]`
      * length) or null if it was not fetched.
      */
-    public function getBodyPartSize(string $id): ?int
+    public function getBodyPartSize(int|string $id): ?int
     {
         return $this->bodyPartSize[$id] ?? null;
     }

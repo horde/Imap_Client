@@ -1865,6 +1865,13 @@ abstract class Horde_Imap_Client_Base implements Serializable, SplObserver
      *          part to append. If 't' is 'text', this is either a string or
      *          resource representation of the message part data.
      *     DEFAULT: NONE (entry is MANDATORY)
+     *   - binary: (boolean) Preserve the message bytes, including bare CR and LF,
+     *             and send using literal8 (RFC 3516). Requires the BINARY
+     *             capability. The caller must supply a valid MIME message:
+     *             textual headers and MIME boundaries must already use CRLF,
+     *             and binary body parts must have the appropriate CTE.
+     *             No fallback to a non-binary APPEND is attempted on rejection.
+     *             DEFAULT: false (normalize line endings to CRLF).
      *   - flags: (array) An array of flags/keywords to set on the appended
      *            message.
      *            DEFAULT: Only the \Recent flag is set.
