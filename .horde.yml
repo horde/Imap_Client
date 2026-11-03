@@ -15,7 +15,7 @@ authors:
     active: false
     role: lead
 version:
-  release: 3.1.0
+  release: 3.2.0
   api: 3.0.0alpha1
 state:
   release: stable
@@ -140,3 +140,7 @@ ci-platform:
     - ext-spl
 ci-platform-flags:
   needs_installer_plugin: true
+
+quality:
+  phpstan:
+    level: 2
