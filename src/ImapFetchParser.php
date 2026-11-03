@@ -504,9 +504,19 @@ final class ImapFetchParser
         }
 
         $sizeHint = ($bytes !== null && ctype_digit($bytes)) ? (int) $bytes : null;
+        $children = [];
+        if (
+            strtolower($type) === 'message'
+            && strtolower($subtype) === 'rfc822'
+            && isset($tokens[8])
+            && is_array($tokens[8])
+        ) {
+            $children[] = self::parseBodyStructure($tokens[8]);
+        }
 
         return new Part(
             headers: HeaderCollection::parse($headerLines),
+            children: $children,
             sizeHint: $sizeHint,
         );
     }
