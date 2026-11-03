@@ -97,7 +97,7 @@ class ImapClientFullMessageTest extends TestCase
 
         self::assertSame(
             array_map(
-                static fn (int $uid): string => "A$uid UID FETCH $uid (BODY[]"
+                static fn(int $uid): string => "A$uid UID FETCH $uid (BODY[]"
                     . ($withStructure ? ' BODYSTRUCTURE' : '') . ')',
                 range(1, 4),
             ),
