@@ -22,6 +22,7 @@ use Horde_Imap_Client_Interaction_Server;
 use Horde_Imap_Client_Tokenize;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 
 #[CoversNothing]
 class SocketBinaryAppendTest extends TestCase
@@ -107,7 +108,7 @@ class SocketBinaryAppendTest extends TestCase
             try {
                 $socket->appendMessages([['data' => $stream, 'binary' => true]]);
                 self::fail('Expected non-seekable stream rejection');
-            } catch (\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
                 self::assertSame([], $socket->commands);
             }
         } finally {

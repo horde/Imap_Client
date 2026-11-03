@@ -29,6 +29,7 @@ use Horde\Sasl\Credentials\PlainSecret;
 use Horde\Sasl\Negotiation\SaslPolicy;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 #[CoversClass(Pop3Client::class)]
 class Pop3ClientTest extends TestCase
@@ -98,7 +99,7 @@ class Pop3ClientTest extends TestCase
         $client->getCapability();
         $client->getCapability();
 
-        self::assertSame(1, count(array_filter($socket->written, static fn (string $line): bool => $line === 'CAPA')));
+        self::assertSame(1, count(array_filter($socket->written, static fn(string $line): bool => $line === 'CAPA')));
     }
 
     public function testLoginViaSaslPlain(): void
@@ -358,7 +359,7 @@ class Pop3ClientTest extends TestCase
 
         $this->expectException(Pop3ProtocolException::class);
 
-        iterator_to_array($client->fetch('INBOX', new Pop3IdSet([1], true), new \stdClass()));
+        iterator_to_array($client->fetch('INBOX', new Pop3IdSet([1], true), new stdClass()));
     }
 
     public function testFetchRejectsMailboxesOtherThanInbox(): void

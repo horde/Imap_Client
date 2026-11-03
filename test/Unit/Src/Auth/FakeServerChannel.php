@@ -103,7 +103,7 @@ final class FakeServerChannel implements AuthenticationChannel
     {
         try {
             $challenge = $this->server->step(Response::bytes($clientMessage));
-        } catch (AuthenticationFailedException | MechanismException $e) {
+        } catch (AuthenticationFailedException|MechanismException $e) {
             return ChannelEvent::failure(text: $e->getMessage());
         }
 
