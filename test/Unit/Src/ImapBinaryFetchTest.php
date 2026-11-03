@@ -26,6 +26,7 @@ use Horde\Imap\Client\OpenMode;
 use Horde\Socket\Client\ClientInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 
 #[CoversClass(ImapFetchQuery::class)]
 #[CoversClass(ImapFetchParser::class)]
@@ -89,7 +90,7 @@ class ImapBinaryFetchTest extends TestCase
                 try {
                     (new ImapFetchQuery())->$method($section);
                     self::fail('Expected invalid section rejection');
-                } catch (\InvalidArgumentException) {
+                } catch (InvalidArgumentException) {
                     self::assertTrue(true);
                 }
             }
@@ -102,7 +103,7 @@ class ImapBinaryFetchTest extends TestCase
             try {
                 (new ImapFetchQuery())->binaryBodyPart(1, $start, $length);
                 self::fail('Expected invalid partial rejection');
-            } catch (\InvalidArgumentException) {
+            } catch (InvalidArgumentException) {
                 self::assertTrue(true);
             }
         }
@@ -207,11 +208,16 @@ class ImapBinaryFetchTest extends TestCase
 
     public function testBinaryQueriesCannotBeSatisfiedByMetadataCache(): void
     {
-        $socket = $this->socket('BINARY',
-            '* OK [UIDVALIDITY 42] valid', 'A1 OK [READ-WRITE] selected',
-            '* 1 FETCH (UID 7 FLAGS ())', 'A2 OK done',
-            '* 1 FETCH (UID 7 FLAGS () BINARY[1] "hello")', 'A3 OK done',
-            '* 1 FETCH (UID 7 FLAGS () BINARY.SIZE[1] 5)', 'A4 OK done'
+        $socket = $this->socket(
+            'BINARY',
+            '* OK [UIDVALIDITY 42] valid',
+            'A1 OK [READ-WRITE] selected',
+            '* 1 FETCH (UID 7 FLAGS ())',
+            'A2 OK done',
+            '* 1 FETCH (UID 7 FLAGS () BINARY[1] "hello")',
+            'A3 OK done',
+            '* 1 FETCH (UID 7 FLAGS () BINARY.SIZE[1] 5)',
+            'A4 OK done'
         );
         $cache = new ImapCacheStore(new ArrayCache(), 'imap.example.test', 993, 'test');
         $client = $this->client($socket, $cache);

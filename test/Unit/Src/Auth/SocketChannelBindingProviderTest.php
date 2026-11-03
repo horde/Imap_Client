@@ -23,6 +23,7 @@ use Horde\Socket\Client\Exception\ChannelBindingException as SocketChannelBindin
 use Horde\Socket\Client\StreamStatus;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 #[CoversClass(SocketChannelBindingProvider::class)]
 class SocketChannelBindingProviderTest extends TestCase
@@ -30,13 +31,13 @@ class SocketChannelBindingProviderTest extends TestCase
     private function client(
         bool $supportsTlsServerEndPoint = true,
         ?string $bindingData = 'fake-cert-hash',
-        ?\Throwable $bindingException = null,
+        ?Throwable $bindingException = null,
     ): ClientInterface {
         return new class ($supportsTlsServerEndPoint, $bindingData, $bindingException) implements ClientInterface {
             public function __construct(
                 private readonly bool $supportsTlsServerEndPoint,
                 private readonly ?string $bindingData,
-                private readonly ?\Throwable $bindingException,
+                private readonly ?Throwable $bindingException,
             ) {}
 
             public function isConnected(): bool

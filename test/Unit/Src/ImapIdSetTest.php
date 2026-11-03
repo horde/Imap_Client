@@ -16,12 +16,17 @@ namespace Horde\Imap\Client\Test\Unit\Src;
 
 use Horde\Imap\Client\ImapIdSet;
 use Horde\Imap\Client\ImapIdSetToken;
+use Horde\Imap\Client\ImapResponseParser;
+use Horde\Imap\Client\ImapSearchParser;
+use Horde\Imap\Client\ImapTokenizer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use InvalidArgumentException;
 
 #[CoversClass(ImapIdSet::class)]
 #[CoversClass(ImapIdSetToken::class)]
+#[CoversClass(ImapSearchParser::class)]
 class ImapIdSetTest extends TestCase
 {
     public function testEmptySet(): void
@@ -132,6 +137,52 @@ class ImapIdSetTest extends TestCase
 
         self::assertSame([2, 4, 5, 6], $ids->toArray());
         self::assertSame('2,4:6', (string) $ids);
+    }
+
+    public function testLargeRangeIsStoredCompactly(): void
+    {
+        $memoryBefore = memory_get_usage();
+        $ids = ImapIdSet::fromSequenceString('1:5000000');
+
+        self::assertLessThan(1024 * 1024, memory_get_usage() - $memoryBefore);
+        self::assertSame(5000000, $ids->count());
+        self::assertSame(1, $ids->min());
+        self::assertSame(5000000, $ids->max());
+        self::assertSame('1:5000000', (string) $ids);
+    }
+
+    public function testAddingAndRemovingRangesStaysCompact(): void
+    {
+        $ids = (new ImapIdSet('1:5'))->add('4:8');
+        self::assertSame(8, $ids->count());
+        self::assertSame('1:8', (string) $ids);
+
+        $remaining = $ids->remove('3:6');
+        self::assertSame(4, $remaining->count());
+        self::assertSame('1:2,7:8', (string) $remaining);
+    }
+
+    public function testLargeEsearchRangeIsNotExpandedWhileParsing(): void
+    {
+        $socket = InMemoryImapSocket::fromParts(
+            InMemoryImapSocket::line('* ESEARCH UID COUNT 5000000 MIN 1 MAX 5000000 ALL 1:5000000'),
+        );
+        $tokens = (new ImapTokenizer($socket))->readLine();
+        $response = ImapResponseParser::parse($tokens);
+        $memoryBefore = memory_get_usage();
+
+        $result = ImapSearchParser::parse([$response], false);
+
+        self::assertLessThan(1024 * 1024, memory_get_usage() - $memoryBefore);
+        self::assertSame(5000000, $result->count);
+        self::assertSame(5000000, $result->match->count());
+        self::assertSame('1:5000000', (string) $result->match);
+    }
+
+    public function testWildcardRangeDoesNotSilentlyBecomeZero(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        ImapIdSet::fromSequenceString('5:*');
     }
 
     public function testConstructFromSingleInt(): void

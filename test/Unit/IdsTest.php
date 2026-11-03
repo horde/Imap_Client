@@ -115,6 +115,48 @@ class IdsTest extends TestCase
         ];
     }
 
+    public function testLargeRangeStaysCompactUntilIterated(): void
+    {
+        $memoryBefore = memory_get_usage();
+        $ids = new Horde_Imap_Client_Ids('1:1000000');
+
+        $this->assertLessThan(1024 * 1024, memory_get_usage() - $memoryBefore);
+        $this->assertSame(1000000, count($ids));
+        $this->assertSame('1:1000000', $ids->tostring);
+
+        $ids->rewind();
+        $this->assertSame(1, $ids->current());
+        $this->assertSame(0, $ids->key());
+        $ids->next();
+        $this->assertSame(2, $ids->current());
+        $this->assertSame(1, $ids->key());
+
+        $restored = unserialize(serialize($ids));
+        $this->assertSame(1000000, count($restored));
+        $this->assertSame('1:1000000', $restored->tostring);
+    }
+
+    public function testWildcardSequenceSetsDoNotExpand(): void
+    {
+        $all = new Horde_Imap_Client_Ids('1:*', true);
+        $this->assertTrue($all->all);
+        $this->assertSame('1:*', $all->tostring);
+
+        $largest = new Horde_Imap_Client_Ids('*', true);
+        $this->assertTrue($largest->largest);
+        $this->assertSame('*', $largest->tostring);
+    }
+
+    public function testOpenEndedPartialRangeIsPreservedWithoutExpansion(): void
+    {
+        $ids = new Horde_Imap_Client_Ids('5:*', true);
+
+        $this->assertTrue($ids->special);
+        $this->assertSame('5:*', $ids->tostring);
+        $this->assertSame(0, count($ids));
+        $this->assertSame([], $ids->ids);
+    }
+
     #[DataProvider('rangeGenerationProvider')]
     public function testRangeGeneration($in, $expected)
     {
@@ -266,6 +308,11 @@ class IdsTest extends TestCase
             70,
             count($ids)
         );
+
+        $ids->remove('1:100');
+        $this->assertTrue($ids->isEmpty());
+        $this->assertFalse($ids->min);
+        $this->assertFalse($ids->max);
     }
 
     #[DataProvider('minAndMaxProvider')]

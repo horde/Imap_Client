@@ -7,6 +7,7 @@ namespace Horde\Imap\Client\Test\Unit\Src;
 use Horde\Socket\Client\ChannelBinding\ChannelBindingType;
 use Horde\Socket\Client\ClientInterface;
 use Horde\Socket\Client\StreamStatus;
+use RuntimeException;
 
 /**
  * An in-memory {@see ClientInterface} fed with a fixed queue of lines to
@@ -59,9 +60,7 @@ final class InMemoryPop3Socket implements ClientInterface
         return true;
     }
 
-    public function close(): void
-    {
-    }
+    public function close(): void {}
 
     public function getStatus(): StreamStatus
     {
@@ -71,7 +70,7 @@ final class InMemoryPop3Socket implements ClientInterface
     public function gets(int $size): string
     {
         if ($this->queue === []) {
-            throw new \RuntimeException('InMemoryPop3Socket: read past the end of the scripted queue.');
+            throw new RuntimeException('InMemoryPop3Socket: read past the end of the scripted queue.');
         }
 
         return array_shift($this->queue) . "\r\n";

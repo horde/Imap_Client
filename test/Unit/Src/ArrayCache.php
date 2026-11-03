@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Horde\Imap\Client\Test\Unit\Src;
 
 use Psr\SimpleCache\CacheInterface;
+use DateInterval;
 
 /**
  * A minimal array-backed PSR-16 cache for exercising
@@ -30,7 +31,7 @@ final class ArrayCache implements CacheInterface
         return $this->data[$key] ?? $default;
     }
 
-    public function set(string $key, mixed $value, null|int|\DateInterval $ttl = null): bool
+    public function set(string $key, mixed $value, int|DateInterval|null $ttl = null): bool
     {
         $this->data[$key] = $value;
 
@@ -61,7 +62,7 @@ final class ArrayCache implements CacheInterface
         return $out;
     }
 
-    public function setMultiple(iterable $values, null|int|\DateInterval $ttl = null): bool
+    public function setMultiple(iterable $values, int|DateInterval|null $ttl = null): bool
     {
         foreach ($values as $key => $value) {
             $this->data[$key] = $value;

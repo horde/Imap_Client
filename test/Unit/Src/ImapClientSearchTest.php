@@ -27,6 +27,7 @@ use Horde\Imap\Client\SearchResultType;
 use Horde\Sasl\Negotiation\SaslPolicy;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 /**
  * SEARCH/ESEARCH parsing and {@see ImapClient::search()}.
@@ -230,7 +231,7 @@ class ImapClientSearchTest extends TestCase
 
         $this->expectException(ImapProtocolException::class);
 
-        $client->search('INBOX', new \stdClass());
+        $client->search('INBOX', new stdClass());
     }
 
     public function testSearchWrapsServerRejection(): void

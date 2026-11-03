@@ -21,6 +21,7 @@ use Horde\Imap\Client\ImapWireStream;
 use Horde\Socket\Client\ClientInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 #[CoversClass(ImapWireStream::class)]
 class ImapWireStreamTest extends TestCase
@@ -164,7 +165,7 @@ class ImapWireStreamTest extends TestCase
         $socket->expects(self::exactly(2))->method('write')->willReturnCallback(
             static function (string $data) use (&$writes): void {
                 if (++$writes === 2) {
-                    throw new \RuntimeException('Injected write failure');
+                    throw new RuntimeException('Injected write failure');
                 }
             }
         );
@@ -172,7 +173,7 @@ class ImapWireStreamTest extends TestCase
         try {
             (new ImapConnection($socket))->sendCommand(new ImapCommand('A1', 'APPEND', ['INBOX', $literal]));
             self::fail('Expected write error');
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             self::assertSame('Injected write failure', $e->getMessage());
             self::assertSame(4, ftell($stream));
             self::assertIsResource($stream);
