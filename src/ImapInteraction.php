@@ -16,6 +16,7 @@ namespace Horde\Imap\Client;
 
 use Horde\Imap\Client\Exception\ImapProtocolException;
 use Horde\Imap\Client\Exception\ServerResponseException;
+use Throwable;
 
 /**
  * Sends one IMAP command and collects its full response cycle. Every
@@ -83,7 +84,7 @@ final class ImapInteraction
         $this->pipeline->enqueue($command);
         try {
             $untagged = $this->connection->sendCommand($command, $nonSynchronizingLiterals);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Rejected announcements and failed stream writes complete this
             // attempt too; don't retain its command and borrowed resources.
             $this->pipeline->complete($command->tag);

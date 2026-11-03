@@ -16,6 +16,7 @@ namespace Horde\Imap\Client;
 
 use Horde\Imap\Client\Exception\ImapProtocolException;
 use Horde\Socket\Client\ClientInterface;
+use Throwable;
 
 /**
  * Parses one full IMAP response line (RFC 3501 §4) off a
@@ -224,10 +225,10 @@ final class ImapTokenizer
                 }
                 $data .= $chunk;
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             try {
                 $this->client->close();
-            } catch (\Throwable) {
+            } catch (Throwable) {
                 // Preserve the original read failure.
             }
             throw $e;

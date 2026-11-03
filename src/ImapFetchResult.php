@@ -34,8 +34,8 @@ use Horde\Stream\Temp;
  *
  * OO representations reuse the `horde/mime` and `horde/mail` value
  * objects rather than inventing parallels: {@see getStructure()} returns
- * a {@see \Horde\Mime\Part} tree, {@see getHeaders()} a
- * {@see \Horde\Mime\Headers\HeaderCollection}, and {@see getEnvelope()}
+ * a {@see Part} tree, {@see getHeaders()} a
+ * {@see HeaderCollection}, and {@see getEnvelope()}
  * an {@see ImapEnvelope} whose addresses are `Horde\Mail\Rfc822` types.
  *
  * @author    Ralf Lang <ralf.lang@ralf-lang.de>

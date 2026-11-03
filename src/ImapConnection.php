@@ -16,6 +16,7 @@ namespace Horde\Imap\Client;
 
 use Horde\Imap\Client\Exception\ServerResponseException;
 use Horde\Socket\Client\ClientInterface;
+use Throwable;
 
 /**
  * The IMAP line/literal protocol (RFC 3501 §2.2, §4.3) spoken over a
@@ -94,12 +95,12 @@ final class ImapConnection
                     foreach ($segment->stream->chunks() as $chunk) {
                         $this->client->write($chunk);
                     }
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     // The announced literal may be incomplete. Never allow a
                     // subsequent command to be interpreted as its payload.
                     try {
                         $this->client->close();
-                    } catch (\Throwable) {
+                    } catch (Throwable) {
                         // Preserve the original read/write failure.
                     }
                     throw $e;

@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Horde\Imap\Client;
 
+use InvalidArgumentException;
+
 /**
  * A fluent `fetch()` query for {@see ImapClient}.
  *
@@ -189,7 +191,7 @@ final class ImapFetchQuery
         $section = $this->binarySection($id);
         if (($start !== null && $start < 0) || ($length !== null && $length < 1)
             || ($start !== null && $length === null)) {
-            throw new \InvalidArgumentException('A BINARY partial requires a nonnegative start and a positive length.');
+            throw new InvalidArgumentException('A BINARY partial requires a nonnegative start and a positive length.');
         }
         $this->wantBinary = true;
         $this->addItem(($peek ? 'BINARY.PEEK[' : 'BINARY[') . $section . ']' . $this->partialSuffix($start, $length));
@@ -214,7 +216,7 @@ final class ImapFetchQuery
     {
         $section = (string) $id;
         if ($section !== '' && !preg_match('/^[1-9][0-9]*(?:\.[1-9][0-9]*)*$/D', $section)) {
-            throw new \InvalidArgumentException('BINARY requires an empty section or a numeric MIME part id.');
+            throw new InvalidArgumentException('BINARY requires an empty section or a numeric MIME part id.');
         }
         return $section;
     }

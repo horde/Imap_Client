@@ -155,7 +155,7 @@ final class SaslAuthenticator
 
             $binding = $mechanismName->usesChannelBinding() ? $this->binding : null;
             $mechanism = $this->factory->create($mechanismName, $credentials, $binding);
-        } catch (UnsupportedMechanismException | PolicyViolationException | DowngradeDetectedException $e) {
+        } catch (UnsupportedMechanismException|PolicyViolationException|DowngradeDetectedException $e) {
             $this->dispatch(new AuthenticationFailed($e->getMessage()));
 
             throw new AuthenticationException($e->getMessage(), 0, $e);
@@ -219,7 +219,7 @@ final class SaslAuthenticator
                     $awaitingAdditionalData = true;
                 }
             }
-        } catch (MechanismException | AuthenticationFailedException $e) {
+        } catch (MechanismException|AuthenticationFailedException $e) {
             $channel->cancel();
             $this->dispatch(new AuthenticationFailed($e->getMessage()));
 

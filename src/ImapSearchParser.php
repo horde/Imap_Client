@@ -42,8 +42,7 @@ final class ImapSearchParser
      */
     public static function parse(array $untagged, bool $sequence): ImapSearchResult
     {
-        /** @var list<int> $matches */
-        $matches = [];
+        $match = new ImapIdSet([], $sequence);
         $count = null;
         $min = null;
         $max = null;
@@ -61,31 +60,30 @@ final class ImapSearchParser
             // A SORT reply (RFC 5256) shares the classic SEARCH shape: a
             // space-separated id list, but in the server's sort order.
             if ($keyword === 'SEARCH' || $keyword === 'SORT') {
+                $lineMatches = [];
                 foreach (array_slice($response->data, 1) as $token) {
                     if (is_string($token) && ctype_digit($token)) {
-                        $matches[] = (int) $token;
+                        $lineMatches[] = (int) $token;
                     }
                 }
+                $match = $match->add($lineMatches);
 
                 continue;
             }
 
             if ($keyword === 'ESEARCH') {
                 $usedEsearch = true;
-                self::parseEsearch($response->data, $sequence, $matches, $count, $min, $max, $modseq, $relevancy);
+                self::parseEsearch($response->data, $sequence, $match, $count, $min, $max, $modseq, $relevancy);
             }
         }
-
-        $match = new ImapIdSet($matches, $sequence);
 
         // Classic SEARCH does not report COUNT/MIN/MAX. Derive them from
         // the matching set so the caller sees a uniform result regardless
         // of which wire form the server used.
         if (!$usedEsearch) {
-            $ids = $match->toArray();
-            $count = count($ids);
-            $min = $ids === [] ? null : min($ids);
-            $max = $ids === [] ? null : max($ids);
+            $count = $match->count();
+            $min = $match->min();
+            $max = $match->max();
         }
 
         return new ImapSearchResult(
@@ -101,16 +99,15 @@ final class ImapSearchParser
     /**
      * @param list<mixed>  $data      The whole ESEARCH response tokens,
      *                                starting with the `ESEARCH` word.
-     * @param list<int>    $matches
+     * @param ImapIdSet    $match
      * @param list<int>    $relevancy
      *
-     * @param-out list<int> $matches
      * @param-out list<int> $relevancy
      */
     private static function parseEsearch(
         array $data,
         bool $sequence,
-        array &$matches,
+        ImapIdSet &$match,
         ?int &$count,
         ?int &$min,
         ?int &$max,
@@ -142,9 +139,9 @@ final class ImapSearchParser
             switch (strtoupper($name)) {
                 case 'ALL':
                     if (is_string($value)) {
-                        foreach (ImapIdSet::fromSequenceString($value, $sequence)->toArray() as $id) {
-                            $matches[] = $id;
-                        }
+                        $match = $match->add(
+                            ImapIdSet::fromSequenceString($value, $sequence)
+                        );
                     }
                     break;
 
