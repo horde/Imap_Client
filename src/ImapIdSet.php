@@ -366,7 +366,7 @@ final class ImapIdSet implements MessageIdSet
     private static function rangesToSequenceString(array $ranges): string
     {
         $parts = [];
-        foreach (self::mergeRanges($ranges) as [$start, $end]) {
+        foreach ($ranges as [$start, $end]) {
             $parts[] = self::rangePart($start, $end);
         }
 
