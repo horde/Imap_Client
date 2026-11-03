@@ -195,6 +195,71 @@ class ImapWireStreamTest extends TestCase
         }
     }
 
+    public function testExplicitLengthConsumesNonSeekableSourceOnceAndLeavesTail(): void
+    {
+        [$stream, $writer] = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
+        fwrite($writer, "a\0bTAIL");
+        fclose($writer);
+        $this->streams[] = $stream;
+        self::assertFalse(stream_get_meta_data($stream)['seekable']);
+        $literal = new ImapWireStream($stream, forceBinary: true, length: 3);
+        self::assertTrue($literal->canReplay());
+        self::assertSame(3, $literal->length());
+        self::assertTrue($literal->isBinary());
+        self::assertSame("a\0b", implode('', iterator_to_array($literal->chunks())));
+        self::assertFalse($literal->canReplay());
+        self::assertSame('TAIL', stream_get_contents($stream));
+        self::assertIsResource($stream);
+        $this->expectException(WireEncodingException::class);
+        iterator_to_array($literal->chunks());
+    }
+
+    public function testExplicitLengthMakesNoPreparatoryReadsOrSeeks(): void
+    {
+        $stream = $this->stream('skip' . str_repeat('x', 131073) . 'tail');
+        fseek($stream, 4);
+        $literal = new ImapWireStream($stream, forceBinary: true, length: 131073);
+        self::assertSame(4, ftell($stream));
+        self::assertSame([65536, 65536, 1], array_map(strlen(...), iterator_to_array($literal->chunks())));
+        self::assertSame(131077, ftell($stream), 'Explicit-length mode must not restore the source');
+        self::assertSame('tail', stream_get_contents($stream));
+    }
+
+    public function testExplicitZeroLengthDoesNotReadSource(): void
+    {
+        $stream = $this->stream('untouched');
+        $literal = new ImapWireStream($stream, forceBinary: true, length: 0);
+        self::assertSame([], iterator_to_array($literal->chunks()));
+        self::assertSame(0, ftell($stream));
+    }
+
+    public function testExplicitLengthRequiresBinaryMode(): void
+    {
+        $this->expectException(WireEncodingException::class);
+        new ImapWireStream($this->stream('abc'), length: 3);
+    }
+
+    public function testNegativeExplicitLengthIsRejected(): void
+    {
+        $this->expectException(WireEncodingException::class);
+        new ImapWireStream($this->stream('abc'), forceBinary: true, length: -1);
+    }
+
+    public function testShortForwardOnlySourceClosesConnectionWithoutTerminator(): void
+    {
+        $source = $this->stream('ab');
+        $literal = new ImapWireStream($source, forceBinary: true, length: 3);
+        $socket = InMemoryImapSocket::fromParts("+ ready\r\n");
+        try {
+            (new ImapConnection($socket))->sendCommand(new ImapCommand('A1', 'APPEND', ['INBOX', $literal]));
+            self::fail('Expected short source rejection');
+        } catch (WireEncodingException) {
+            self::assertTrue($socket->closed);
+            self::assertSame(["A1 APPEND INBOX ~{3}\r\n", 'ab'], $socket->rawWritten);
+            self::assertIsResource($source);
+        }
+    }
+
     public function testRejectedStreamAnnouncementReleasesPendingCommand(): void
     {
         $socket = InMemoryImapSocket::fromParts("A1 NO [TRYCREATE] Missing mailbox\r\n");

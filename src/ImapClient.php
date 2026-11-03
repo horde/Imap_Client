@@ -1101,6 +1101,11 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
      * through EOF are sent verbatim in bounded chunks; the position is restored
      * and the stream remains owned by the caller. Non-seekable input must be
      * spooled by the caller first. Do not modify a stream during APPEND.
+     * Alternatively, an entry with `length: int` and `binary: true` accepts a
+     * forward-only stream. Exactly `length` bytes are consumed on demand,
+     * without pre-reading, seeking or restoring the source. This opt-in mode
+     * requires BINARY and cannot be retried after consumption. A short source
+     * closes the IMAP connection; extra bytes remain in the caller's stream.
      *
      * Extensions used when advertised: `MULTIAPPEND` (RFC 3502, all
      * messages in one command), `literal8`/`~{n}` (RFC 3516, automatic for
@@ -1141,6 +1146,13 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
         // once so retries and repeated references replay the same literal.
         foreach ($data as $index => $message) {
             $binary = !empty($message['binary']);
+            $length = $message['length'] ?? null;
+            if (array_key_exists('length', $message) && (!is_int($length) || $length < 0
+                || !$binary || !is_resource($message['data'] ?? null) || isset($message['catenate']))) {
+                throw new WireEncodingException(
+                    'APPEND length requires a stream, binary: true and a non-negative integer, without CATENATE.'
+                );
+            }
 
             if (isset($message['catenate']) && is_array($message['catenate'])) {
                 if (!$binary) {
@@ -1186,7 +1198,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
                 rewind($value);
             }
             if (!is_string($value)) {
-                $stream = new ImapWireStream($value, $this->utf8Enabled() || $binary);
+                $stream = new ImapWireStream($value, $this->utf8Enabled() || $binary, $length);
                 if ($stream->containsNul() && !$this->getCapability()->query('BINARY')) {
                     throw new CapabilityNotSupportedException('A stream containing NUL requires the BINARY extension.');
                 }
@@ -1230,6 +1242,14 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
             $result = $this->interaction->send('APPEND', $arguments);
         } catch (ServerResponseException $e) {
             if ($create && $this->hasTryCreate($e)) {
+                foreach ($messages as $message) {
+                    $content = $message['data'] ?? null;
+                    if ($content instanceof ImapWireStream && !$content->canReplay()) {
+                        // A tagged rejection after the payload was sent does
+                        // not permit replaying a consumed one-pass source.
+                        throw $e;
+                    }
+                }
                 $this->createMailbox($mailbox);
 
                 return $this->sendAppend($mailbox, $messages, false);

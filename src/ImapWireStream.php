@@ -11,12 +11,13 @@ namespace Horde\Imap\Client;
 
 use Horde\Imap\Client\Exception\WireEncodingException;
 
-/** A borrowed, seekable stream represented as a replayable IMAP literal. */
+/** A borrowed stream: replayable when seekable, one-pass with explicit length. */
 final class ImapWireStream implements ImapWireEncodable
 {
     private const CHUNK_SIZE = 65536;
 
-    private readonly int $start;
+    private readonly ?int $start;
+    private bool $consumed = false;
     private readonly int $size;
     private readonly bool $binary;
 
@@ -24,10 +25,31 @@ final class ImapWireStream implements ImapWireEncodable
      * Capture bytes from the current position through EOF. The caller retains
      * ownership and must not modify or close the stream until sending finishes.
      *
-     * @param resource $stream A readable, seekable PHP stream.
+     * With $length, send exactly that many bytes from the current position,
+     * without scanning, seeking or restoring it. Binary mode is mandatory in
+     * this case and the literal can be consumed only once. Extra source bytes
+     * remain unread; a short source fails and the connection must be closed.
+     *
+     * @param resource $stream A readable PHP stream; seekable without $length.
+     * @param ?int $length Explicit length for opt-in forward-only consumption.
      */
-    public function __construct(private readonly mixed $stream, private readonly bool $forceBinary = false)
+    public function __construct(private readonly mixed $stream, private readonly bool $forceBinary = false, ?int $length = null)
     {
+        if ($length !== null) {
+            if ($length < 0 || !$forceBinary) {
+                throw new WireEncodingException('An explicit APPEND length must be non-negative and requires binary mode.');
+            }
+            if (!is_resource($stream) || get_resource_type($stream) !== 'stream'
+                || !preg_match('/[r+]/', stream_get_meta_data($stream)['mode'])) {
+                throw new WireEncodingException('APPEND requires a readable stream.');
+            }
+            $this->start = null;
+            $this->size = $length;
+            // No scan is possible on a one-pass source. All bytes, including
+            // NUL, are permitted because the caller explicitly chose literal8.
+            $this->binary = false;
+            return;
+        }
         if (!is_resource($stream) || get_resource_type($stream) !== 'stream'
             || !stream_get_meta_data($stream)['seekable']) {
             throw new WireEncodingException('APPEND requires a readable, seekable stream.');
@@ -99,6 +121,23 @@ final class ImapWireStream implements ImapWireEncodable
      */
     public function chunks(): iterable
     {
+        if ($this->start === null) {
+            if ($this->consumed) {
+                throw new WireEncodingException('A forward-only APPEND stream cannot be replayed.');
+            }
+            $this->consumed = true;
+            if (!is_resource($this->stream)) {
+                throw new WireEncodingException('APPEND stream was closed before sending.');
+            }
+            $remaining = $this->size;
+            while ($remaining > 0) {
+                $chunk = $this->read(min(self::CHUNK_SIZE, $remaining));
+                $remaining -= strlen($chunk);
+                yield $chunk;
+            }
+            return;
+        }
+
         if (!is_resource($this->stream) || ($position = ftell($this->stream)) === false) {
             throw new WireEncodingException('APPEND stream was closed before sending.');
         }
@@ -118,6 +157,12 @@ final class ImapWireStream implements ImapWireEncodable
                 fseek($this->stream, $position);
             }
         }
+    }
+
+    /** Safe to retry only if replayable or no one-pass bytes were requested. */
+    public function canReplay(): bool
+    {
+        return $this->start !== null || !$this->consumed;
     }
 
     private function read(int $length): string
