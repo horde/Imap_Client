@@ -179,6 +179,75 @@ class ImapFetchParserTest extends TestCase
         self::assertSame(['1' => 'text/plain', '2' => 'text/html'], $parts);
     }
 
+    public function testBodyStructureIncludesAttachedRfc822MessageParts(): void
+    {
+        $plain = '("text" "plain" NIL NIL NIL "7bit" 100 10)';
+        $html = '("text" "html" NIL NIL NIL "7bit" 200 20)';
+        $alternative = '(' . $plain . ' ' . $html . ' "alternative")';
+        $nestedMessage = '("message" "rfc822" NIL NIL NIL "7bit" 300 NIL '
+            . $alternative . ' 30)';
+        $embeddedMixed = '(' . $plain . ' ' . $nestedMessage . ' "mixed")';
+
+        $messagePart = static fn(string $embedded): string =>
+            '("message" "rfc822" NIL NIL NIL "7bit" 500 NIL '
+            . $embedded . ' 50)';
+
+        $parts = [
+            $alternative,
+            $plain,
+            $html,
+            $messagePart($embeddedMixed),
+            $messagePart($alternative),
+            $messagePart($embeddedMixed),
+            $plain,
+            $messagePart($alternative),
+        ];
+        $bodyStructure = '(' . implode(' ', $parts) . ' "mixed")';
+        $result = $this->parse(
+            '* 1 FETCH (BODYSTRUCTURE ' . $bodyStructure . ')',
+            (new ImapFetchQuery())->structure(),
+        );
+
+        $partTypes = [];
+        foreach ($result->getParts() as $id => $part) {
+            $partTypes[$id] = $part->fullType();
+        }
+
+        self::assertSame(
+            [
+                '1' => 'multipart/alternative',
+                '1.1' => 'text/plain',
+                '1.2' => 'text/html',
+                '2' => 'text/plain',
+                '3' => 'text/html',
+                '4' => 'message/rfc822',
+                '4.1' => 'multipart/mixed',
+                '4.1.1' => 'text/plain',
+                '4.1.2' => 'message/rfc822',
+                '4.1.2.1' => 'multipart/alternative',
+                '4.1.2.1.1' => 'text/plain',
+                '4.1.2.1.2' => 'text/html',
+                '5' => 'message/rfc822',
+                '5.1' => 'multipart/alternative',
+                '5.1.1' => 'text/plain',
+                '5.1.2' => 'text/html',
+                '6' => 'message/rfc822',
+                '6.1' => 'multipart/mixed',
+                '6.1.1' => 'text/plain',
+                '6.1.2' => 'message/rfc822',
+                '6.1.2.1' => 'multipart/alternative',
+                '6.1.2.1.1' => 'text/plain',
+                '6.1.2.1.2' => 'text/html',
+                '7' => 'text/plain',
+                '8' => 'message/rfc822',
+                '8.1' => 'multipart/alternative',
+                '8.1.1' => 'text/plain',
+                '8.1.2' => 'text/html',
+            ],
+            $partTypes,
+        );
+    }
+
     public function testBareBodyIsTreatedAsBodyStructure(): void
     {
         $result = $this->parse(
