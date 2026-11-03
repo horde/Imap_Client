@@ -179,6 +179,33 @@ class ImapFetchParserTest extends TestCase
         self::assertSame(['1' => 'text/plain', '2' => 'text/html'], $parts);
     }
 
+    public function testBodyStructurePreservesContentDispositionFromIssue55(): void
+    {
+        $bodyStructure = '((("text" "plain" ("charset" "ISO-8859-1") NIL NIL '
+            . '"quoted-printable" 1431 35 NIL NIL NIL NIL) '
+            . '("text" "html" ("charset" "ISO-8859-1") NIL NIL "quoted-printable" '
+            . '5381 91 NIL NIL NIL NIL) "alternative" '
+            . '("boundary" "----=_Part_514_1435718703.1792158319440") NIL NIL NIL) '
+            . '("image" "png" ("name" "Image_2026-10-16_06-44-30.png") '
+            . '"<909a96b3-b806-4cd3-ad95-cee73a15c453@Image_0_>" NIL "base64" '
+            . '309532 NIL ("inline" ("filename" "Image_2026-10-16_06-44-30.png")) '
+            . 'NIL NIL) "mixed" '
+            . '("boundary" "----=_Part_515_168023386.1792158319440") NIL NIL NIL)';
+        $result = $this->parse(
+            '* 9 FETCH (UID 3188 BODYSTRUCTURE ' . $bodyStructure . ')',
+            (new ImapFetchQuery())->structure(),
+        );
+
+        $parts = iterator_to_array($result->getParts());
+        self::assertArrayHasKey('2', $parts);
+        self::assertSame('image/png', $parts['2']->fullType());
+
+        $disposition = $parts['2']->headers->get('Content-Disposition');
+        self::assertNotNull($disposition);
+        self::assertTrue($disposition->isInline());
+        self::assertSame('Image_2026-10-16_06-44-30.png', $disposition->filename());
+    }
+
     public function testBodyStructureIncludesAttachedRfc822MessageParts(): void
     {
         $plain = '("text" "plain" NIL NIL NIL "7bit" 100 10)';

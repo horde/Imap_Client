@@ -503,6 +503,34 @@ final class ImapFetchParser
             $headerLines .= 'Content-Description: ' . $description . "\r\n";
         }
 
+        $extensionIndex = match (true) {
+            strtolower($type) === 'text' => 8,
+            strtolower($type) === 'message'
+                && strtolower($subtype) === 'rfc822' => 10,
+            default => 7,
+        };
+        foreach ([$extensionIndex, $extensionIndex + 1] as $index) {
+            $disposition = $tokens[$index] ?? null;
+            if (
+                !is_array($disposition)
+                || !in_array(
+                    strtolower(self::nstring($disposition[0] ?? null)),
+                    ['inline', 'attachment'],
+                    true,
+                )
+            ) {
+                continue;
+            }
+
+            $headerLines .= 'Content-Disposition: '
+                . $disposition[0]
+                . self::formatParams(
+                    self::parseStructureParams($disposition[1] ?? null)
+                )
+                . "\r\n";
+            break;
+        }
+
         $sizeHint = ($bytes !== null && ctype_digit($bytes)) ? (int) $bytes : null;
         $children = [];
         if (
