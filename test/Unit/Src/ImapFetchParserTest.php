@@ -215,8 +215,8 @@ class ImapFetchParserTest extends TestCase
             . $alternative . ' 30)';
         $embeddedMixed = '(' . $plain . ' ' . $nestedMessage . ' "mixed")';
 
-        $messagePart = static fn(string $embedded): string =>
-            '("message" "rfc822" NIL NIL NIL "7bit" 500 NIL '
+        $messagePart = static fn(string $embedded): string
+            => '("message" "rfc822" NIL NIL NIL "7bit" 500 NIL '
             . $embedded . ' 50)';
 
         $parts = [
