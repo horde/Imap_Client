@@ -29,6 +29,7 @@ use Horde\Socket\Client\ConnectionConfig as SocketConnectionConfig;
 use Horde\Socket\Client\Exception\ConnectionException as SocketConnectionException;
 use Horde\Socket\Client\SecureMode as SocketSecureMode;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Exception;
 
 /**
  * A modern POP3 client (RFC 1939, RFC 2449, RFC 5034, RFC 6856) built on
@@ -278,7 +279,7 @@ final class Pop3Client implements MailboxProtocol
         $this->requireInbox($mailbox);
         $this->connect();
 
-        $flagValue = static fn (SystemFlag|string $flag): string => $flag instanceof SystemFlag
+        $flagValue = static fn(SystemFlag|string $flag): string => $flag instanceof SystemFlag
             ? $flag->value
             : $flag;
 
@@ -667,7 +668,7 @@ final class Pop3Client implements MailboxProtocol
             if (stripos($line, 'Date:') === 0) {
                 try {
                     return new DateTimeImmutable(trim(substr($line, 5)));
-                } catch (\Exception) {
+                } catch (Exception) {
                     return null;
                 }
             }
@@ -676,4 +677,3 @@ final class Pop3Client implements MailboxProtocol
         return null;
     }
 }
-

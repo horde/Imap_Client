@@ -63,6 +63,21 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
     protected $_ids = [];
 
     /**
+     * Compact, sorted ID intervals. When set, this is authoritative and
+     * $_ids remains empty until the flat list is explicitly requested.
+     *
+     * @var array|null
+     */
+    protected $_intervals = null;
+
+    /**
+     * Iterator state while traversing compact intervals.
+     *
+     * @var array
+     */
+    protected $_iterState = [];
+
+    /**
      * Are IDs message sequence numbers?
      *
      * @var boolean
@@ -97,6 +112,9 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
                 return ($this->_ids === self::ALL);
 
             case 'ids':
+                if ($this->_intervals !== null) {
+                    $this->_expandIntervals();
+                }
                 return is_array($this->_ids)
                     ? $this->_ids
                     : [];
@@ -105,10 +123,28 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
                 return ($this->_ids === self::LARGEST);
 
             case 'max':
+                if ($this->_intervals !== null) {
+                    if (!$this->_intervals) {
+                        return false;
+                    }
+                    return max(array_column($this->_intervals, 1));
+                }
+                if (is_string($this->_ids)) {
+                    return null;
+                }
                 $this->sort();
                 return end($this->_ids);
 
             case 'min':
+                if ($this->_intervals !== null) {
+                    if (!$this->_intervals) {
+                        return false;
+                    }
+                    return min(array_column($this->_intervals, 0));
+                }
+                if (is_string($this->_ids)) {
+                    return null;
+                }
                 $this->sort();
                 return reset($this->_ids);
 
@@ -142,6 +178,14 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
                 } elseif ($this->search_res) {
                     return '$';
                 }
+                if (is_string($this->_ids)) {
+                    return $this->_ids;
+                }
+                if ($this->_intervals !== null) {
+                    return $this->_intervalsToSequenceString(
+                        $name == 'tostring_sort'
+                    );
+                }
                 return strval($this->_toSequenceString($name == 'tostring_sort'));
         }
     }
@@ -166,7 +210,43 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
             if (is_string($ids)
                 && in_array($ids, [self::ALL, self::SEARCH_RES, self::LARGEST])) {
                 $this->_ids = $ids;
+                $this->_intervals = null;
+            } elseif (is_string($ids)
+                && in_array(trim($ids), ['1:*', '*', '$'], true)) {
+                $this->_ids = match (trim($ids)) {
+                    '1:*' => self::ALL,
+                    '*' => self::LARGEST,
+                    '$' => self::SEARCH_RES,
+                };
+                $this->_intervals = null;
+            } elseif (is_string($ids) && str_contains($ids, '*')) {
+                $sequenceSet = trim($ids);
+                if (!$this->_isValidWildcardSequenceString($sequenceSet)) {
+                    throw new InvalidArgumentException(
+                        'Invalid IMAP sequence set.'
+                    );
+                }
+                $this->_ids = $sequenceSet;
+                $this->_intervals = null;
             } elseif ($add = $this->_resolveIds($ids)) {
+                $isIntervals = isset($add[0]) && is_array($add[0]);
+                if ($isIntervals || ($this->_intervals !== null)) {
+                    $existing = $this->_intervals
+                        ?? $this->_flatToIntervals(
+                            is_array($this->_ids) ? $this->_ids : []
+                        );
+                    $incoming = $isIntervals
+                        ? $add
+                        : $this->_flatToIntervals($add);
+                    $this->_intervals = $this->duplicates
+                        ? array_merge($existing, $incoming)
+                        : $this->_mergeIntervals(
+                            array_merge($existing, $incoming)
+                        );
+                    $this->_ids = [];
+                    $this->_sorted = true;
+                    return;
+                }
                 if (is_array($this->_ids) && !empty($this->_ids)) {
                     foreach ($add as $val) {
                         $this->_ids[] = (int) $val;
@@ -195,9 +275,32 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
      */
     public function remove($ids)
     {
+        if (is_string($this->_ids)) {
+            return;
+        }
         if (!$this->isEmpty()
             && ($remove = $this->_resolveIds($ids))) {
-            $this->_ids = array_diff($this->_ids, array_unique($remove));
+            $removeIsIntervals = isset($remove[0]) && is_array($remove[0]);
+            if ($this->_intervals !== null || $removeIsIntervals) {
+                $source = $this->_intervals
+                    ?? $this->_flatToIntervals(
+                        is_array($this->_ids) ? $this->_ids : []
+                    );
+                $removeIntervals = $removeIsIntervals
+                    ? $remove
+                    : $this->_flatToIntervals($remove);
+                $removeIntervals = $this->_mergeIntervals($removeIntervals);
+                $this->_intervals = $this->duplicates
+                    ? $this->_subtractIntervalList($source, $removeIntervals)
+                    : $this->_subtractIntervals(
+                        $this->_mergeIntervals($source),
+                        $removeIntervals
+                    );
+                $this->_ids = [];
+                $this->_sorted = true;
+            } else {
+                $this->_ids = array_diff($this->_ids, array_unique($remove));
+            }
         }
     }
 
@@ -208,6 +311,9 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
      */
     public function isEmpty()
     {
+        if ($this->_intervals !== null) {
+            return !$this->_intervals;
+        }
         return (is_array($this->_ids) && !count($this->_ids));
     }
 
@@ -216,6 +322,9 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
      */
     public function reverse()
     {
+        if ($this->_intervals !== null) {
+            $this->_expandIntervals();
+        }
         if (is_array($this->_ids)) {
             $this->_ids = array_reverse($this->_ids);
         }
@@ -226,6 +335,9 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
      */
     public function sort()
     {
+        if ($this->_intervals !== null) {
+            return;
+        }
         if (!$this->_sorted && is_array($this->_ids)) {
             $this->_sort($this->_ids);
             $this->_sorted = true;
@@ -271,11 +383,14 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
      * @param mixed $ids  Either Horde_Imap_Client_Ids object, array, or
      *                    sequence string.
      *
-     * @return array  An array of IDs.
+     * @return array  An array of IDs or compact [start, end] intervals.
      */
     protected function _resolveIds($ids)
     {
         if ($ids instanceof Horde_Imap_Client_Ids) {
+            if ($ids->_intervals !== null) {
+                return $ids->_intervals;
+            }
             return $ids->ids;
         } elseif (is_array($ids)) {
             return $ids;
@@ -347,31 +462,181 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
      *
      * @param string $str  The IMAP message sequence string.
      *
-     * @return array  An array of indices.
+     * @return array  An array of IDs or compact [start, end] intervals.
      */
     protected function _fromSequenceString($str)
     {
-        $ids = [];
         $str = trim($str);
 
         if (!strlen($str)) {
-            return $ids;
+            return [];
         }
 
         $idarray = explode(',', $str);
+        $hasRange = strpos($str, ':') !== false;
+        $ids = [];
 
         foreach ($idarray as $val) {
-            $range = explode(':', $val);
+            $range = explode(':', $val, 2);
             if (isset($range[1])) {
-                for ($i = min($range), $j = max($range); $i <= $j; ++$i) {
-                    $ids[] = (int) $i;
+                if (!ctype_digit($range[0]) || !ctype_digit($range[1])) {
+                    throw new InvalidArgumentException(
+                        'Open-ended or invalid IMAP ID ranges cannot be expanded without mailbox context.'
+                    );
                 }
+                $start = (int) $range[0];
+                $end = (int) $range[1];
+                $ids[] = ($start <= $end)
+                    ? [$start, $end]
+                    : [$end, $start];
             } else {
                 $ids[] = (int) $val;
             }
         }
 
-        return $ids;
+        return $hasRange
+            ? array_map(
+                static fn($id) => is_array($id) ? $id : [$id, $id],
+                $ids
+            )
+            : $ids;
+    }
+
+    /**
+     * Check a sequence set containing the unresolved `*` endpoint.
+     */
+    protected function _isValidWildcardSequenceString($str)
+    {
+        foreach (explode(',', $str) as $part) {
+            $range = explode(':', $part, 2);
+            foreach ($range as $endpoint) {
+                if ($endpoint !== '*' && !ctype_digit($endpoint)) {
+                    return false;
+                }
+            }
+        }
+
+        return $str !== '';
+    }
+
+    /**
+     * Expand compact intervals only when a caller explicitly requests ids.
+     */
+    protected function _expandIntervals()
+    {
+        if ($this->_intervals === null) {
+            return;
+        }
+
+        $this->_ids = [];
+        foreach ($this->_intervals as [$start, $end]) {
+            for ($id = $start; $id <= $end; ++$id) {
+                $this->_ids[] = $id;
+            }
+        }
+        $this->_intervals = null;
+        $this->_sorted = true;
+    }
+
+    /**
+     * Convert flat IDs to single-value intervals.
+     *
+     * @return array  List of [start, end] pairs.
+     */
+    protected function _flatToIntervals(array $ids)
+    {
+        return array_map(
+            static fn($id) => [(int) $id, (int) $id],
+            $ids
+        );
+    }
+
+    /**
+     * Merge overlapping or adjacent intervals.
+     *
+     * @return array  Sorted, non-overlapping [start, end] pairs.
+     */
+    protected function _mergeIntervals(array $intervals)
+    {
+        if (!$intervals) {
+            return [];
+        }
+
+        usort($intervals, static fn($a, $b) => $a[0] <=> $b[0]);
+        $merged = [$intervals[0]];
+        foreach (array_slice($intervals, 1) as [$start, $end]) {
+            $last = count($merged) - 1;
+            if ($start <= $merged[$last][1] + 1) {
+                $merged[$last][1] = max($merged[$last][1], $end);
+            } else {
+                $merged[] = [$start, $end];
+            }
+        }
+
+        return $merged;
+    }
+
+    /**
+     * Subtract sorted removal intervals from sorted source intervals.
+     *
+     * @return array  Remaining [start, end] pairs.
+     */
+    protected function _subtractIntervals(array $source, array $remove)
+    {
+        $result = [];
+        foreach ($source as [$start, $end]) {
+            foreach ($remove as [$removeStart, $removeEnd]) {
+                if ($removeEnd < $start || $removeStart > $end) {
+                    continue;
+                }
+                if ($removeStart > $start) {
+                    $result[] = [$start, $removeStart - 1];
+                }
+                $start = max($start, $removeEnd + 1);
+                if ($start > $end) {
+                    break;
+                }
+            }
+            if ($start <= $end) {
+                $result[] = [$start, $end];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Subtract ranges while retaining duplicate intervals.
+     */
+    protected function _subtractIntervalList(array $source, array $remove)
+    {
+        $result = [];
+        foreach ($source as $interval) {
+            array_push(
+                $result,
+                ...$this->_subtractIntervals([$interval], $remove)
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * Format compact intervals as an IMAP sequence string.
+     */
+    protected function _intervalsToSequenceString($sort = false)
+    {
+        $intervals = $this->_intervals;
+        if ($sort) {
+            usort($intervals, static fn($a, $b) => $a[0] <=> $b[0]);
+        }
+
+        return implode(',', array_map(
+            static fn($interval) => ($interval[0] === $interval[1])
+                ? (string) $interval[0]
+                : $interval[0] . ':' . $interval[1],
+            $intervals
+        ));
     }
 
     /* Countable methods. */
@@ -381,6 +646,12 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
     #[ReturnTypeWillChange]
     public function count()
     {
+        if ($this->_intervals !== null) {
+            return array_sum(array_map(
+                static fn($interval) => $interval[1] - $interval[0] + 1,
+                $this->_intervals
+            ));
+        }
         return is_array($this->_ids)
             ? count($this->_ids)
             : 0;
@@ -393,6 +664,12 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
     #[ReturnTypeWillChange]
     public function current()
     {
+        if ($this->_intervals !== null) {
+            return isset($this->_iterState['idx'])
+                && isset($this->_intervals[$this->_iterState['idx']])
+                ? $this->_iterState['pos']
+                : null;
+        }
         return is_array($this->_ids)
             ? current($this->_ids)
             : null;
@@ -403,6 +680,12 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
     #[ReturnTypeWillChange]
     public function key()
     {
+        if ($this->_intervals !== null) {
+            return isset($this->_iterState['idx'])
+                && isset($this->_intervals[$this->_iterState['idx']])
+                ? $this->_iterState['key']
+                : null;
+        }
         return is_array($this->_ids)
             ? key($this->_ids)
             : null;
@@ -413,6 +696,22 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
     #[ReturnTypeWillChange]
     public function next()
     {
+        if ($this->_intervals !== null) {
+            if (!isset($this->_iterState['idx'])) {
+                return;
+            }
+            ++$this->_iterState['key'];
+            ++$this->_iterState['pos'];
+            if ($this->_iterState['pos']
+                > $this->_intervals[$this->_iterState['idx']][1]) {
+                ++$this->_iterState['idx'];
+                if (isset($this->_intervals[$this->_iterState['idx']])) {
+                    $this->_iterState['pos']
+                        = $this->_intervals[$this->_iterState['idx']][0];
+                }
+            }
+            return;
+        }
         if (is_array($this->_ids)) {
             next($this->_ids);
         }
@@ -423,6 +722,17 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
     #[ReturnTypeWillChange]
     public function rewind()
     {
+        if ($this->_intervals !== null) {
+            $this->_iterState = [];
+            if ($this->_intervals) {
+                $this->_iterState = [
+                    'idx' => 0,
+                    'pos' => $this->_intervals[0][0],
+                    'key' => 0,
+                ];
+            }
+            return;
+        }
         if (is_array($this->_ids)) {
             reset($this->_ids);
         }
@@ -461,15 +771,18 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
             's' => $this->_sequence,
             'is' => $this->_sorted,
             'ids' => $this->_ids,
+            'ir' => $this->_intervals,
         ];
     }
 
     public function __unserialize(array $data)
     {
-        $this->duplicates = $data['d'];
-        $this->_sequence = $data['s'];
-        $this->_sorted = $data['is'];
-        $this->_ids = $data['ids'];
+        $this->duplicates = !empty($data['d']);
+        $this->_sequence = !empty($data['s']);
+        $this->_sorted = !empty($data['is']);
+        $this->_ids = $data['ids'] ?? [];
+        $this->_intervals = $data['ir'] ?? null;
+        $this->_iterState = [];
     }
 
 }

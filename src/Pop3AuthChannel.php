@@ -24,7 +24,7 @@ use Horde\Imap\Client\Exception\Pop3ProtocolException;
  * Wire-equivalent to IMAP's `AUTHENTICATE`: `AUTH <mechanism>
  * [initial-response]`, then `+ <base64-challenge>` continuations, then a
  * final `+OK`/`-ERR`. This is a real consumer of
- * {@see \Horde\Imap\Client\Auth\SaslAuthenticator} as opposed to the IMAP-shaped
+ * {@see Auth\SaslAuthenticator} as opposed to the IMAP-shaped
  * fake used in tests), proving the channel abstraction isn't IMAP-specific.
  *
  * @author    Ralf Lang <ralf.lang@ralf-lang.de>

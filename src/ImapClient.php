@@ -43,7 +43,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 /**
  * A modern IMAP client (RFC 3501/RFC 9051) built on `Horde\Socket\Client` and `Horde\Sasl`
  *
- * Reuses {@see Auth\ImapAuthChannel} for SASL `AUTHENTICATE`
+ * Reuses {@see ImapAuthChannel} for SASL `AUTHENTICATE`
  * and {@see ImapCapabilityNegotiator} for `CAPABILITY`/ `ENABLE`.
  * `LOGIN` is the one native fallback this class handles directly for
  * servers that only advertise SASL mechanisms this library's policy
@@ -209,7 +209,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
 
         try {
             $this->interaction->send('LOGOUT');
-        } catch (ImapProtocolException | ServerResponseException) {
+        } catch (ImapProtocolException|ServerResponseException) {
             // The server is going away regardless; nothing more to do.
         } finally {
             $this->cache?->flush();
@@ -1634,7 +1634,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
                 // data: LISTRIGHTS mailbox identifier required optional...
                 $rights = array_values(array_filter(
                     array_slice($response->data, 3),
-                    static fn ($value): bool => is_string($value),
+                    static fn($value): bool => is_string($value),
                 ));
 
                 $required = $rights === [] ? '' : array_shift($rights);
@@ -2431,7 +2431,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
             if ($statusItems !== []) {
                 $returnOptions->add(new ImapWireAtom('STATUS'));
                 $returnOptions->add(new ImapWireList(array_map(
-                    static fn (string $item): ImapWireEncodable => new ImapWireAtom($item),
+                    static fn(string $item): ImapWireEncodable => new ImapWireAtom($item),
                     $statusItems,
                 )));
             }
@@ -2546,7 +2546,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
 
         $rawAttributes = array_values(array_filter(
             $response->data[1],
-            static fn ($value): bool => is_string($value),
+            static fn($value): bool => is_string($value),
         ));
         $delimiter = is_string($response->data[2]) ? $response->data[2] : null;
 
@@ -2598,8 +2598,8 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
         $subscribed = isset($attributes['\\subscribed']) || strcasecmp($mailbox, 'INBOX') === 0;
 
         return match ($mode) {
-            MailboxListMode::SubscribedExists =>
-                isset($attributes['\\nonexistent']) || !$subscribed,
+            MailboxListMode::SubscribedExists
+                => isset($attributes['\\nonexistent']) || !$subscribed,
             MailboxListMode::Unsubscribed => $subscribed,
             default => false,
         };
@@ -2769,7 +2769,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
         }
 
         return array_map(
-            static fn (string $atom): ImapWireEncodable => new ImapWireAtom($atom),
+            static fn(string $atom): ImapWireEncodable => new ImapWireAtom($atom),
             array_keys($atoms),
         );
     }
@@ -3367,6 +3367,3 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
         return $e->responseCode !== null && strtoupper($e->responseCode->name) === 'TRYCREATE';
     }
 }
-
-
-

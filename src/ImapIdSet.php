@@ -14,8 +14,9 @@ declare(strict_types=1);
 
 namespace Horde\Imap\Client;
 
-use ArrayIterator;
+use Generator;
 use Iterator;
+use InvalidArgumentException;
 
 /**
  * A range-aware set of IMAP message identifiers (UIDs or sequence numbers).
@@ -28,7 +29,7 @@ use Iterator;
  *
  * A set is one of two things:
  *
- * - an explicit list of integer IDs or
+ * - an explicit list of integer IDs, stored as compact ranges, or
  * - a single {@see ImapIdSetToken} special set (`1:*`, `*`, or `$`).
  *
  * The `$sequence` flag distinguishes message-sequence numbers (positional,
@@ -47,11 +48,12 @@ use Iterator;
 final class ImapIdSet implements MessageIdSet
 {
     /**
-     * Explicit IDs in first-seen order. Empty when this is a special set.
+     * Explicit IDs as inclusive ranges in first-seen order. Ranges may
+     * overlap; public list views deduplicate them.
      *
-     * @var list<int>
+     * @var list<array{int, int}>
      */
-    private readonly array $ids;
+    private readonly array $ranges;
 
     /**
      * The special token this set represents or null for an explicit list.
@@ -71,13 +73,13 @@ final class ImapIdSet implements MessageIdSet
     ) {
         if ($ids instanceof ImapIdSetToken) {
             $this->token = $ids;
-            $this->ids = [];
+            $this->ranges = [];
 
             return;
         }
 
         $this->token = null;
-        $this->ids = self::normalize(self::resolve($ids));
+        $this->ranges = self::resolveRanges($ids);
     }
 
     /**
@@ -121,7 +123,7 @@ final class ImapIdSet implements MessageIdSet
 
     public function isEmpty(): bool
     {
-        return $this->token === null && $this->ids === [];
+        return $this->token === null && $this->ranges === [];
     }
 
     /**
@@ -129,7 +131,11 @@ final class ImapIdSet implements MessageIdSet
      */
     public function min(): ?int
     {
-        return $this->ids === [] ? null : min($this->ids);
+        if ($this->ranges === []) {
+            return null;
+        }
+
+        return min(array_column($this->ranges, 0));
     }
 
     /**
@@ -137,35 +143,63 @@ final class ImapIdSet implements MessageIdSet
      */
     public function max(): ?int
     {
-        return $this->ids === [] ? null : max($this->ids);
+        if ($this->ranges === []) {
+            return null;
+        }
+
+        return max(array_column($this->ranges, 1));
     }
 
     /**
      * Return a new set with $ids added (union). Adding to a special set
      * replaces the token with the resulting explicit list.
      *
-     * @param iterable<int|string>|string|int $ids
+     * @param iterable<int|string>|string|int|self $ids
      */
-    public function add(iterable|string|int $ids): self
+    public function add(iterable|string|int|self $ids): self
     {
-        return new self([...$this->ids, ...self::resolve($ids)], $this->sequence);
+        $ranges = $this->token === null ? $this->ranges : [];
+        $ranges = [...$ranges, ...self::resolveRanges($ids)];
+
+        return new self(self::rangesToSequenceString($ranges), $this->sequence);
     }
 
     /**
      * Return a new set with $ids removed. Removing from a special set is a
      * no-op (there is no concrete list to subtract from).
      *
-     * @param iterable<int|string>|string|int $ids
+      * @param iterable<int|string>|string|int|self $ids
      */
-    public function remove(iterable|string|int $ids): self
+    public function remove(iterable|string|int|self $ids): self
     {
         if ($this->token !== null) {
             return $this;
         }
 
-        $drop = self::normalize(self::resolve($ids));
+        $drop = self::mergeRanges(self::resolveRanges($ids));
+        $remaining = [];
+        foreach ($this->ranges as [$start, $end]) {
+            foreach ($drop as [$dropStart, $dropEnd]) {
+                if ($dropEnd < $start || $dropStart > $end) {
+                    continue;
+                }
+                if ($dropStart > $start) {
+                    $remaining[] = [$start, $dropStart - 1];
+                }
+                $start = max($start, $dropEnd + 1);
+                if ($start > $end) {
+                    break;
+                }
+            }
+            if ($start <= $end) {
+                $remaining[] = [$start, $end];
+            }
+        }
 
-        return new self(array_values(array_diff($this->ids, $drop)), $this->sequence);
+        return new self(
+            self::rangesToSequenceString($remaining),
+            $this->sequence,
+        );
     }
 
     /**
@@ -173,12 +207,24 @@ final class ImapIdSet implements MessageIdSet
      */
     public function toArray(): array
     {
-        return $this->ids;
+        $ids = [];
+        foreach ($this->ranges as [$start, $end]) {
+            for ($id = $start; $id <= $end; ++$id) {
+                $ids[$id] = $id;
+            }
+        }
+
+        return array_values($ids);
     }
 
     public function count(): int
     {
-        return count($this->ids);
+        $count = 0;
+        foreach (self::mergeRanges($this->ranges) as [$start, $end]) {
+            $count += $end - $start + 1;
+        }
+
+        return $count;
     }
 
     /**
@@ -186,7 +232,13 @@ final class ImapIdSet implements MessageIdSet
      */
     public function getIterator(): Iterator
     {
-        return new ArrayIterator($this->ids);
+        return (static function (array $ranges): Generator {
+            foreach (self::mergeRanges($ranges) as [$start, $end]) {
+                for ($id = $start; $id <= $end; ++$id) {
+                    yield $id;
+                }
+            }
+        })($this->ranges);
     }
 
     /**
@@ -201,77 +253,124 @@ final class ImapIdSet implements MessageIdSet
             return $this->token->toWire();
         }
 
-        return self::toSequenceString($this->ids);
+        $parts = [];
+        foreach (self::mergeRanges($this->ranges) as [$start, $end]) {
+            $parts[] = self::rangePart($start, $end);
+        }
+
+        return implode(',', $parts);
     }
 
     /**
      * Resolve a constructor/add/remove argument into a flat list of ints.
      *
-     * @param iterable<int|string>|string|int $ids
+     * @param iterable<int|string>|string|int|self $ids
      *
      * @return list<int>
      */
-    private static function resolve(iterable|string|int $ids): array
+    private static function resolveRanges(iterable|string|int $ids): array
     {
+        if ($ids instanceof self) {
+            return $ids->ranges;
+        }
+
         if (is_int($ids)) {
-            return [$ids];
+            return [[$ids, $ids]];
         }
 
         if (is_string($ids)) {
-            return self::fromWireList($ids);
+            return self::parseWireRanges($ids);
         }
 
         $out = [];
         foreach ($ids as $id) {
-            $out[] = (int) $id;
+            $id = (int) $id;
+            $out[] = [$id, $id];
         }
 
         return $out;
     }
 
     /**
-     * Deduplicate while preserving first-seen order.
+     * Parse an IMAP sequence string into compact inclusive ranges.
      *
-     * @param list<int> $ids
-     *
-     * @return list<int>
+     * @return list<array{int, int}>
      */
-    private static function normalize(array $ids): array
-    {
-        return array_keys(array_flip($ids));
-    }
-
-    /**
-     * Parse an IMAP sequence string into an int list with ranges expanded.
-     *
-     * @return list<int>
-     */
-    private static function fromWireList(string $str): array
+    private static function parseWireRanges(string $str): array
     {
         $str = trim($str);
         if ($str === '') {
             return [];
         }
 
-        $ids = [];
-
+        $ranges = [];
         foreach (explode(',', $str) as $part) {
             $range = explode(':', $part, 2);
             if (isset($range[1])) {
+                if (!ctype_digit($range[0]) || !ctype_digit($range[1])) {
+                    throw new InvalidArgumentException(
+                        'IMAP ID ranges must have numeric endpoints.'
+                    );
+                }
                 $start = (int) $range[0];
                 $end = (int) $range[1];
-                if ($start > $end) {
-                    [$start, $end] = [$end, $start];
-                }
-                for ($i = $start; $i <= $end; ++$i) {
-                    $ids[] = $i;
-                }
+                $ranges[] = ($start <= $end)
+                    ? [$start, $end]
+                    : [$end, $start];
             } else {
-                $ids[] = (int) $part;
+                if (!ctype_digit($part)) {
+                    throw new InvalidArgumentException(
+                        'IMAP IDs must be decimal integers.'
+                    );
+                }
+                $id = (int) $part;
+                $ranges[] = [$id, $id];
             }
         }
 
-        return $ids;
+        return $ranges;
+    }
+
+    /**
+     * Merge overlapping or adjacent ranges into ascending, unique ranges.
+     *
+     * @param list<array{int, int}> $ranges
+     *
+     * @return list<array{int, int}>
+     */
+    private static function mergeRanges(array $ranges): array
+    {
+        if ($ranges === []) {
+            return [];
+        }
+
+        usort($ranges, static fn(array $a, array $b): int => $a[0] <=> $b[0]);
+        $merged = [$ranges[0]];
+        foreach (array_slice($ranges, 1) as [$start, $end]) {
+            $last = count($merged) - 1;
+            if ($start <= $merged[$last][1] + 1) {
+                $merged[$last][1] = max($merged[$last][1], $end);
+            } else {
+                $merged[] = [$start, $end];
+            }
+        }
+
+        return $merged;
+    }
+
+    /**
+     * Serialize ranges into a compact numeric IMAP sequence string.
+     *
+     * @param list<array{int, int}> $ranges
+     */
+    private static function rangesToSequenceString(array $ranges): string
+    {
+        $parts = [];
+        foreach (self::mergeRanges($ranges) as [$start, $end]) {
+            $parts[] = self::rangePart($start, $end);
+        }
+
+        return implode(',', $parts);
     }
 
     /**
@@ -279,32 +378,6 @@ final class ImapIdSet implements MessageIdSet
      *
      * @param list<int> $ids
      */
-    private static function toSequenceString(array $ids): string
-    {
-        if ($ids === []) {
-            return '';
-        }
-
-        sort($ids, SORT_NUMERIC);
-
-        $out = [];
-        $start = $prev = $ids[0];
-
-        foreach (array_slice($ids, 1) as $id) {
-            if ($id === $prev + 1) {
-                $prev = $id;
-                continue;
-            }
-
-            $out[] = self::rangePart($start, $prev);
-            $start = $prev = $id;
-        }
-
-        $out[] = self::rangePart($start, $prev);
-
-        return implode(',', $out);
-    }
-
     /**
      * Render a single range or singleton such as `5` vs `5:9`.
      */
