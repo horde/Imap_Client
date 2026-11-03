@@ -46,6 +46,133 @@ class ImapClientAppendExtensionsTest extends TestCase
         );
     }
 
+    public function testForwardOnlyAppendUsesExplicitLengthAndKeepsOwnership(): void
+    {
+        [$source, $writer] = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
+        fwrite($writer, "a\0bTAIL");
+        fclose($writer);
+        try {
+            $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 BINARY UIDPLUS] ready', '+ ready', 'A1 OK [APPENDUID 1 7] done');
+            $uids = $this->client($socket)->append('Drafts', [['data' => $source, 'length' => 3, 'binary' => true]]);
+            self::assertSame([7], $uids->toArray());
+            self::assertSame("A1 APPEND Drafts ~{3}\r\na\0b\r\n", implode('', $socket->rawWritten));
+            self::assertSame('TAIL', stream_get_contents($source));
+        } finally {
+            fclose($source);
+        }
+    }
+
+    public function testForwardOnlyRejectionBeforeContinuationDoesNotReadSource(): void
+    {
+        $source = fopen('php://temp', 'w+b');
+        fwrite($source, 'abc');
+        rewind($source);
+        try {
+            $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 BINARY UIDPLUS] ready', 'A1 NO rejected');
+            try {
+                $this->client($socket)->append('Drafts', [['data' => $source, 'length' => 3, 'binary' => true]]);
+                self::fail('Expected server rejection');
+            } catch (\Horde\Imap\Client\Exception\ServerResponseException) {
+                self::assertSame(0, ftell($source));
+                self::assertFalse($socket->closed);
+            }
+        } finally {
+            fclose($source);
+        }
+    }
+
+    public function testConsumedForwardOnlySourceIsNotRetriedAfterTryCreate(): void
+    {
+        $source = fopen('php://temp', 'w+b');
+        fwrite($source, 'abc');
+        rewind($source);
+        try {
+            $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 BINARY UIDPLUS] ready', '+ ready', 'A1 NO [TRYCREATE] missing');
+            try {
+                $this->client($socket)->append('Drafts', [['data' => $source, 'length' => 3, 'binary' => true]], ['create' => true]);
+                self::fail('Expected rejection without replay');
+            } catch (\Horde\Imap\Client\Exception\ServerResponseException) {
+                self::assertSame(3, ftell($source));
+                self::assertSame("A1 APPEND Drafts ~{3}\r\nabc\r\n", implode('', $socket->rawWritten));
+            }
+        } finally {
+            fclose($source);
+        }
+    }
+
+    public function testUnconsumedForwardOnlySourceCanRetryAfterTryCreate(): void
+    {
+        $source = fopen('php://temp', 'w+b');
+        fwrite($source, 'abc');
+        rewind($source);
+        try {
+            $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 BINARY UIDPLUS] ready',
+                'A1 NO [TRYCREATE] missing', 'A2 OK created', '+ ready', 'A3 OK [APPENDUID 1 7] done');
+            $uids = $this->client($socket)->append('Drafts', [['data' => $source, 'length' => 3, 'binary' => true]], ['create' => true]);
+            self::assertSame([7], $uids->toArray());
+            self::assertSame("A1 APPEND Drafts ~{3}\r\nA2 CREATE Drafts\r\nA3 APPEND Drafts ~{3}\r\nabc\r\n", implode('', $socket->rawWritten));
+        } finally {
+            fclose($source);
+        }
+    }
+
+    public function testForwardOnlyLengthRejectsInvalidBatchBeforeSending(): void
+    {
+        $source = fopen('php://temp', 'w+b');
+        fwrite($source, 'abc');
+        rewind($source);
+        try {
+            $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 BINARY UIDPLUS] ready');
+            try {
+                $this->client($socket)->append('Drafts', [
+                    ['data' => 'valid first message'],
+                    ['data' => $source, 'length' => -1, 'binary' => true],
+                ]);
+                self::fail('Expected invalid length');
+            } catch (\Horde\Imap\Client\Exception\WireEncodingException) {
+                self::assertSame([], $socket->rawWritten);
+                self::assertSame(0, ftell($source));
+            }
+        } finally {
+            fclose($source);
+        }
+    }
+
+    public function testForwardOnlyAppendRequiresBinaryCapabilityBeforeReading(): void
+    {
+        $source = fopen('php://temp', 'w+b');
+        fwrite($source, 'abc');
+        rewind($source);
+        try {
+            $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 UIDPLUS] ready');
+            try {
+                $this->client($socket)->append('Drafts', [['data' => $source, 'length' => 3, 'binary' => true]]);
+                self::fail('Expected missing capability');
+            } catch (CapabilityNotSupportedException) {
+                self::assertSame(0, ftell($source));
+                self::assertSame([], $socket->rawWritten);
+            }
+        } finally {
+            fclose($source);
+        }
+    }
+
+    public function testForwardOnlyAppendUsesUtf8WrapperWhenEnabled(): void
+    {
+        $source = fopen('php://temp', 'w+b');
+        fwrite($source, 'abc');
+        rewind($source);
+        try {
+            $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 BINARY UIDPLUS UTF8=ACCEPT] ready', '+ ready', 'A1 OK [APPENDUID 1 7] done');
+            $client = $this->client($socket);
+            $client->getCapability()->enable('UTF8=ACCEPT');
+            $client->append('Drafts', [['data' => $source, 'length' => 3, 'binary' => true]]);
+            self::assertSame("A1 APPEND Drafts UTF8 (~{3}\r\nabc)\r\n", implode('', $socket->rawWritten));
+        } finally {
+            fclose($source);
+        }
+    }
+
     public function testMultiAppendSendsOneCommand(): void
     {
         $socket = $this->socket(

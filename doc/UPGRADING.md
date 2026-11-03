@@ -4,6 +4,38 @@ Contact: dev@lists.horde.org
 
 This lists the API changes between releases of the package.
 
+## Unreleased: forward-only APPEND streams
+
+The modern `ImapClient::append()` accepts an optional `length` on a stream
+entry. Together with `binary: true`, it sends exactly that many bytes from
+its current position without scanning, seeking, rewinding or buffering the
+whole message. The server must advertise `BINARY`.
+
+```php
+// $source is a readable stream containing a complete MIME message.
+// $messageBytes includes headers, the blank line and the body.
+$uids = $client->append(
+    mailbox: 'Archive',
+    data: [[
+        'data' => $source,
+        'length' => $messageBytes,
+        'binary' => true,
+    ]],
+);
+```
+
+The caller retains ownership; this mode advances the source position and
+leaves any bytes after the declared length unread. A short or failed source
+aborts the literal and closes the IMAP connection to avoid protocol corruption.
+An APPEND rejected before its continuation consumes no source bytes. With
+`create: true`, a TRYCREATE retry is allowed only while all one-pass sources
+remain unconsumed. No source is replayed after consumption.
+
+`length` must be a non-negative integer and cannot be combined with CATENATE
+or string data. Unknown-length sources still need staging or an application
+chunking scheme: IMAP literals announce their byte count before transmission.
+Without `length`, the existing seekable, replayable stream API is unchanged.
+
 ## Upgrading to 3.0.0 (src/ PSR-4 rewrite)
 
 Version 3.0 adds a modern PSR-4 codebase under `src/` (namespace
