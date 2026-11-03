@@ -1,4 +1,18 @@
 ---
+3.2.1:
+  api: 3.2.1
+  state:
+    release: stable
+    api: stable
+  date: 2026-11-03
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    style: formatting
+    test: Cover issue #54 to prove fix
+    fix: Issue #55 returning content-disposition
+    fix: Issue #57 Tokenizer
 3.2.0:
   api: 3.2.0
   state:
