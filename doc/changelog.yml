@@ -1,4 +1,21 @@
 ---
+3.3.0:
+  api: 3.3.0
+  state:
+    release: stable
+    api: stable
+  date: 2026-11-04
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    feat: Implement standards-compliant MIME part traversal
+    Support forward-only APPEND streams with explicit lengths
+    chore(release): bump version to 3.2.1
+    style: formatting
+    test: Cover issue #54 to prove fix
+    fix: Issue #55 returning content-disposition
+    fix: Issue #57 Tokenizer
 3.2.1:
   api: 3.2.1
   state:
