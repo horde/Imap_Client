@@ -16,6 +16,7 @@ namespace Horde\Imap\Client\Test\Unit\Src;
 
 use DateTimeImmutable;
 use Horde\Imap\Client\ImapEnvelope;
+use Horde\Imap\Client\ImapFetchQuery;
 use Horde\Imap\Client\ImapFetchResult;
 use Horde\Mime\Headers\HeaderCollection;
 use Horde\Mime\Part;
@@ -146,6 +147,66 @@ class ImapFetchResultTest extends TestCase
         $result = new ImapFetchResult(1);
 
         self::assertSame([], iterator_to_array($result->getParts()));
+        self::assertSame([], iterator_to_array($result->getLeafParts()));
+        self::assertSame([], iterator_to_array($result->getPartsH5()));
+    }
+
+    /** RFC 3501 §6.4.5: A non-multipart message has section 1, even without child nodes. */
+    public function testSinglePartRootIsFetchableButExcludedFromLegacyTraversal(): void
+    {
+        $result = new ImapFetchResult(1);
+        $root = new Part(headers: HeaderCollection::parse("Content-Type: text/plain\r\n"));
+        $result->setStructure($root);
+
+        self::assertSame([1 => $root], iterator_to_array($result->getParts()));
+        self::assertSame([1 => $root], iterator_to_array($result->getLeafParts()));
+        self::assertSame([], iterator_to_array($result->getPartsH5()));
+    }
+
+    /** RFC 3501 §6.4.5: Leaf sections omit enclosing messages and multipart containers. */
+    public function testLeafPartsCanBeFetchedWithoutOverlappingContainers(): void
+    {
+        $part = static fn(string $type, array $children = []): Part => new Part(
+            headers: HeaderCollection::parse('Content-Type: ' . $type . "\r\n"),
+            children: $children,
+        );
+        $plain = $part('text/plain');
+        $html = $part('text/html');
+        $pdf = $part('application/pdf');
+        $nested = $part('message/rfc822', [$pdf]);
+        $alternative = $part('multipart/alternative', [$plain, $html]);
+        $embedded = $part('multipart/mixed', [$alternative, $nested]);
+        $message = $part('message/rfc822', [$embedded]);
+        $root = $part('multipart/mixed', [$message, $part('multipart/mixed')]);
+        $result = new ImapFetchResult(1);
+        $result->setStructure($root);
+
+        self::assertSame([
+            1 => $message,
+            '1.1' => $alternative,
+            '1.1.1' => $plain,
+            '1.1.2' => $html,
+            '1.2' => $nested,
+            '1.2.1' => $pdf,
+            2 => $root->children[1],
+        ], iterator_to_array($result->getParts()));
+        self::assertSame([
+            '1.1.1' => $plain,
+            '1.1.2' => $html,
+            '1.2.1' => $pdf,
+        ], iterator_to_array($result->getLeafParts()));
+
+        $query = new ImapFetchQuery();
+        foreach ($result->getLeafParts() as $section => $payload) {
+            $query->bodyPart($section);
+        }
+        self::assertSame([
+            'BODY.PEEK[1.1.1]',
+            'BODY.PEEK[1.1.2]',
+            'BODY.PEEK[1.2.1]',
+        ], $query->wireItems());
+        self::assertSame($root, $result->getStructure());
+        self::assertSame($embedded, iterator_to_array($result->getPartsH5())['1.0']);
     }
 
     public function testGetPartsYieldsCanonicalMimeIdKeyedChildren(): void

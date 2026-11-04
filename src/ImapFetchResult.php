@@ -22,21 +22,18 @@ use Horde\Stream\StreamInterface;
 use Horde\Stream\Temp;
 
 /**
- * The IMAP `fetch()` result value object: {@see MessageMetadata} (scalar metadata),
- * {@see MessageContent} (raw stream content), {@see PartAccess} (MIME
- * part addressing) and {@see ParsedAccess} (OO envelope/headers/
- * structure). {@see Pop3MessageData} implements only the first two since
- * POP3 has no wire-level part addressing or structure. IMAP has both.
+ * The IMAP `fetch()` result value object:
+ * {@see MessageMetadata} for scalar metadata,
+ * {@see MessageContent} for raw stream content,
+ * {@see PartAccess} for MIME part addressing and
+ * {@see ParsedAccess} for OO envelope/headers/structure.
+ * {@see Pop3MessageData} implements only the first two since POP3 has no wire-level part addressing or structure. IMAP has both.
  *
  * Section-addressed content (header text, body text, MIME header and
- * body parts) is stored keyed by MIME id. Whole-message content uses the id `0`,
+ * body parts) is stored keyed by MIME id. Whole message content uses the id `0`,
  * matching {@see MessageContent}'s default argument.
  *
- * OO representations reuse the `horde/mime` and `horde/mail` value
- * objects rather than inventing parallels: {@see getStructure()} returns
- * a {@see Part} tree, {@see getHeaders()} a
- * {@see HeaderCollection}, and {@see getEnvelope()}
- * an {@see ImapEnvelope} whose addresses are `Horde\Mail\Rfc822` types.
+ * OO representations reuse the `horde/mime` and `horde/mail` value objects
  *
  * @author    Ralf Lang <ralf.lang@ralf-lang.de>
  * @copyright 2026 Horde LLC
@@ -228,7 +225,7 @@ final class ImapFetchResult implements MessageMetadata, MessageContent, PartAcce
 
     public function getBodyPart(string $id): StreamInterface
     {
-        // Preserve the earlier parser's BINARY-only getBodyPart behavior, while
+        // Preserve the earlier parser's BINARY-only getBodyPart behavior while
         // keeping encoded BODY and decoded BINARY distinct when both arrive.
         return $this->bodyPart[$id] ?? $this->binaryBodyPart[$id] ?? $this->toStream('');
     }
@@ -248,11 +245,13 @@ final class ImapFetchResult implements MessageMetadata, MessageContent, PartAcce
     }
 
     /**
-     * Yields the MIME parts of the structure lazily (RFC 3501 §7.4.2
-     * `BODYSTRUCTURE`), skipping the top-level message part itself. Empty
-     * if no structure was fetched.
+     * Yields numerically addressable parts depth-first, keyed by valid IMAP
+     * sections. Includes a non-multipart root as section 1. Containers and
+     * descendants may overlap in content; use getLeafParts() for payloads only.
+     * Empty if no structure was fetched. The complete tree is getStructure().
      *
-     * @return Generator<Part>
+     * @see https://www.rfc-editor.org/rfc/rfc3501#section-6.4.5 IMAP section addressing.
+     * @return Generator<string, Part>
      */
     public function getParts(): Generator
     {
@@ -260,7 +259,68 @@ final class ImapFetchResult implements MessageMetadata, MessageContent, PartAcce
             return;
         }
 
-        yield from $this->structure->iterate(false);
+        if ($this->structure->isMultipart()) {
+            yield from $this->iterateParts($this->structure, '');
+        } else {
+            yield '1' => $this->structure;
+            yield from $this->iterateParts($this->structure, '1.');
+        }
+    }
+
+    /**
+     * Yields terminal non-multipart payloads once, without enclosing messages.
+     *
+     * @see https://www.rfc-editor.org/rfc/rfc3501#section-6.4.5 Numeric fetch addresses.
+     * @return Generator<string, Part>
+     */
+    public function getLeafParts(): Generator
+    {
+        foreach ($this->getParts() as $id => $part) {
+            if ($part->isLeaf() && !$part->isMultipart()) {
+                yield $id => $part;
+            }
+        }
+    }
+
+    /**
+     * Migration aid
+     *
+     * Skips the root and includes Horde's synthetic X.0 containers.
+     * X.0 is not fetchable. Request the embedded body with bodyText(X) instead.
+     *
+     * @see https://www.rfc-editor.org/rfc/rfc3501#section-9 Non-Zero wire section numbers.
+     * @return Generator<string, Part>
+     */
+    public function getPartsH5(): Generator
+    {
+        if ($this->structure === null) {
+            return;
+        }
+
+        $prefix = $this->structure->fullType() === 'message/rfc822' ? '1.' : '';
+        yield from $this->iterateParts($this->structure, $prefix, true);
+    }
+
+    /**
+     * @see https://www.rfc-editor.org/rfc/rfc3501#section-9 Non-Zero wire section numbers.
+     *  X.0 is a Horde convention not part of the spec.
+     * @return Generator<string, Part>
+     */
+    private function iterateParts(Part $parent, string $prefix, bool $includeSynthetic = false): Generator
+    {
+        foreach ($parent->children as $index => $child) {
+            if ($parent->fullType() === 'message/rfc822' && $child->isMultipart()) {
+                // Embedded multipart containers do not add a section level.
+                if ($includeSynthetic) {
+                    yield $prefix . '0' => $child;
+                }
+                yield from $this->iterateParts($child, $prefix, $includeSynthetic);
+            } else {
+                $id = $prefix . ($index + 1);
+                yield $id => $child;
+                yield from $this->iterateParts($child, $id . '.', $includeSynthetic);
+            }
+        }
     }
 
     // -- ParsedAccess --
@@ -291,7 +351,7 @@ final class ImapFetchResult implements MessageMetadata, MessageContent, PartAcce
     }
 
     /**
-     * The raw (unparsed) header text stored for a label, or null if the
+     * The raw (unparsed) header text stored for a label or null if the
      * label was not fetched. Used by the cache layer, which stores the
      * raw text and reconstructs the {@see HeaderCollection} on read via
      * {@see getHeaders()}.

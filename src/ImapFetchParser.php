@@ -27,15 +27,7 @@ use Horde\Mime\Part;
  * Turns one untagged `* n FETCH (...)` response (RFC 3501 §7.4.2) into an
  * {@see ImapFetchResult}.
  *
- * The H5 version walked a streaming token cursor
- * The new version works off the fully-materialized token tree {@see ImapTokenizer} already produces.
- * The FETCH item list is a flat even-membered array alternating item name and
- * value (`['UID', '5', 'FLAGS', ['\Seen'], 'BODY[]', '<bytes>', ...]`),
- * with complex structures (ENVELOPE, BODYSTRUCTURE, FLAGS) as
- * nested arrays and `NIL` as `null`. Parsing is therefore index walking,
- * not cursor advancing.
- *
- * Stateless implementation. Every method is static.
+ * Stateless, static implementation.
  * The {@see ImapFetchQuery} is passed in only to map an incoming `BODY[HEADER.FIELDS (...)]` key back to the
  * caller label it was requested under.
  *
@@ -49,8 +41,7 @@ final class ImapFetchParser
 
     /**
      * @return array{seq: int, result: ImapFetchResult}|null Null when the
-     *         response is not an `* n FETCH (...)` line (the caller skips
-     *         it. A mailbox may interleave EXPUNGE/EXISTS/etc. among the
+     *         response is not an `* n FETCH (...)` line (A mailbox may interleave EXPUNGE/EXISTS/etc. among the
      *         FETCH replies).
      *
      * @throws ImapProtocolException On a malformed FETCH structure.
@@ -94,12 +85,6 @@ final class ImapFetchParser
                 throw new ImapProtocolException('Malformed FETCH item name.');
             }
 
-            // A `BODY[HEADER.FIELDS (...)]` item is split by the tokenizer
-            // on the space before the parenthesized field list, arriving
-            // as `BODY[HEADER.FIELDS`, `(FROM TO)`, `]` then the value.
-            // Reassemble the full section key before pairing it with a
-            // value. Every other section (`BODY[HEADER]`, `BODY[1.TEXT]`,
-            // `BODY[]<0>`, ...) is a single atom and needs no reassembly.
             if (self::isUnterminatedSection($name)) {
                 [$name, $i] = self::reassembleSectionKey($items, $i, $count);
             }
@@ -112,7 +97,7 @@ final class ImapFetchParser
 
     /**
      * A `BODY[`/`BINARY[` token whose closing `]` was split off by the
-     * tokenizer (an embedded parenthesized field list forced a break).
+     * tokenizer.
      */
     private static function isUnterminatedSection(string $name): bool
     {
@@ -121,9 +106,11 @@ final class ImapFetchParser
     }
 
     /**
-     * Rebuild a section key split across tokens, folding the field-list
-     * members back inside their brackets. Returns the reconstructed key
-     * and the index of its last consumed token (the closing `]`).
+     * Rebuild a section key split across tokens.
+     *
+     * Fold the field-list members back inside their brackets.
+     *
+     * Returns the reconstructed key and the index of its last consumed token.
      *
      * @param list<mixed> $items
      *
@@ -145,7 +132,7 @@ final class ImapFetchParser
             }
 
             if (is_string($token)) {
-                // The token that carries the closing bracket ends the key.
+                // The token which carries the closing bracket ends the key.
                 // It may also carry a trailing `<partial>` suffix.
                 $key .= $token;
 
@@ -235,8 +222,6 @@ final class ImapFetchParser
         if (str_starts_with($upper, 'BODY[') || str_starts_with($upper, 'BINARY[')) {
             self::dispatchSection($upper, $value, $result, $query);
         }
-
-        // Anything else is ignored (not implemented or unknown).
     }
 
     private static function dispatchSection(
@@ -246,8 +231,6 @@ final class ImapFetchParser
         ImapFetchQuery $query,
     ): void {
         // HEADER.FIELDS keys carry their field list inside the brackets.
-        // Rebuild the section signature and map it back to the caller
-        // label (H5's fetch_lookup round-trip).
         if (str_contains($upper, 'HEADER.FIELDS')) {
             $signature = self::sectionOf($upper);
             $label = $query->headerLabelFor($signature);
@@ -260,7 +243,8 @@ final class ImapFetchParser
         }
 
         // Strip everything from the last ']' onward. This drops the
-        // closing bracket and any `<partial>` octet-offset suffix so `BODY[1.TEXT]<0>` reduces to the section `1.TEXT`.
+        // closing bracket and any `<partial>` octet-offset suffix.
+        // `BODY[1.TEXT]<0>` reduces to the section `1.TEXT`.
         $section = self::sectionOf($upper);
 
         if (str_starts_with($upper, 'BINARY[')) {
@@ -304,8 +288,8 @@ final class ImapFetchParser
 
     /**
      * The section text inside `BODY[...]`/`BINARY[...]`, i.e. everything
-     * between the first `[` and the last `]`, dropping any trailing
-     * `<partial>` suffix.
+     * between the first `[` and the last `]`.
+     * Any trailing `<partial>` suffix is dropped.
      */
     private static function sectionOf(string $item): string
     {
@@ -359,10 +343,11 @@ final class ImapFetchParser
     }
 
     /**
-     * Parse an address-list token: A list of 4-element `(name adl mailbox
-     * host)` sub-lists (RFC 3501 §7.4.2), honoring the group start/end
-     * markers (host NIL + mailbox non-NIL starts a group. Both NIL ends
-     * it).
+     * Parse an address list token: `(name adl mailbox
+     * host)` sub-lists (RFC 3501 §7.4.2)
+     *
+     * Respects group start/end markers
+     * Host NIL + mailbox non-NIL starts a group. Both NIL ends it.
      */
     private static function parseAddressList(mixed $token): AddressList
     {
@@ -385,7 +370,7 @@ final class ImapFetchParser
             $host = self::nstringOrNull($address[3] ?? null);
 
             if ($host === null && $mailbox !== null) {
-                // Group start: flush any prior group, open a new one.
+                // Group start: Flush any prior group, open a new one.
                 if ($group !== null && $groupItems !== null) {
                     $list->add(new Group($group, $groupItems));
                 }
@@ -431,16 +416,14 @@ final class ImapFetchParser
 
     /**
      * Recursively parse a BODYSTRUCTURE list into a {@see Part} tree
-     * (RFC 3501 §7.4.2). Multipart is distinguished by its first token
-     * being a nested list (a child part) rather than a type string.
+     * according to RFC 3501 §7.4.2.
+     * Multipart is distinguished by its first token being a nested list (a child part) rather than a type string.
      *
-     * MIME-id numbering is deliberately left to the {@see Part} tree
-     * itself: iterating the built tree ({@see ImapFetchResult::getParts()}
-     * uses `iterate(false)`) yields the canonical RFC 3501 §6.4.5 section
-     * ids (`1`, `1.1`, `2`, ...) as iterator keys, so the parser does not
-     * stamp them a second time. Doing so would duplicate the tree's own
-     * numbering and, for a top-level multipart, disagree with it.
+     * MIME-id numbering is handled by {@see ImapFetchResult::getParts()},
+     * which maps the tree to IMAP section ids, including the special
+     * numbering of multipart bodies inside message/rfc822 attachments.
      *
+     * @see https://www.rfc-editor.org/rfc/rfc3501#section-7.4.2 BODYSTRUCTURE nesting.
      * @param list<mixed> $tokens
      */
     private static function parseBodyStructure(array $tokens): Part

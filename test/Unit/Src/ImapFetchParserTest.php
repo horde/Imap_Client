@@ -27,8 +27,7 @@ use PHPUnit\Framework\TestCase;
 class ImapFetchParserTest extends TestCase
 {
     /**
-     * Tokenize and response-parse a single wire line, exactly as the live
-     * connection would, so the parser is exercised against real
+     * Tokenize and response-parse a single wire line. The parser is exercised against real
      * {@see ImapTokenizer} output rather than hand-built token arrays.
      */
     private function response(string $line): ImapResponse
@@ -137,7 +136,7 @@ class ImapFetchParserTest extends TestCase
 
     public function testEnvelopeAddressGroup(): void
     {
-        // A group: start marker (host NIL, mailbox non-NIL), one member,
+        // A group: Start marker (host NIL, mailbox non-NIL), one member,
         // end marker (host NIL, mailbox NIL). RFC 3501 §7.4.2.
         $to = '((NIL NIL "friends" NIL) ("Bob" NIL "bob" "b.com") (NIL NIL NIL NIL))';
         $env = '(NIL NIL NIL NIL NIL ' . $to . ' NIL NIL NIL NIL)';
@@ -206,6 +205,7 @@ class ImapFetchParserTest extends TestCase
         self::assertSame('Image_2026-10-16_06-44-30.png', $disposition->filename());
     }
 
+    /** RFC 3501 §6.4.5: Nested message children use X.1, X.2; X.0 containers are Horde-only. */
     public function testBodyStructureIncludesAttachedRfc822MessageParts(): void
     {
         $plain = '("text" "plain" NIL NIL NIL "7bit" 100 10)';
@@ -248,31 +248,127 @@ class ImapFetchParserTest extends TestCase
                 '2' => 'text/plain',
                 '3' => 'text/html',
                 '4' => 'message/rfc822',
-                '4.1' => 'multipart/mixed',
-                '4.1.1' => 'text/plain',
-                '4.1.2' => 'message/rfc822',
-                '4.1.2.1' => 'multipart/alternative',
-                '4.1.2.1.1' => 'text/plain',
-                '4.1.2.1.2' => 'text/html',
+                '4.1' => 'text/plain',
+                '4.2' => 'message/rfc822',
+                '4.2.1' => 'text/plain',
+                '4.2.2' => 'text/html',
                 '5' => 'message/rfc822',
-                '5.1' => 'multipart/alternative',
-                '5.1.1' => 'text/plain',
-                '5.1.2' => 'text/html',
+                '5.1' => 'text/plain',
+                '5.2' => 'text/html',
                 '6' => 'message/rfc822',
-                '6.1' => 'multipart/mixed',
-                '6.1.1' => 'text/plain',
-                '6.1.2' => 'message/rfc822',
-                '6.1.2.1' => 'multipart/alternative',
-                '6.1.2.1.1' => 'text/plain',
-                '6.1.2.1.2' => 'text/html',
+                '6.1' => 'text/plain',
+                '6.2' => 'message/rfc822',
+                '6.2.1' => 'text/plain',
+                '6.2.2' => 'text/html',
                 '7' => 'text/plain',
                 '8' => 'message/rfc822',
-                '8.1' => 'multipart/alternative',
-                '8.1.1' => 'text/plain',
-                '8.1.2' => 'text/html',
+                '8.1' => 'text/plain',
+                '8.2' => 'text/html',
             ],
             $partTypes,
         );
+    }
+
+    /** RFC 3501 §6.4.5 defines child addresses. §9 excludes Horde's synthetic X.0 from wire sections. */
+    public function testBodyStructurePartNumbersFromIssue57(): void
+    {
+        $plain = '("text" "plain" NIL NIL NIL "7bit" 100 10)';
+        $html = '("text" "html" NIL NIL NIL "7bit" 200 20)';
+        $image = '("image" "png" NIL NIL NIL "base64" 100)';
+        $pdf = '("application" "pdf" NIL NIL NIL "base64" 100)';
+        $alternative = '(' . $plain . ' ' . $html . ' "alternative")';
+        $related = static fn(int $images): string
+            => '(' . $alternative . str_repeat(' ' . $image, $images) . ' "related")';
+        $message = static fn(int $images, int $attachments): string
+            => '("message" "rfc822" NIL NIL NIL "7bit" 1000 NIL ('
+            . $related($images) . str_repeat(' ' . $pdf, $attachments) . ' "mixed") 100)';
+        $bodyStructure = '(' . implode(' ', [
+            $related(2),
+            $pdf,
+            '("application" "octet-stream" NIL NIL NIL "base64" 100)',
+            $message(2, 3),
+            $message(4, 3),
+            $message(4, 3),
+            $pdf,
+            $message(2, 4),
+        ]) . ' "mixed")';
+        $result = $this->parse(
+            '* 5 FETCH (UID 5 BODYSTRUCTURE ' . $bodyStructure . ')',
+            (new ImapFetchQuery())->structure(),
+        );
+
+        $ids = [];
+        foreach ($result->getPartsH5() as $id => $part) {
+            $ids[] = (string) $id;
+        }
+
+        self::assertSame([
+            '1', '1.1', '1.1.1', '1.1.2', '1.2', '1.3', '2', '3',
+            '4', '4.0', '4.1', '4.1.1', '4.1.1.1', '4.1.1.2',
+            '4.1.2', '4.1.3', '4.2', '4.3', '4.4',
+            '5', '5.0', '5.1', '5.1.1', '5.1.1.1', '5.1.1.2',
+            '5.1.2', '5.1.3', '5.1.4', '5.1.5', '5.2', '5.3', '5.4',
+            '6', '6.0', '6.1', '6.1.1', '6.1.1.1', '6.1.1.2',
+            '6.1.2', '6.1.3', '6.1.4', '6.1.5', '6.2', '6.3', '6.4',
+            '7',
+            '8', '8.0', '8.1', '8.1.1', '8.1.1.1', '8.1.1.2',
+            '8.1.2', '8.1.3', '8.2', '8.3', '8.4', '8.5',
+        ], $ids);
+
+        $wireIds = [];
+        foreach ($result->getParts() as $id => $part) {
+            $wireIds[] = (string) $id;
+        }
+        self::assertSame(
+            array_values(array_filter($ids, static fn(string $id): bool => !str_ends_with($id, '.0'))),
+            $wireIds,
+        );
+    }
+
+    /** RFC 3501 §6.4.5: An attached single-part message's body is addressed as X.1. */
+    public function testAttachedSinglePartMessageKeepsItsSectionNumber(): void
+    {
+        $plain = '("text" "plain" NIL NIL NIL "7bit" 100 10)';
+        $message = '("message" "rfc822" NIL NIL NIL "7bit" 500 NIL '
+            . $plain . ' 50)';
+        $bodyStructure = '(' . str_repeat($plain . ' ', 9) . $message . ' "mixed")';
+        $result = $this->parse(
+            '* 1 FETCH (BODYSTRUCTURE ' . $bodyStructure . ')',
+            (new ImapFetchQuery())->structure(),
+        );
+
+        $parts = iterator_to_array($result->getParts());
+        self::assertCount(11, $parts);
+        self::assertSame('message/rfc822', $parts['10']->fullType());
+        self::assertArrayHasKey('10.1', $parts);
+        self::assertSame('text/plain', $parts['10.1']->fullType());
+        self::assertSame(
+            $result->getStructure()->children[9]->children[0],
+            $parts['10.1'],
+        );
+    }
+
+    /** RFC 3501 §6.4.5: A top-level message/rfc822 is section 1; body children use 1.1, 1.2. */
+    public function testTopLevelRfc822MessageUsesEmbeddedBodySectionNumbers(): void
+    {
+        $bodyStructure = '("message" "rfc822" NIL NIL NIL "7bit" 500 NIL '
+            . '(("text" "plain" NIL NIL NIL "7bit" 100 10) '
+            . '("text" "html" NIL NIL NIL "7bit" 200 20) "alternative") 50)';
+        $result = $this->parse(
+            '* 1 FETCH (BODYSTRUCTURE ' . $bodyStructure . ')',
+            (new ImapFetchQuery())->structure(),
+        );
+
+        $parts = [];
+        foreach ($result->getParts() as $id => $part) {
+            $parts[$id] = $part->fullType();
+        }
+
+        self::assertSame([
+            '1' => 'message/rfc822',
+            '1.1' => 'text/plain',
+            '1.2' => 'text/html',
+        ], $parts);
     }
 
     public function testBareBodyIsTreatedAsBodyStructure(): void

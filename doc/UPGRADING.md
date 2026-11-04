@@ -4,7 +4,31 @@ Contact: dev@lists.horde.org
 
 This lists the API changes between releases of the package.
 
-## Unreleased: forward-only APPEND streams
+## 3.3: MIME part traversal
+
+`ImapFetchResult::getParts()` now yields numerically addressable MIME parts
+depth-first and keyed by valid IMAP section numbers (RFC 3501 §6.4.5).
+A non-multipart root is included as `1`. Embedded multipart body containers
+do not have their own numeric section and are omitted. Their children retain
+addresses such as `4.1`, `4.2`. `getStructure()` still returns the complete tree.
+Fetching a container and its descendants retrieves overlapping content.
+
+Use `getLeafParts()` to request terminal payloads without enclosing messages:
+
+```php
+$query = new \Horde\Imap\Client\ImapFetchQuery();
+foreach ($result->getLeafParts() as $section => $part) {
+    $query->bodyPart($section);
+}
+```
+
+For legacy traversal, switch to `getPartsH5()`. It excludes the root and
+includes synthetic `.0` multipart container identifiers. These are tree labels,
+not valid wire sections (RFC 3501 §9); use `bodyText('4')` for `BODY[4.TEXT]`,
+not `bodyPart('4.0')`. Embedded-message headers use `headerText('4')`.
+All three iterators are empty when no structure was fetched.
+
+## 3.3: forward-only APPEND streams
 
 The modern `ImapClient::append()` accepts an optional `length` on a stream
 entry. Together with `binary: true`, it sends exactly that many bytes from
