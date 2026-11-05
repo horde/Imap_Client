@@ -1,4 +1,14 @@
 ---
+3.3.2:
+  api: 3.3.2
+  state:
+    release: stable
+    api: stable
+  date: 2026-11-05
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: 'test: Regression test on #57 parts mangling'
 3.3.1:
   api: 3.3.1
   state:
