@@ -115,6 +115,54 @@ class IdsTest extends TestCase
         ];
     }
 
+    public function testServerResultOrderSurvivesCompactRanges(): void
+    {
+        $ids = new Horde_Imap_Client_Ids('90,10:12,3,11:14');
+        $expected = [90, 10, 11, 12, 3, 13, 14];
+
+        $this->assertSame($expected, iterator_to_array($ids));
+        $this->assertSame(7, count($ids));
+        $this->assertSame('3,10:14,90', $ids->tostring_sort);
+        $this->assertSame($expected, unserialize(serialize($ids))->ids);
+        $this->assertSame($expected, $ids->ids);
+
+        $ids->sort();
+        $this->assertSame([3, 10, 11, 12, 13, 14, 90], $ids->ids);
+    }
+
+    public function testAddingCompactRangePreservesExistingServerResultOrder(): void
+    {
+        $ids = new Horde_Imap_Client_Ids([90, 12, 3]);
+        $ids->add('10:14');
+
+        $this->assertSame([90, 12, 3, 10, 11, 13, 14], iterator_to_array($ids));
+
+        $ids->add([2, 90, 1]);
+        $this->assertSame([90, 12, 3, 10, 11, 13, 14, 2, 1], $ids->ids);
+    }
+
+    public function testRemovingCompactRangePreservesServerResultOrder(): void
+    {
+        $ids = new Horde_Imap_Client_Ids([90, 10, 12, 3]);
+        $ids->remove('11:11');
+        $this->assertSame([90, 10, 12, 3], iterator_to_array($ids));
+
+        $ids->remove('10:12');
+        $this->assertSame([90, 3], $ids->ids);
+    }
+
+    public function testSortingAndReversingCompactRanges(): void
+    {
+        $ids = new Horde_Imap_Client_Ids('90,10:12,3');
+        $ids->sort();
+        $this->assertSame([3, 10, 11, 12, 90], iterator_to_array($ids));
+
+        $ids->reverse();
+        $this->assertSame([90, 12, 11, 10, 3], $ids->ids);
+        $ids->sort();
+        $this->assertSame([3, 10, 11, 12, 90], $ids->ids);
+    }
+
     public function testLargeRangeStaysCompactUntilIterated(): void
     {
         $memoryBefore = memory_get_usage();

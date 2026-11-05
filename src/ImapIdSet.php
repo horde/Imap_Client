@@ -233,10 +233,28 @@ final class ImapIdSet implements MessageIdSet
     public function getIterator(): Iterator
     {
         return (static function (array $ranges): Generator {
-            foreach (self::mergeRanges($ranges) as [$start, $end]) {
-                for ($id = $start; $id <= $end; ++$id) {
+            $seen = [];
+            foreach ($ranges as [$start, $end]) {
+                $next = $start;
+                foreach ($seen as [$seenStart, $seenEnd]) {
+                    if ($seenEnd < $next) {
+                        continue;
+                    }
+                    if ($seenStart > $end) {
+                        break;
+                    }
+                    for ($id = $next; $id < $seenStart; ++$id) {
+                        yield $id;
+                    }
+                    $next = max($next, $seenEnd + 1);
+                    if ($next > $end) {
+                        break;
+                    }
+                }
+                for ($id = $next; $id <= $end; ++$id) {
                     yield $id;
                 }
+                $seen = self::mergeRanges([...$seen, [$start, $end]]);
             }
         })($this->ranges);
     }

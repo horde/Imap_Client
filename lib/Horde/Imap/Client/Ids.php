@@ -238,13 +238,30 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
                     $incoming = $isIntervals
                         ? $add
                         : $this->_flatToIntervals($add);
-                    $this->_intervals = $this->duplicates
-                        ? array_merge($existing, $incoming)
-                        : $this->_mergeIntervals(
-                            array_merge($existing, $incoming)
+                    if ($this->duplicates) {
+                        $existing = array_merge($existing, $incoming);
+                    } elseif (!$isIntervals) {
+                        $existing = array_merge(
+                            $existing,
+                            $this->_subtractIntervals(
+                                $this->_flatToIntervals(array_unique($add)),
+                                $this->_mergeIntervals($existing)
+                            )
                         );
+                    } else {
+                        foreach ($incoming as $interval) {
+                            array_push(
+                                $existing,
+                                ...$this->_subtractIntervals(
+                                    [$interval],
+                                    $this->_mergeIntervals($existing)
+                                )
+                            );
+                        }
+                    }
+                    $this->_intervals = $existing;
                     $this->_ids = [];
-                    $this->_sorted = true;
+                    $this->_sorted = false;
                     return;
                 }
                 if (is_array($this->_ids) && !empty($this->_ids)) {
@@ -293,11 +310,10 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
                 $this->_intervals = $this->duplicates
                     ? $this->_subtractIntervalList($source, $removeIntervals)
                     : $this->_subtractIntervals(
-                        $this->_mergeIntervals($source),
+                        $source,
                         $removeIntervals
                     );
                 $this->_ids = [];
-                $this->_sorted = true;
             } else {
                 $this->_ids = array_diff($this->_ids, array_unique($remove));
             }
@@ -327,6 +343,7 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
         }
         if (is_array($this->_ids)) {
             $this->_ids = array_reverse($this->_ids);
+            $this->_sorted = false;
         }
     }
 
@@ -336,6 +353,10 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
     public function sort()
     {
         if ($this->_intervals !== null) {
+            if (!$this->duplicates) {
+                $this->_intervals = $this->_mergeIntervals($this->_intervals);
+                $this->_sorted = true;
+            }
             return;
         }
         if (!$this->_sorted && is_array($this->_ids)) {
@@ -535,7 +556,6 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
             }
         }
         $this->_intervals = null;
-        $this->_sorted = true;
     }
 
     /**
@@ -628,7 +648,11 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
     {
         $intervals = $this->_intervals;
         if ($sort) {
-            usort($intervals, static fn($a, $b) => $a[0] <=> $b[0]);
+            if ($this->duplicates) {
+                usort($intervals, static fn($a, $b) => $a[0] <=> $b[0]);
+            } else {
+                $intervals = $this->_mergeIntervals($intervals);
+            }
         }
 
         return implode(',', array_map(

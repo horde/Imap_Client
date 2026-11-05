@@ -66,6 +66,33 @@ class ImapIdSetTest extends TestCase
         self::assertSame([1, 2, 3], iterator_to_array($ids->getIterator()));
     }
 
+    public function testIterationPreservesFirstSeenOrderAcrossOverlappingRanges(): void
+    {
+        $ids = (new ImapIdSet('90,10:12,3,11:14'))->add([2, 90, 1]);
+        $expected = [90, 10, 11, 12, 3, 13, 14, 2, 1];
+
+        self::assertSame($expected, iterator_to_array($ids));
+        self::assertSame($expected, $ids->toArray());
+        self::assertSame(count($expected), count($ids));
+        self::assertSame('1:3,10:14,90', (string) $ids);
+        self::assertSame(
+            [90, 10, 3, 14, 2, 1],
+            iterator_to_array($ids->remove('11:13')),
+        );
+    }
+
+    public function testSortResponseIterationPreservesServerOrder(): void
+    {
+        $socket = InMemoryImapSocket::fromParts(
+            InMemoryImapSocket::line('* SORT 90 10 12 3'),
+        );
+        $response = ImapResponseParser::parse((new ImapTokenizer($socket))->readLine());
+        $result = ImapSearchParser::parse([$response], false);
+
+        self::assertSame([90, 10, 12, 3], iterator_to_array($result->match));
+        self::assertSame($result->match->toArray(), iterator_to_array($result->match));
+    }
+
     public function testMinMax(): void
     {
         $ids = new ImapIdSet([7, 2, 9, 4]);

@@ -106,8 +106,13 @@ class ImapClientAppendExtensionsTest extends TestCase
         fwrite($source, 'abc');
         rewind($source);
         try {
-            $socket = $this->socket('* OK [CAPABILITY IMAP4rev1 BINARY UIDPLUS] ready',
-                'A1 NO [TRYCREATE] missing', 'A2 OK created', '+ ready', 'A3 OK [APPENDUID 1 7] done');
+            $socket = $this->socket(
+                '* OK [CAPABILITY IMAP4rev1 BINARY UIDPLUS] ready',
+                'A1 NO [TRYCREATE] missing',
+                'A2 OK created',
+                '+ ready',
+                'A3 OK [APPENDUID 1 7] done'
+            );
             $uids = $this->client($socket)->append('Drafts', [['data' => $source, 'length' => 3, 'binary' => true]], ['create' => true]);
             self::assertSame([7], $uids->toArray());
             self::assertSame("A1 APPEND Drafts ~{3}\r\nA2 CREATE Drafts\r\nA3 APPEND Drafts ~{3}\r\nabc\r\n", implode('', $socket->rawWritten));
