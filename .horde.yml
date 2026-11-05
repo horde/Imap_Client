@@ -30,7 +30,7 @@ dependencies:
       horde/eventdispatcher: ^1
       horde/exception: ^3
       horde/mail: ^3
-      horde/mime: ^3
+      horde/mime: ^3.1.1
       horde/sasl: ^1
       horde/socket_client: ^3.1
       horde/stream: ^2

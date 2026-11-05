@@ -22,7 +22,7 @@
         "horde/eventdispatcher": "^1 || dev-FRAMEWORK_6_0",
         "horde/exception": "^3 || dev-FRAMEWORK_6_0",
         "horde/mail": "^3 || dev-FRAMEWORK_6_0",
-        "horde/mime": "^3 || dev-FRAMEWORK_6_0",
+        "horde/mime": "^3.1.1 || dev-FRAMEWORK_6_0",
         "horde/sasl": "^1 || dev-FRAMEWORK_6_0",
         "horde/socket_client": "^3.1 || dev-FRAMEWORK_6_0",
         "horde/stream": "^2 || dev-FRAMEWORK_6_0",

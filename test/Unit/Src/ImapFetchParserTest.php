@@ -325,6 +325,42 @@ class ImapFetchParserTest extends TestCase
         );
     }
 
+    public function testIssue57AdapterTraversalPreservesEmbeddedMessagePartNumbers(): void
+    {
+        $plain = '("text" "plain" NIL NIL NIL "7bit" 100 10)';
+        $html = '("text" "html" NIL NIL NIL "7bit" 200 20)';
+        $alternative = '(' . $plain . ' ' . $html . ' "alternative")';
+        $related = '(' . $alternative . ' "related")';
+        $embedded = '(' . $related . ' "mixed")';
+        $message = '("message" "rfc822" NIL NIL NIL "7bit" 500 NIL '
+            . $embedded . ' 50)';
+        $bodyStructure = '(' . str_repeat($plain . ' ', 3) . $message . ' ' . $plain . ' "mixed")';
+        $result = $this->parse(
+            '* 1 FETCH (BODYSTRUCTURE ' . $bodyStructure . ')',
+            (new ImapFetchQuery())->structure(),
+        );
+        $structure = $result->getStructure();
+        $includeSelf = $structure->iterate()->count() <= 1;
+        $partTypes = [];
+
+        foreach ($structure->iterate($includeSelf) as $id => $part) {
+            $partTypes[$id] = $part->fullType();
+        }
+
+        self::assertSame([
+            '1' => 'text/plain',
+            '2' => 'text/plain',
+            '3' => 'text/plain',
+            '4' => 'message/rfc822',
+            '4.0' => 'multipart/mixed',
+            '4.1' => 'multipart/related',
+            '4.1.1' => 'multipart/alternative',
+            '4.1.1.1' => 'text/plain',
+            '4.1.1.2' => 'text/html',
+            '5' => 'text/plain',
+        ], $partTypes);
+    }
+
     /** RFC 3501 §6.4.5: An attached single-part message's body is addressed as X.1. */
     public function testAttachedSinglePartMessageKeepsItsSectionNumber(): void
     {
