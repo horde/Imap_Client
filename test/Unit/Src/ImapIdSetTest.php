@@ -93,6 +93,25 @@ class ImapIdSetTest extends TestCase
         self::assertSame($result->match->toArray(), iterator_to_array($result->match));
     }
 
+    /**
+     * A server SORT result of a large mailbox with UID gaps is one
+     * non-adjacent range per message. Iterating it must not rescan all
+     * previous ranges for each new one: with quadratic behavior this test
+     * runs for minutes.
+     */
+    public function testLargeUnsortedServerResultIteratesInOrder(): void
+    {
+        $expected = range(60200, 202, -2);
+        $ids = new ImapIdSet(implode(',', $expected) . ',1:3,300:304');
+        array_push($expected, 1, 2, 3, 301, 303);
+
+        self::assertSame($expected, iterator_to_array($ids));
+        self::assertSame($expected, $ids->toArray());
+        self::assertSame(30005, count($ids));
+        self::assertSame(1, $ids->min());
+        self::assertSame(60200, $ids->max());
+    }
+
     public function testMinMax(): void
     {
         $ids = new ImapIdSet([7, 2, 9, 4]);

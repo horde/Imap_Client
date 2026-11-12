@@ -238,28 +238,9 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
                     $incoming = $isIntervals
                         ? $add
                         : $this->_flatToIntervals($add);
-                    if ($this->duplicates) {
-                        $existing = array_merge($existing, $incoming);
-                    } elseif (!$isIntervals) {
-                        $existing = array_merge(
-                            $existing,
-                            $this->_subtractIntervals(
-                                $this->_flatToIntervals(array_unique($add)),
-                                $this->_mergeIntervals($existing)
-                            )
-                        );
-                    } else {
-                        foreach ($incoming as $interval) {
-                            array_push(
-                                $existing,
-                                ...$this->_subtractIntervals(
-                                    [$interval],
-                                    $this->_mergeIntervals($existing)
-                                )
-                            );
-                        }
-                    }
-                    $this->_intervals = $existing;
+                    $this->_intervals = $this->duplicates
+                        ? array_merge($existing, $incoming)
+                        : $this->_appendNewIntervals($existing, $incoming);
                     $this->_ids = [];
                     $this->_sorted = false;
                     return;
@@ -569,6 +550,104 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
             static fn($id) => [(int) $id, (int) $id],
             $ids
         );
+    }
+
+    /**
+     * Append the not yet contained parts of the incoming intervals to the
+     * existing intervals, preserving first-seen (server result) order.
+     *
+     * A server SORT result is a long list of mostly single-ID intervals, so
+     * this must not rescan the already collected intervals for every
+     * incoming one. The ID space is split into elementary segments at every
+     * interval boundary and each segment is claimed by the first interval
+     * covering it, tracked with a union-find "next free segment" table.
+     * Runtime is O(n log n) for n intervals.
+     *
+     * @author Torben Dannhauer <torben@dannhauer.de>
+     *
+     * @param array $existing  Intervals already contained, kept unchanged.
+     * @param array $incoming  Intervals to add, in result order.
+     *
+     * @return array  $existing followed by the new [start, end] pairs.
+     */
+    protected function _appendNewIntervals(array $existing, array $incoming)
+    {
+        /* Segment $i covers the IDs $points[$i] .. $points[$i + 1] - 1. */
+        $points = [];
+        foreach ([$existing, $incoming] as $intervals) {
+            foreach ($intervals as [$start, $end]) {
+                $points[$start] = true;
+                $points[$end + 1] = true;
+            }
+        }
+        $points = array_keys($points);
+        sort($points, SORT_NUMERIC);
+        $index = array_flip($points);
+
+        /* $next[$i] leads to the first unclaimed segment at or after $i.
+         * The last point only ever ends an interval, so it is the
+         * permanently unclaimed sentinel. */
+        $next = array_keys($points);
+
+        foreach ($existing as [$start, $end]) {
+            $this->_claimSegments($next, $points, $index[$start], $index[$end + 1]);
+        }
+
+        foreach ($incoming as [$start, $end]) {
+            foreach ($this->_claimSegments($next, $points, $index[$start], $index[$end + 1]) as $interval) {
+                $existing[] = $interval;
+            }
+        }
+
+        return $existing;
+    }
+
+    /**
+     * Claim all free segments in a segment range.
+     *
+     * @see _appendNewIntervals()
+     *
+     * @param array &$next    Union-find table of the next free segment.
+     * @param array $points   Sorted segment boundaries.
+     * @param integer $seg    First segment of the range.
+     * @param integer $stop   Segment following the range.
+     *
+     * @return array  The newly claimed IDs as [start, end] pairs, with
+     *                adjacent segments joined.
+     */
+    protected function _claimSegments(array &$next, array $points, $seg, $stop)
+    {
+        $claimed = [];
+        $last = -1;
+
+        while (true) {
+            /* Find the next free segment, compressing the path to it. */
+            $free = $seg;
+            while ($next[$free] !== $free) {
+                $free = $next[$free];
+            }
+            while ($next[$seg] !== $free) {
+                $tmp = $next[$seg];
+                $next[$seg] = $free;
+                $seg = $tmp;
+            }
+
+            if ($free >= $stop) {
+                break;
+            }
+
+            $segStart = $points[$free];
+            $segEnd = $points[$free + 1] - 1;
+            if (($last >= 0) && ($claimed[$last][1] + 1 === $segStart)) {
+                $claimed[$last][1] = $segEnd;
+            } else {
+                $claimed[++$last] = [$segStart, $segEnd];
+            }
+
+            $next[$free] = $seg = $free + 1;
+        }
+
+        return $claimed;
     }
 
     /**

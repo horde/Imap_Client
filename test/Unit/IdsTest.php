@@ -163,6 +163,29 @@ class IdsTest extends TestCase
         $this->assertSame([3, 10, 11, 12, 90], $ids->ids);
     }
 
+    /**
+     * A server SORT result of a large mailbox is one interval per message.
+     * Collecting it must not rescan all previous intervals for each new
+     * one: with quadratic behavior this test runs for minutes.
+     */
+    public function testLargeUnsortedServerResultKeepsOrder(): void
+    {
+        $expected = range(30100, 101, -1);
+        $ids = new Horde_Imap_Client_Ids(
+            implode(',', $expected) . ',1:3,200:202'
+        );
+        array_push($expected, 1, 2, 3);
+
+        $this->assertSame(30003, count($ids));
+        $this->assertSame('1:3,101:30100', $ids->tostring_sort);
+        $this->assertSame($expected, iterator_to_array($ids));
+
+        $ids->add([30101, 150, 4]);
+        $ids->add('5:6,29000:30102');
+        array_push($expected, 30101, 4, 5, 6, 30102);
+        $this->assertSame($expected, $ids->ids);
+    }
+
     public function testLargeRangeStaysCompactUntilIterated(): void
     {
         $memoryBefore = memory_get_usage();
