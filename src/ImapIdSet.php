@@ -233,30 +233,84 @@ final class ImapIdSet implements MessageIdSet
     public function getIterator(): Iterator
     {
         return (static function (array $ranges): Generator {
-            $seen = [];
-            foreach ($ranges as [$start, $end]) {
-                $next = $start;
-                foreach ($seen as [$seenStart, $seenEnd]) {
-                    if ($seenEnd < $next) {
-                        continue;
-                    }
-                    if ($seenStart > $end) {
-                        break;
-                    }
-                    for ($id = $next; $id < $seenStart; ++$id) {
-                        yield $id;
-                    }
-                    $next = max($next, $seenEnd + 1);
-                    if ($next > $end) {
-                        break;
-                    }
-                }
-                for ($id = $next; $id <= $end; ++$id) {
+            foreach (self::firstSeenRanges($ranges) as [$start, $end]) {
+                for ($id = $start; $id <= $end; ++$id) {
                     yield $id;
                 }
-                $seen = self::mergeRanges([...$seen, [$start, $end]]);
             }
         })($this->ranges);
+    }
+
+    /**
+     * Reduce possibly overlapping ranges to disjoint ranges in first-seen
+     * order: every ID is kept only in the first range that contains it.
+     *
+     * A server SORT result is a long list of mostly single-ID ranges, so
+     * this must not rescan the ranges seen so far for every further range.
+     * The ID space is split into elementary segments at every range
+     * boundary and each segment is claimed by the first range covering it,
+     * tracked with a union-find "next free segment" table. Runtime is
+     * O(n log n) for n ranges.
+     *
+     * @author Torben Dannhauer <torben@dannhauer.de>
+     *
+     * @param list<array{int, int}> $ranges
+     *
+     * @return list<array{int, int}>
+     */
+    private static function firstSeenRanges(array $ranges): array
+    {
+        /* Segment $i covers the IDs $points[$i] .. $points[$i + 1] - 1. */
+        $points = [];
+        foreach ($ranges as [$start, $end]) {
+            $points[$start] = true;
+            $points[$end + 1] = true;
+        }
+        $points = array_keys($points);
+        sort($points, SORT_NUMERIC);
+        $index = array_flip($points);
+
+        /* $next[$i] leads to the first unclaimed segment at or after $i.
+         * The last point only ever ends a range, so it is the permanently
+         * unclaimed sentinel. */
+        $next = array_keys($points);
+        $result = [];
+
+        foreach ($ranges as [$start, $end]) {
+            $seg = $index[$start];
+            $stop = $index[$end + 1];
+            $last = null;
+
+            while (true) {
+                /* Find the next free segment, compressing the path to it. */
+                $free = $seg;
+                while ($next[$free] !== $free) {
+                    $free = $next[$free];
+                }
+                while ($next[$seg] !== $free) {
+                    $tmp = $next[$seg];
+                    $next[$seg] = $free;
+                    $seg = $tmp;
+                }
+
+                if ($free >= $stop) {
+                    break;
+                }
+
+                $segStart = $points[$free];
+                $segEnd = $points[$free + 1] - 1;
+                if ($last !== null && $result[$last][1] + 1 === $segStart) {
+                    $result[$last][1] = $segEnd;
+                } else {
+                    $result[] = [$segStart, $segEnd];
+                    $last = count($result) - 1;
+                }
+
+                $next[$free] = $seg = $free + 1;
+            }
+        }
+
+        return $result;
     }
 
     /**
