@@ -31,7 +31,7 @@ namespace Horde\Imap\Client;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-final readonly class ImapQresyncResult
+final class ImapQresyncResult
 {
     /**
      * @param ImapIdSet                    $vanished UIDs expunged since the
@@ -40,7 +40,7 @@ final readonly class ImapQresyncResult
      *                                               keyed by UID.
      */
     public function __construct(
-        public ImapIdSet $vanished,
-        public array $changed = [],
+        public readonly ImapIdSet $vanished,
+        public readonly array $changed = [],
     ) {}
 }

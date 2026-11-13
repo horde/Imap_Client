@@ -33,7 +33,7 @@ namespace Horde\Imap\Client;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-final readonly class ImapSearchResult
+final class ImapSearchResult
 {
     /**
      * @param ImapIdSet    $match     The matching messages (UIDs or
@@ -52,12 +52,12 @@ final readonly class ImapSearchResult
      *                                server reported one (RFC 7162).
      */
     public function __construct(
-        public ImapIdSet $match,
-        public ?int $count = null,
-        public ?int $min = null,
-        public ?int $max = null,
-        public ?bool $saved = null,
-        public array $relevancy = [],
-        public ?int $modseq = null,
+        public readonly ImapIdSet $match,
+        public readonly ?int $count = null,
+        public readonly ?int $min = null,
+        public readonly ?int $max = null,
+        public readonly ?bool $saved = null,
+        public readonly array $relevancy = [],
+        public readonly ?int $modseq = null,
     ) {}
 }

@@ -29,14 +29,14 @@ namespace Horde\Imap\Client;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-final readonly class ImapNamespace
+final class ImapNamespace
 {
     public function __construct(
-        public string $name,
-        public NamespaceType $type,
-        public ?string $delimiter = null,
-        public bool $hidden = false,
-        public string $translation = '',
+        public readonly string $name,
+        public readonly NamespaceType $type,
+        public readonly ?string $delimiter = null,
+        public readonly bool $hidden = false,
+        public readonly string $translation = '',
     ) {}
 
     /**
