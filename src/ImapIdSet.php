@@ -233,7 +233,7 @@ final class ImapIdSet implements MessageIdSet
     public function getIterator(): Iterator
     {
         return (static function (array $ranges): Generator {
-            foreach (self::firstSeenRanges($ranges) as [$start, $end]) {
+            foreach (self::uniqueRangesInOrder($ranges) as [$start, $end]) {
                 for ($id = $start; $id <= $end; ++$id) {
                     yield $id;
                 }
@@ -242,8 +242,8 @@ final class ImapIdSet implements MessageIdSet
     }
 
     /**
-     * Reduce possibly overlapping ranges to disjoint ranges in first-seen
-     * order: every ID is kept only in the first range that contains it.
+     * Return the portions of ranges not already seen, preserving first-seen
+     * order.
      *
      * A server SORT result is a long list of mostly single-ID ranges, so
      * this must not rescan the ranges seen so far for every further range.
@@ -254,17 +254,22 @@ final class ImapIdSet implements MessageIdSet
      *
      * @author Torben Dannhauer <torben@dannhauer.de>
      *
+     * @internal
+     *
      * @param list<array{int, int}> $ranges
+     * @param list<array{int, int}> $seen  Ranges already claimed.
      *
      * @return list<array{int, int}>
      */
-    private static function firstSeenRanges(array $ranges): array
+    public static function uniqueRangesInOrder(array $ranges, array $seen = []): array
     {
         /* Segment $i covers the IDs $points[$i] .. $points[$i + 1] - 1. */
         $points = [];
-        foreach ($ranges as [$start, $end]) {
-            $points[$start] = true;
-            $points[$end + 1] = true;
+        foreach ([$seen, $ranges] as $intervals) {
+            foreach ($intervals as [$start, $end]) {
+                $points[$start] = true;
+                $points[$end + 1] = true;
+            }
         }
         $points = array_keys($points);
         sort($points, SORT_NUMERIC);
@@ -276,41 +281,72 @@ final class ImapIdSet implements MessageIdSet
         $next = array_keys($points);
         $result = [];
 
+        foreach ($seen as [$start, $end]) {
+            self::claimSegments($next, $points, $index[$start], $index[$end + 1]);
+        }
+
         foreach ($ranges as [$start, $end]) {
-            $seg = $index[$start];
-            $stop = $index[$end + 1];
-            $last = null;
-
-            while (true) {
-                /* Find the next free segment, compressing the path to it. */
-                $free = $seg;
-                while ($next[$free] !== $free) {
-                    $free = $next[$free];
-                }
-                while ($next[$seg] !== $free) {
-                    $tmp = $next[$seg];
-                    $next[$seg] = $free;
-                    $seg = $tmp;
-                }
-
-                if ($free >= $stop) {
-                    break;
-                }
-
-                $segStart = $points[$free];
-                $segEnd = $points[$free + 1] - 1;
-                if ($last !== null && $result[$last][1] + 1 === $segStart) {
-                    $result[$last][1] = $segEnd;
-                } else {
-                    $result[] = [$segStart, $segEnd];
-                    $last = count($result) - 1;
-                }
-
-                $next[$free] = $seg = $free + 1;
+            foreach (
+                self::claimSegments(
+                    $next,
+                    $points,
+                    $index[$start],
+                    $index[$end + 1],
+                ) as $claimed
+            ) {
+                $result[] = $claimed;
             }
         }
 
         return $result;
+    }
+
+    /**
+     * Claim the free segments in one range.
+     *
+     * @param list<int> $next
+     * @param list<int> $points
+     *
+     * @return list<array{int, int}>
+     */
+    private static function claimSegments(
+        array &$next,
+        array $points,
+        int $seg,
+        int $stop,
+    ): array {
+        $claimed = [];
+        $last = null;
+
+        while (true) {
+            /* Find the next free segment, compressing the path to it. */
+            $free = $seg;
+            while ($next[$free] !== $free) {
+                $free = $next[$free];
+            }
+            while ($next[$seg] !== $free) {
+                $tmp = $next[$seg];
+                $next[$seg] = $free;
+                $seg = $tmp;
+            }
+
+            if ($free >= $stop) {
+                break;
+            }
+
+            $segStart = $points[$free];
+            $segEnd = $points[$free + 1] - 1;
+            if ($last !== null && $claimed[$last][1] + 1 === $segStart) {
+                $claimed[$last][1] = $segEnd;
+            } else {
+                $claimed[] = [$segStart, $segEnd];
+                $last = count($claimed) - 1;
+            }
+
+            $next[$free] = $seg = $free + 1;
+        }
+
+        return $claimed;
     }
 
     /**
