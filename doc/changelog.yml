@@ -1,4 +1,17 @@
 ---
+3.3.3:
+  api: 3.3.3
+  state:
+    release: stable
+    api: stable
+  date: 2026-11-13
+  license:
+    identifier: LGPL-2.1-only
+    uri: https://spdx.org/licenses/LGPL-2.1-only.html
+  notes: |-
+    fix(compat): We still support PHP 8.1 so final classes are not yet allowed.
+    refactor: Utilize the src/ ID Collector in lib
+    fix(ids): avoid quadratic interval merging for large result sets
 3.3.2:
   api: 3.3.2
   state:
