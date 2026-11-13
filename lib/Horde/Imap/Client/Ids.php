@@ -12,6 +12,8 @@
  * @package   Imap_Client
  */
 
+use Horde\Imap\Client\ImapIdSet;
+
 /**
  * An object that provides a way to identify a list of IMAP indices.
  *
@@ -572,82 +574,10 @@ class Horde_Imap_Client_Ids implements Countable, Iterator, Serializable
      */
     protected function _appendNewIntervals(array $existing, array $incoming)
     {
-        /* Segment $i covers the IDs $points[$i] .. $points[$i + 1] - 1. */
-        $points = [];
-        foreach ([$existing, $incoming] as $intervals) {
-            foreach ($intervals as [$start, $end]) {
-                $points[$start] = true;
-                $points[$end + 1] = true;
-            }
-        }
-        $points = array_keys($points);
-        sort($points, SORT_NUMERIC);
-        $index = array_flip($points);
-
-        /* $next[$i] leads to the first unclaimed segment at or after $i.
-         * The last point only ever ends an interval, so it is the
-         * permanently unclaimed sentinel. */
-        $next = array_keys($points);
-
-        foreach ($existing as [$start, $end]) {
-            $this->_claimSegments($next, $points, $index[$start], $index[$end + 1]);
-        }
-
-        foreach ($incoming as [$start, $end]) {
-            foreach ($this->_claimSegments($next, $points, $index[$start], $index[$end + 1]) as $interval) {
-                $existing[] = $interval;
-            }
-        }
-
-        return $existing;
-    }
-
-    /**
-     * Claim all free segments in a segment range.
-     *
-     * @see _appendNewIntervals()
-     *
-     * @param array &$next    Union-find table of the next free segment.
-     * @param array $points   Sorted segment boundaries.
-     * @param integer $seg    First segment of the range.
-     * @param integer $stop   Segment following the range.
-     *
-     * @return array  The newly claimed IDs as [start, end] pairs, with
-     *                adjacent segments joined.
-     */
-    protected function _claimSegments(array &$next, array $points, $seg, $stop)
-    {
-        $claimed = [];
-        $last = -1;
-
-        while (true) {
-            /* Find the next free segment, compressing the path to it. */
-            $free = $seg;
-            while ($next[$free] !== $free) {
-                $free = $next[$free];
-            }
-            while ($next[$seg] !== $free) {
-                $tmp = $next[$seg];
-                $next[$seg] = $free;
-                $seg = $tmp;
-            }
-
-            if ($free >= $stop) {
-                break;
-            }
-
-            $segStart = $points[$free];
-            $segEnd = $points[$free + 1] - 1;
-            if (($last >= 0) && ($claimed[$last][1] + 1 === $segStart)) {
-                $claimed[$last][1] = $segEnd;
-            } else {
-                $claimed[++$last] = [$segStart, $segEnd];
-            }
-
-            $next[$free] = $seg = $free + 1;
-        }
-
-        return $claimed;
+        return array_merge(
+            $existing,
+            ImapIdSet::uniqueRangesInOrder($incoming, $existing)
+        );
     }
 
     /**

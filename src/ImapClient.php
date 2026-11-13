@@ -1123,7 +1123,7 @@ final class ImapClient implements ImapProtocol, ImapAclAware, ImapQuotaAware, Im
      * CATENATE parts).
      * A `url` part cannot be combined with `binary`.
      *
-     * @param list<array{data?: string|resource, catenate?: list<array{text?: string, url?: string}>, flags?: list<SystemFlag|string>, internaldate?: DateTimeInterface, binary?: bool}> $data
+     * @param list<array{data?: string|resource, catenate?: list<array{text?: string, url?: string}>, flags?: list<SystemFlag|string>, internaldate?: DateTimeInterface, binary?: bool, length?: mixed}> $data
      * @param array{create?: bool} $options
      *
      * @return MessageIdSet The new UIDs from `[APPENDUID ...]` responses
