@@ -43,18 +43,18 @@ use Horde\Mail\Rfc822\AddressList;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-final readonly class ImapEnvelope
+final class ImapEnvelope
 {
     public function __construct(
-        public string $date = '',
-        public string $subject = '',
-        public AddressList $from = new AddressList(),
-        public AddressList $sender = new AddressList(),
-        public AddressList $replyTo = new AddressList(),
-        public AddressList $to = new AddressList(),
-        public AddressList $cc = new AddressList(),
-        public AddressList $bcc = new AddressList(),
-        public string $inReplyTo = '',
-        public string $messageId = '',
+        public readonly string $date = '',
+        public readonly string $subject = '',
+        public readonly AddressList $from = new AddressList(),
+        public readonly AddressList $sender = new AddressList(),
+        public readonly AddressList $replyTo = new AddressList(),
+        public readonly AddressList $to = new AddressList(),
+        public readonly AddressList $cc = new AddressList(),
+        public readonly AddressList $bcc = new AddressList(),
+        public readonly string $inReplyTo = '',
+        public readonly string $messageId = '',
     ) {}
 }

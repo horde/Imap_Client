@@ -29,11 +29,11 @@ namespace Horde\Imap\Client;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-final readonly class ImapSyncResult
+final class ImapSyncResult
 {
     public function __construct(
-        public ImapIdSet $newMsgs,
-        public ImapIdSet $flagChanges,
-        public ImapIdSet $vanished,
+        public readonly ImapIdSet $newMsgs,
+        public readonly ImapIdSet $flagChanges,
+        public readonly ImapIdSet $vanished,
     ) {}
 }

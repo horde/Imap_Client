@@ -29,7 +29,7 @@ namespace Horde\Imap\Client;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-final readonly class ImapAclRights
+final class ImapAclRights
 {
     /**
      * @param list<string> $required Rights the identifier always has.
@@ -38,7 +38,7 @@ final readonly class ImapAclRights
      *                               multi-letter group).
      */
     public function __construct(
-        public array $required = [],
-        public array $optional = [],
+        public readonly array $required = [],
+        public readonly array $optional = [],
     ) {}
 }

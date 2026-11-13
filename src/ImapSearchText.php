@@ -28,9 +28,9 @@ namespace Horde\Imap\Client;
  * @copyright 2026 Horde LLC
  * @license   http://www.horde.org/licenses/lgpl21 LGPL 2.1
  */
-final readonly class ImapSearchText
+final class ImapSearchText
 {
-    public function __construct(public string $utf8Value) {}
+    public function __construct(public readonly string $utf8Value) {}
 
     /**
      * Materialize as an {@see ImapWireString} in `$charset`. UTF-8 (and
